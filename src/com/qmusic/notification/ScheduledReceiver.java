@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.qmusic.activities.EmptyActivity;
+import com.qmusic.activities.DialogActivity;
 import com.qmusic.common.BConstants;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
@@ -77,16 +77,18 @@ public class ScheduledReceiver extends BroadcastReceiver {
 			BLog.i(TAG, "SCHEDULE_RATING");
 			Bundle extras = new Bundle();
 			extras.putInt(SCHEDULE_TYPE, SCHEDULE_RATING);
-			extras.putString("title", "用户反馈");
-			extras.putString("message", "您觉得我们的应用很棒么?");
-			EmptyActivity.show(context, extras);
+			extras.putString("title", "Feedback");
+			extras.putString("message", "Do you like our app?");
+			extras.putString("ok", "I like it");
+			extras.putString("cancel", "Need to improve");
+			DialogActivity.show(context, extras);
 			break;
 		}
 		case SCHEDULE_ACCOUNT: {
 			BLog.i(TAG, "SCHEDULE_ACCOUNT");
 			Bundle extras = new Bundle();
 			extras.putInt(SCHEDULE_TYPE, SCHEDULE_ACCOUNT);
-			EmptyActivity.show(context, extras);
+			DialogActivity.show(context, extras);
 			break;
 		}
 		default: {
