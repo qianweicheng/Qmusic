@@ -1,7 +1,5 @@
 package com.qmusic.notification;
 
-import java.util.Calendar;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -12,15 +10,14 @@ import android.text.TextUtils;
 
 import com.qmusic.activities.EmptyActivity;
 import com.qmusic.common.BConstants;
-import com.qmusic.entities.BAlarm;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
 
 public class ScheduledReceiver extends BroadcastReceiver {
 	public static final String TAG = "ScheduledReceiver";
-	static final int INTERVAL = 2 * 60 * 1000;// 2 mins
-	static final int DELAY = 2 * 1000;// 2 seconds
-	public static final String SCHEDULE_TYPE = "type";
+	static final int INTERVAL = 120 * 60 * 1000;
+	static final int DELAY = 30 * 1000;
+	public static final String SCHEDULE_TYPE = "schedule_type";
 	public static final int SCHEDULE_ALARM = 1;
 	public static final int SCHEDULE_DISCOVER = 2;
 	public static final int SCHEDULE_RATING = 3;
@@ -68,18 +65,20 @@ public class ScheduledReceiver extends BroadcastReceiver {
 		}
 		case SCHEDULE_DISCOVER: {
 			BLog.i(TAG, "SCHEDULE_DISCOVER");
-			BAlarm alarm = new BAlarm();
-			Calendar cal = Calendar.getInstance();
-			alarm.title = cal.getTime().toString();
-			alarm.subTitle = cal.getTime().toString();
-			alarm.time = cal.getTimeInMillis() + DELAY;
-			BAlarmHelper.schedule(context, alarm);
+			// BAlarm alarm = new BAlarm();
+			// Calendar cal = Calendar.getInstance();
+			// alarm.title = cal.getTime().toString();
+			// alarm.subTitle = cal.getTime().toString();
+			// alarm.time = cal.getTimeInMillis() + DELAY;
+			// BAlarmHelper.schedule(context, alarm);
 			break;
 		}
 		case SCHEDULE_RATING: {
 			BLog.i(TAG, "SCHEDULE_RATING");
 			Bundle extras = new Bundle();
 			extras.putInt(SCHEDULE_TYPE, SCHEDULE_RATING);
+			extras.putString("title", "用户反馈");
+			extras.putString("message", "您觉得我们的应用很棒么?");
 			EmptyActivity.show(context, extras);
 			break;
 		}
@@ -105,12 +104,27 @@ public class ScheduledReceiver extends BroadcastReceiver {
 	}
 
 	private static final boolean showAppRating() {
-		String countStr = BUtilities.getPref(BConstants.PRE_KEY_RUN_COUNT);
-		if (!TextUtils.isEmpty(countStr)) {
-			int count = Integer.parseInt(countStr);
-			return count % 100 == 0;
+		boolean result = false;
+		String ratingTime = BUtilities.getPref(BConstants.PRE_KEY_SHOW_RATING + BUtilities.getAppVersion());
+		if (TextUtils.isEmpty(ratingTime)) {
+			String countStr = BUtilities.getPref(BConstants.PRE_KEY_RUN_COUNT);
+			if (TextUtils.isDigitsOnly(countStr)) {
+				int count = Integer.parseInt(countStr);
+				if (count > 10) {
+					result = true;
+				}
+			}
+		} else {
+			long lastRatingTime = Long.parseLong(ratingTime);
+			if (System.currentTimeMillis() - lastRatingTime > 30 * 24 * 60 * 60 * 1000) {
+				result = true;
+			}
 		}
-		return false;
+		if (result) {
+			BUtilities.setPref(BConstants.PRE_KEY_SHOW_RATING + BUtilities.getAppVersion(),
+					String.valueOf(System.currentTimeMillis()));
+		}
+		return result;
 	}
 
 	private static final boolean showAccount() {

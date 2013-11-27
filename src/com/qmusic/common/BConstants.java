@@ -17,6 +17,7 @@ public final class BConstants {
 	public static final int PAGE_SIZE = 50;
 	// =======================================
 	public static final String PRE_KEY_SHOW_TUTORIAL = "show_tutorial";
+	public static final String PRE_KEY_SHOW_RATING = "show_rating";
 	public static final String PRE_KEY_RUN_COUNT = "run_count";
 	public static final String PRE_KEY_USER_INFO = "user_info";
 	public static final String PRE_KEY_ORDER_USERNAME = "order_username";

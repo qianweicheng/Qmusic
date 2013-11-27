@@ -2,6 +2,7 @@ package com.qmusic.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.IBinder;
 
 import com.qmusic.notification.ScheduledReceiver;
@@ -15,7 +16,8 @@ public class BDataService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		BLog.i(TAG, "onCreate");
-		init();
+		binder = new BDataServiceImp(this);
+		new AsyncRunnable().execute();
 	}
 
 	@Override
@@ -34,8 +36,20 @@ public class BDataService extends Service {
 		return super.onStartCommand(intent, flags, startId);
 	}
 
-	void init() {
-		ScheduledReceiver.init(getApplicationContext());
-		binder = new BDataServiceImp(this);
+	class AsyncRunnable extends AsyncTask<Void, Void, Void> {
+		@Override
+		protected void onPreExecute() {
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			ScheduledReceiver.init(getApplicationContext());
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			BLog.i(TAG, "Service initialized!");
+		}
 	}
 }
