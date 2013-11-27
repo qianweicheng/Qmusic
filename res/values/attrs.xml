@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SectionTab">
+
+        <!-- =================== -->
+        <!-- Tab styles -->
+        <!-- =================== -->
+        <attr name="selectedTab">
+            <enum name="tab0" value="0" />
+            <enum name="tab1" value="1" />
+            <enum name="tab2" value="2" />
+        </attr>
+        <attr name="activeType">
+			<flag name="stroke" value="0" />
+			<flag name="fill" value="1" />
+		</attr>
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,12 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/widget_layout"
+    android:minHeight="142dp"
+    android:minWidth="294dp"
+    android:previewImage="@drawable/b_widget_empty"
+    android:resizeMode="none"
+    android:widgetCategory="home_screen|keyguard" >
+
+    <!-- android:updatePeriodMillis="1800000" -->
+    <!-- Updates requested with updatePeriodMillis will not be delivered more than once every 30 minutes. -->
+
+</appwidget-provider>

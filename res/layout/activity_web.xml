@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include
+        android:id="@+id/activity_web_title"
+        layout="@layout/common_title" />
+
+    <WebView
+        android:id="@+id/activity_web_webview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/activity_web_title" />
+
+    <com.qmusic.controls.BProgressBar
+        android:id="@+id/activity_web_progressbar"
+        android:layout_width="@dimen/button_h"
+        android:layout_height="@dimen/button_h"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>
