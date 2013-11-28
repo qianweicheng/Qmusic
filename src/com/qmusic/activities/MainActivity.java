@@ -2,7 +2,6 @@ package com.qmusic.activities;
 
 import org.json.JSONObject;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,7 +13,6 @@ import android.view.View.OnClickListener;
 import cn.jpush.android.api.JPushInterface;
 
 import com.qmusic.R;
-import com.qmusic.common.BUser;
 import com.qmusic.uitls.BAppHelper;
 import com.qmusic.uitls.BLog;
 import com.umeng.analytics.MobclickAgent;
@@ -119,11 +117,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			}
 			MobclickAgent.onEvent(this, "fragment1");
 		} else if (newTab == 2) {
-			if (!BUser.isLogined()) {
-				Intent intent = new Intent(this, LoginActivity.class);
-				startActivity(intent);
-				return;
-			}
+			// if (!BUser.isLogined()) {
+			// Intent intent = new Intent(this, LoginActivity.class);
+			// startActivity(intent);
+			// return;
+			// }
 			if (fragment2 == null) {
 				fragment2 = new Fragment2();
 				transaction.add(R.id.activity_main_content, fragment2, "fragment2");
@@ -144,11 +142,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			}
 			MobclickAgent.onEvent(this, "fragment2");
 		} else if (newTab == 3) {
-			if (!BUser.isLogined()) {
-				Intent intent = new Intent(this, LoginActivity.class);
-				startActivity(intent);
-				return;
-			}
+			// if (!BUser.isLogined()) {
+			// Intent intent = new Intent(this, LoginActivity.class);
+			// startActivity(intent);
+			// return;
+			// }
 			if (fragment3 == null) {
 				fragment3 = new Fragment3();
 				transaction.add(R.id.activity_main_content, fragment3, "fragment3");

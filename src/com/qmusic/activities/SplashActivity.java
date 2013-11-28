@@ -13,6 +13,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.common.BConstants;
+import com.qmusic.common.BUser;
 import com.qmusic.test.TestActivity;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
@@ -23,7 +24,6 @@ public class SplashActivity extends SherlockFragmentActivity {
 	static final int WAITING_TIME = 500;
 	public static final String SHUTDOWN = "shutdown";
 	public static final String RE_LOGIN = "re_login";
-	public static final String INIT = "init";
 	public static final boolean UI_TEST = false;// only for UI test.
 	Intent newIntent;
 
@@ -67,12 +67,10 @@ public class SplashActivity extends SherlockFragmentActivity {
 			} else if (bundle.getBoolean(RE_LOGIN, false)) {
 				checkLogin();
 				return;
-			} else if (bundle.getBoolean(INIT, false)) {
-				BLog.w(TAG, "init");
+			} else {
+				BLog.i(TAG, "bundle does not match any key. " + bundle.toString());
 				new MyAsyncTask().execute();
 				return;
-			} else {
-				BLog.i(TAG, "bundle does not match any key.");
 			}
 		}
 		if (UI_TEST) {
@@ -147,23 +145,19 @@ public class SplashActivity extends SherlockFragmentActivity {
 	}
 
 	void checkLogin() {
-		// No need login
-		Bundle bundle = getIntent().getExtras();
-		Intent intent = new Intent(this, MainActivity.class);
-		if (bundle != null) {
-			intent.putExtras(bundle);
+		if (BUser.isLogined()) {
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			Bundle bundle = getIntent().getExtras();
+			if (bundle != null) {
+				intent.putExtras(bundle);
+			}
+			startActivity(intent);
+		} else {
+			Intent intent = new Intent(this, LoginActivity.class);
+			intent.putExtra(LoginActivity.EXIT_WHEN_BACK, true);
+			startActivity(intent);
 		}
-		startActivity(intent);
-		// String username =
-		// BUtilities.getPref(BohanConstants.PRE_KEY_USER_NAME);
-		// if (!TextUtils.isEmpty(username)) {
-		// Intent intent = new Intent(this, MainActivity.class);
-		// startActivity(intent);
-		// } else {
-		// Intent intent = new Intent(this, LoginActivity.class);
-		// intent.putExtra(LoginActivity.EXIT_WHEN_BACK, true);
-		// startActivity(intent);
-		// }
 		overridePendingTransition(R.anim.fadein, 0);
 	}
 }

@@ -1,10 +1,12 @@
 package com.qmusic.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.qmusic.R;
+import com.qmusic.common.BUser;
 import com.qmusic.uitls.BAppHelper;
 
 public class LoginActivity extends BaseActivity {
@@ -45,6 +47,11 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	public void onLoginClicked(View view) {
+		BUser.getUser().setToken("token");
+		Intent intent = new Intent(this, SplashActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra(SplashActivity.RE_LOGIN, true);
+		startActivity(intent);
 	}
 
 	public void onCancleClicked(View view) {
