@@ -51,23 +51,6 @@ public final class BAlarmHelper {
 		}
 	}
 
-	private static void schedule(Context ctx, AlarmTable alarmDAL) {
-		BAlarm nearestAlarm = alarmDAL.pop();
-		if (nearestAlarm != null) {
-			Intent intent = new Intent(ctx, ScheduledReceiver.class);
-			intent.putExtra(ScheduledReceiver.SCHEDULE_TYPE, ScheduledReceiver.SCHEDULE_ALARM);
-			intent.putExtra("id", nearestAlarm.id);
-			PendingIntent pi = PendingIntent.getBroadcast(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			AlarmManager am = (AlarmManager) ctx.getSystemService(Service.ALARM_SERVICE);
-			BLog.i(TAG, "doAlarm title = " + nearestAlarm.title + " subTitle=" + nearestAlarm.subTitle);
-			am.set(AlarmManager.RTC_WAKEUP, nearestAlarm.time, pi);
-			nearestAlarm.status = BAlarm.STATUS_SCHEDUING;
-			alarmDAL.update(nearestAlarm);
-		} else {
-			BLog.i(TAG, "has no alarm");
-		}
-	}
-
 	public static void doAlarm(Context ctx, long id) {
 		AlarmTable alarmDAL = new AlarmTable();
 		// BAlarm alarm = alarmDAL.current();
@@ -79,4 +62,32 @@ public final class BAlarmHelper {
 			schedule(ctx, alarmDAL);
 		}
 	}
+
+	public static void shutdown(Context ctx) {
+		AlarmManager am = (AlarmManager) ctx.getSystemService(Service.ALARM_SERVICE);
+		Intent intent = new Intent(ctx, ScheduledReceiver.class);
+		intent.putExtra(ScheduledReceiver.SCHEDULE_TYPE, ScheduledReceiver.SCHEDULE_ALARM);
+		PendingIntent pi = PendingIntent.getBroadcast(ctx, ScheduledReceiver.SCHEDULE_ALARM, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		am.cancel(pi);
+	}
+
+	private static void schedule(Context ctx, AlarmTable alarmDAL) {
+		BAlarm nearestAlarm = alarmDAL.pop();
+		if (nearestAlarm != null) {
+			Intent intent = new Intent(ctx, ScheduledReceiver.class);
+			intent.putExtra(ScheduledReceiver.SCHEDULE_TYPE, ScheduledReceiver.SCHEDULE_ALARM);
+			intent.putExtra("id", nearestAlarm.id);
+			PendingIntent pi = PendingIntent.getBroadcast(ctx, ScheduledReceiver.SCHEDULE_ALARM, intent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
+			AlarmManager am = (AlarmManager) ctx.getSystemService(Service.ALARM_SERVICE);
+			BLog.i(TAG, "doAlarm title = " + nearestAlarm.title + " subTitle=" + nearestAlarm.subTitle);
+			am.set(AlarmManager.RTC_WAKEUP, nearestAlarm.time, pi);
+			nearestAlarm.status = BAlarm.STATUS_SCHEDUING;
+			alarmDAL.update(nearestAlarm);
+		} else {
+			BLog.i(TAG, "has no alarm");
+		}
+	}
+
 }

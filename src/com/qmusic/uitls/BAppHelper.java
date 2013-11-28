@@ -1,9 +1,13 @@
 package com.qmusic.uitls;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Debug;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -14,6 +18,8 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.androidquery.util.AQUtility;
+import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.activities.SplashActivity;
 import com.qmusic.common.BConstants;
@@ -103,14 +109,59 @@ public class BAppHelper {
 			count = Integer.parseInt(countStr);
 		}
 		BUtilities.setPref(BConstants.PRE_KEY_RUN_COUNT, "" + (++count));
-		String log = String.format("App Opened:%s time(s)", count);
-		BLog.i(TAG, log);
-
-		DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
-		// Note:w and h may be exchanged for each other
-		String result = String.format("w=%s,h=%s,dip=%s", displayMetrics.widthPixels, displayMetrics.heightPixels,
-				displayMetrics.density);
-		BLog.i(TAG, result);
+		if (MyApplication.DEBUG) {
+			String log = String.format("App Opened:%s time(s)", count);
+			BLog.i(TAG, log);
+			DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
+			BLog.i(TAG, displayMetrics.toString());
+			Configuration configuration = ctx.getResources().getConfiguration();
+			BLog.i(TAG, configuration.toString());
+			BLog.i(TAG, BUtilities.objToJsonString(System.getenv()));
+			BLog.i(TAG, BUtilities.objToJsonString(System.getProperties()));
+			// Do StrictMode setup here
+			StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().penaltyLog()
+					.penaltyDeath().build());
+			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites()
+					.detectNetwork().penaltyLog().build());
+			// watchMem();
+		}
 		return count;
+	}
+
+	static final void watchMem() {
+		final Debug.MemoryInfo outInfo = new Debug.MemoryInfo();
+		final ActivityManager.MemoryInfo outInfo1 = new ActivityManager.MemoryInfo();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					Debug.getMemoryInfo(outInfo);
+					int uss0 = outInfo.getTotalPrivateDirty();
+					int pss0 = outInfo.getTotalPss();
+					int rss0 = outInfo.getTotalSharedDirty();
+					BLog.i(TAG, "uss0=" + uss0 + ";pss0=" + pss0 + ";rss0=" + (uss0 + rss0));
+
+					ActivityManager am = (ActivityManager) AQUtility.getContext().getSystemService(
+							Context.ACTIVITY_SERVICE);
+					am.getMemoryInfo(outInfo1);
+					BLog.i(TAG, "availMem=" + outInfo1.availMem + ";threshold=" + outInfo1.threshold + ";lowMemory="
+							+ outInfo1.lowMemory);
+
+					long nativeHeapAllocatedSize = Debug.getNativeHeapAllocatedSize();
+					long nativeHeapFreeSize = Debug.getNativeHeapFreeSize();
+					long nativeHeapSize = Debug.getNativeHeapSize();
+					long globalAllocSize = Debug.getGlobalAllocSize();
+					long threadAllocSize = Debug.getThreadAllocSize();
+					BLog.i(TAG, "nativeHeapAllocatedSize=" + nativeHeapAllocatedSize + ";nativeHeapFreeSize="
+							+ nativeHeapFreeSize + ";nativeHeapSize=" + nativeHeapSize + ";globalAllocSize="
+							+ globalAllocSize + ";threadAllocSize=" + threadAllocSize);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
 	}
 }

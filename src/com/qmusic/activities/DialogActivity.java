@@ -1,5 +1,6 @@
 package com.qmusic.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,10 +19,18 @@ public class DialogActivity extends FragmentActivity implements IFragmentDialogC
 	static final String TAG = DialogActivity.class.getSimpleName();
 	int action;
 
+	/**
+	 * @param ctx
+	 * @param extras
+	 */
 	public static final void show(Context ctx, Bundle extras) {
 		Intent intent = new Intent(ctx, DialogActivity.class);
 		intent.putExtras(extras);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		if (ctx instanceof Activity) {
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		} else {
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		}
 		ctx.startActivity(intent);
 	}
 

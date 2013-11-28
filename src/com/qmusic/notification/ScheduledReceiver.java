@@ -54,6 +54,19 @@ public class ScheduledReceiver extends BroadcastReceiver {
 		}
 	}
 
+	public static final void shutdown(Context ctx) {
+		if (enableAlarm()) {
+			BAlarmHelper.shutdown(ctx);
+		}
+		// Discover
+		final AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+		Intent intentDiscover = new Intent(ctx, ScheduledReceiver.class);
+		intentDiscover.putExtra(ScheduledReceiver.SCHEDULE_TYPE, ScheduledReceiver.SCHEDULE_DISCOVER);
+		PendingIntent piDiscover = PendingIntent.getBroadcast(ctx, ScheduledReceiver.SCHEDULE_DISCOVER, intentDiscover,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		am.cancel(piDiscover);
+	}
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		int type = intent.getIntExtra(SCHEDULE_TYPE, 0);

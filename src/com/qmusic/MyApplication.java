@@ -4,14 +4,12 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import android.app.ActivityManager;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ApplicationInfo;
-import android.os.Debug;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -22,6 +20,7 @@ import com.qmusic.common.IAsyncDataCallback;
 import com.qmusic.common.IServiceCallback;
 import com.qmusic.dal.BDatabaseHelper;
 import com.qmusic.notification.BNotification;
+import com.qmusic.notification.ScheduledReceiver;
 import com.qmusic.plugin.PluginManager;
 import com.qmusic.service.BDataService;
 import com.qmusic.uitls.BAppHelper;
@@ -50,31 +49,15 @@ public class MyApplication extends Application {
 		super.onLowMemory();
 	}
 
-	@Override
-	public void onTerminate() {
-		// TODO Auto-generated method stub
-		super.onTerminate();
-	}
-
 	public static void init(Application ctx) {
-		startDate = System.currentTimeMillis() / 1000;
+		startDate = System.currentTimeMillis();
 		foreground = new Stack<String>();
 		foreground.setSize(2);
 		ApplicationInfo appInfo = ctx.getApplicationInfo();
-		int appFlags = appInfo.flags;
-		if ((appFlags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
-			DEBUG = true;
-			// Do StrictMode setup here
-			// StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-			// .detectLeakedSqlLiteObjects().penaltyLog().penaltyDeath()
-			// .build());
-			// StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-			// .detectDiskReads().detectDiskWrites().detectNetwork()
-			// .penaltyLog().build());
-			// watchMem();
-		} else {
+		if ((appInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
 			DEBUG = false;
-			// CrashHandler.init(ctx);
+		} else {
+			DEBUG = true;
 		}
 
 		AQUtility.setContext(ctx);
@@ -99,6 +82,8 @@ public class MyApplication extends Application {
 		final Context ctx = AQUtility.getContext();
 		try {
 			PluginManager.destory();
+			// this is initialized in BDataService
+			ScheduledReceiver.shutdown(ctx);
 			ctx.stopService(new Intent(ctx, BDataService.class));
 			BDatabaseHelper.closeDB();
 			BNotification.cancel(ctx);
@@ -107,7 +92,8 @@ public class MyApplication extends Application {
 			MobclickAgent.reportError(ctx, ex.getMessage());
 			ex.printStackTrace();
 		}
-		Log.i(TAG, "====End " + ctx.getPackageName() + "====");
+		long minutes = (System.currentTimeMillis() - startDate) / 1000 / 60;
+		Log.i(TAG, String.format("====End %s. Used %d minute(s)====", ctx.getString(R.string.app_name), minutes));
 		android.os.Process.killProcess(android.os.Process.myPid());
 		System.exit(0);
 	}
@@ -200,40 +186,4 @@ public class MyApplication extends Application {
 			}
 		}
 	};
-
-	static final void watchMem() {
-		final Debug.MemoryInfo outInfo = new Debug.MemoryInfo();
-		final ActivityManager.MemoryInfo outInfo1 = new ActivityManager.MemoryInfo();
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (true) {
-					Debug.getMemoryInfo(outInfo);
-					int uss0 = outInfo.getTotalPrivateDirty();
-					int pss0 = outInfo.getTotalPss();
-					int rss0 = outInfo.getTotalSharedDirty();
-					BLog.i(TAG, "uss0=" + uss0 + ";pss0=" + pss0 + ";rss0=" + (uss0 + rss0));
-
-					ActivityManager am = (ActivityManager) AQUtility.getContext().getSystemService(ACTIVITY_SERVICE);
-					am.getMemoryInfo(outInfo1);
-					BLog.i(TAG, "availMem=" + outInfo1.availMem + ";threshold=" + outInfo1.threshold + ";lowMemory="
-							+ outInfo1.lowMemory);
-
-					long nativeHeapAllocatedSize = Debug.getNativeHeapAllocatedSize();
-					long nativeHeapFreeSize = Debug.getNativeHeapFreeSize();
-					long nativeHeapSize = Debug.getNativeHeapSize();
-					long globalAllocSize = Debug.getGlobalAllocSize();
-					long threadAllocSize = Debug.getThreadAllocSize();
-					BLog.i(TAG, "nativeHeapAllocatedSize=" + nativeHeapAllocatedSize + ";nativeHeapFreeSize="
-							+ nativeHeapFreeSize + ";nativeHeapSize=" + nativeHeapSize + ";globalAllocSize="
-							+ globalAllocSize + ";threadAllocSize=" + threadAllocSize);
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}).start();
-	}
 }
