@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.qmusic.MyApplication;
 import com.qmusic.activities.DialogActivity;
 import com.qmusic.common.BConstants;
 import com.qmusic.uitls.BLog;
@@ -15,7 +16,7 @@ import com.qmusic.uitls.BUtilities;
 
 public class ScheduledReceiver extends BroadcastReceiver {
 	public static final String TAG = "ScheduledReceiver";
-	static final int INTERVAL = 120 * 60 * 1000;
+	static final int INTERVAL = 60 * 60 * 1000;
 	static final int DELAY = 30 * 1000;
 	public static final String SCHEDULE_TYPE = "schedule_type";
 	public static final int SCHEDULE_ALARM = 1;
@@ -75,20 +76,24 @@ public class ScheduledReceiver extends BroadcastReceiver {
 		}
 		case SCHEDULE_RATING: {
 			BLog.i(TAG, "SCHEDULE_RATING");
-			Bundle extras = new Bundle();
-			extras.putInt(SCHEDULE_TYPE, SCHEDULE_RATING);
-			extras.putString("title", "Feedback");
-			extras.putString("message", "Do you like our app?");
-			extras.putString("ok", "I like it");
-			extras.putString("cancel", "Need to improve");
-			DialogActivity.show(context, extras);
+			if (MyApplication.foreground() != null) {
+				Bundle extras = new Bundle();
+				extras.putInt(SCHEDULE_TYPE, SCHEDULE_RATING);
+				extras.putString("title", "Feedback");
+				extras.putString("message", "Do you like our app?");
+				extras.putString("ok", "I like it");
+				extras.putString("cancel", "Need to improve");
+				DialogActivity.show(context, extras);
+			}
 			break;
 		}
 		case SCHEDULE_ACCOUNT: {
 			BLog.i(TAG, "SCHEDULE_ACCOUNT");
-			Bundle extras = new Bundle();
-			extras.putInt(SCHEDULE_TYPE, SCHEDULE_ACCOUNT);
-			DialogActivity.show(context, extras);
+			if (MyApplication.foreground() != null) {
+				Bundle extras = new Bundle();
+				extras.putInt(SCHEDULE_TYPE, SCHEDULE_ACCOUNT);
+				DialogActivity.show(context, extras);
+			}
 			break;
 		}
 		default: {

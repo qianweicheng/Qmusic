@@ -15,7 +15,6 @@ public class LoginActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		BAppHelper.setTitle(this, R.layout.activity_login, getString(R.string.login));
-		TAG = LoginActivity.class.getSimpleName();
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null) {
 			exitWhenBack = bundle.getBoolean(EXIT_WHEN_BACK);

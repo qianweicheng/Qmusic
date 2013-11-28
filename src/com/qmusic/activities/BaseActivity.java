@@ -5,17 +5,16 @@ import com.actionbarsherlock.view.MenuItem;
 import com.qmusic.MyApplication;
 
 public abstract class BaseActivity extends SherlockFragmentActivity {
-	static String TAG = BaseActivity.class.getSimpleName();
 
 	@Override
 	protected void onStart() {
-		MyApplication.foreground(TAG);
+		MyApplication.foreground(this.getClass().getSimpleName());
 		super.onStart();
 	}
 
 	@Override
 	protected void onStop() {
-		MyApplication.background(TAG);
+		MyApplication.background(this.getClass().getSimpleName());
 		super.onStop();
 	}
 

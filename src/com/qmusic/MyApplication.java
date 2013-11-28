@@ -2,6 +2,7 @@ package com.qmusic;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import android.app.ActivityManager;
 import android.app.Application;
@@ -13,7 +14,6 @@ import android.content.pm.ApplicationInfo;
 import android.os.Debug;
 import android.os.IBinder;
 import android.util.Log;
-import android.util.SparseArray;
 
 import com.androidquery.util.AQUtility;
 import com.qmusic.common.BConstants;
@@ -34,7 +34,7 @@ public class MyApplication extends Application {
 	public static boolean STARTED;
 	static ArrayList<WeakReference<IAsyncDataCallback>> callbackList;
 	static IServiceCallback dataService;
-	static SparseArray<String> foreground;
+	static Stack<String> foreground;
 	public static long startDate;
 
 	@Override
@@ -58,7 +58,8 @@ public class MyApplication extends Application {
 
 	public static void init(Application ctx) {
 		startDate = System.currentTimeMillis() / 1000;
-		foreground = new SparseArray<String>();
+		foreground = new Stack<String>();
+		foreground.setSize(2);
 		ApplicationInfo appInfo = ctx.getApplicationInfo();
 		int appFlags = appInfo.flags;
 		if ((appFlags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
@@ -136,30 +137,28 @@ public class MyApplication extends Application {
 
 	public static final void foreground(String tag) {
 		if (foreground.size() == 0) {
+			// Note: session start
 		}
 		BLog.v(TAG, "open:" + tag);
-		foreground.put(tag.hashCode(), tag);
+		foreground.push(tag);
 	}
 
 	public static final void background(String tag) {
 		BLog.v(TAG, "close:" + tag);
-		try {
-			foreground.remove(tag.hashCode());
-			if (foreground.size() == 0) {
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		foreground.remove(tag);
+		if (foreground.size() == 0) {
+			// Note: session end
 		}
 	}
 
 	/*
 	 * this method can't be called from the onCreate or onStart of an activity
 	 * 
-	 * @return
+	 * @return current activity
 	 */
-	public static final String forgeground() {
+	public static final String foreground() {
 		if (foreground.size() > 0) {
-			return foreground.valueAt(0);
+			return foreground.peek();
 		} else {
 			return null;
 		}
