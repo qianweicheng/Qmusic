@@ -8,11 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.qmusic.R;
+import com.qmusic.uitls.BLog;
 
 public final class FragmentUserGuide extends Fragment implements OnClickListener {
 	static final String TAG = FragmentUserGuide.class.getSimpleName();
+	public static final int[] tutorials = new int[] { R.drawable.splash, R.drawable.splash };
 	int index;
 
 	public static FragmentUserGuide newInstance(int index) {
@@ -48,6 +51,13 @@ public final class FragmentUserGuide extends Fragment implements OnClickListener
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View layout = inflater.inflate(R.layout.fragment_user_guide, null);
+		ImageView tutorial = (ImageView) layout.findViewById(R.id.fragment_user_guide_img);
+		if (index > -1 && index < tutorials.length) {
+			tutorial.setImageResource(tutorials[index]);
+		} else {
+			BLog.i(TAG, "index is large than the tutorials lenght");
+			tutorial.setImageResource(tutorials[0]);
+		}
 		return layout;
 	}
 

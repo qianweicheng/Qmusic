@@ -53,7 +53,7 @@ public class GuideActivity extends BaseActivity {
 
 		@Override
 		public int getCount() {
-			return 5;
+			return FragmentUserGuide.tutorials.length;
 		}
 
 		@Override
