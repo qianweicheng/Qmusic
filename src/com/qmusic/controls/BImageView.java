@@ -1,7 +1,5 @@
 package com.qmusic.controls;
 
-import com.qmusic.R;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -19,7 +17,11 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.qmusic.R;
+import com.qmusic.uitls.BLog;
+
 public class BImageView extends ImageView {
+	static final String TAG = BImageView.class.getSimpleName();
 	ColorMatrixColorFilter filter;
 	Paint mMaskPaint;
 	Path mMaskPath;
@@ -55,8 +57,12 @@ public class BImageView extends ImageView {
 	}
 
 	public void setRadius(float radius) {
-		this.mCornerRadius = radius;
-		generateMaskPath(this.getWidth(), this.getHeight());
+		if (radius > 0) {
+			this.mCornerRadius = radius;
+			generateMaskPath(this.getWidth(), this.getHeight());
+		} else {
+			BLog.e(TAG, "radius must greater than zero");
+		}
 	}
 
 	@SuppressLint("NewApi")

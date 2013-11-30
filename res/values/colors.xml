@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="button_pressed">#ff666666</color>
+    <color name="button_normal">#ffffffff</color>
     <color name="gray">#ff666666</color>
     <color name="white">#ffffffff</color>
     <color name="txt_gray_input">#000</color>

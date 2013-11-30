@@ -136,7 +136,7 @@ public class ScheduledReceiver extends BroadcastReceiver {
 			}
 		} else {
 			long lastRatingTime = Long.parseLong(ratingTime);
-			if (System.currentTimeMillis() - lastRatingTime > 30 * 24 * 60 * 60 * 1000) {
+			if (System.currentTimeMillis() - lastRatingTime > 30L * 24 * 60 * 60 * 1000) {
 				result = true;
 			}
 		}
