@@ -1,68 +1,109 @@
 package com.qmusic.controls;
 
+import com.qmusic.R;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 
 public class BImageView extends ImageView {
 	ColorMatrixColorFilter filter;
-	boolean blackWhiteEnable;
-
-	// private Matrix matrix = new Matrix();
+	Paint mMaskPaint;
+	Path mMaskPath;
+	float mCornerRadius = 20f;
+	boolean mBlackWhite = false;
 
 	public BImageView(Context context) {
 		super(context);
-		init();
+		init(null);
 	}
 
 	public BImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
+		init(attrs);
 	}
 
-	void init() {
+	public BImageView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		init(attrs);
+	}
+
+	public void setBlackWhite(boolean blackWhite) {
+		this.mBlackWhite = blackWhite;
+		this.invalidate();
+	}
+
+	public boolean getBlackWhite() {
+		return this.mBlackWhite;
+	}
+
+	public float getRadius() {
+		return this.mCornerRadius;
+	}
+
+	public void setRadius(float radius) {
+		this.mCornerRadius = radius;
+		generateMaskPath(this.getWidth(), this.getHeight());
+	}
+
+	@SuppressLint("NewApi")
+	private void init(AttributeSet attrs) {
+		if (attrs != null) {
+			TypedArray styledAttrs = getContext().obtainStyledAttributes(attrs, R.styleable.RoundImage);
+			mCornerRadius = styledAttrs.getDimension(R.styleable.RoundImage_roundradius, mCornerRadius);
+			mBlackWhite = styledAttrs.getBoolean(R.styleable.RoundImage_blackwhite, mBlackWhite);
+			styledAttrs.recycle();
+
+		}
 		ColorMatrix cm = new ColorMatrix();
 		cm.setSaturation(0);
 		filter = new ColorMatrixColorFilter(cm);
+		if (Build.VERSION.SDK_INT >= 11) {
+			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
+		mMaskPaint = new Paint();
+		mMaskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+	}
+
+	private void generateMaskPath(int width, int height) {
+		this.mMaskPath = new Path();
+		this.mMaskPath.addRoundRect(new RectF(0.0F, 0.0F, width, height), this.mCornerRadius, this.mCornerRadius,
+				Path.Direction.CW);
+		this.mMaskPath.setFillType(Path.FillType.INVERSE_WINDING);
 	}
 
 	@Override
-	protected void onDraw(Canvas canvas) {
-		Drawable drawable = this.getDrawable();
-		if (drawable == null)
-			return;
-		if (blackWhiteEnable) {
-			drawable.setColorFilter(filter);
-		}
-		// int saveCount = canvas.save();
-		// int width = getWidth();
-		// int height = getHeight();
-		// int w = drawable.getIntrinsicWidth();
-		// int h = drawable.getIntrinsicHeight();
-		// float ratio = (float) height / (float) width;
-		// float r = (float) h / (float) w;
-		// float scale;
-		// if (ratio > r) {
-		// // 底下空白
-		// scale = height / (float) h;
-		// float offset = (w * scale - width) / 2;
-		// matrix.setScale(scale, scale);
-		// matrix.postTranslate(-offset, 0);
-		// } else {
-		// scale = width / (float) w;
-		// matrix.setScale(scale, scale);
-		// }
-		// canvas.concat(matrix);
-		// drawable.draw(canvas);
-		// canvas.restoreToCount(saveCount);
-		super.onDraw(canvas);
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+		if ((w != oldw) || (h != oldh))
+			generateMaskPath(w, h);
+
 	}
 
-	public void blackWhiteEnable(boolean blackWhiteEnable) {
-		this.blackWhiteEnable = blackWhiteEnable;
+	protected void onDraw(Canvas canvas) {
+		int saveCount = canvas.saveLayerAlpha(0.0F, 0.0F, canvas.getWidth(), canvas.getHeight(), 255,
+				Canvas.HAS_ALPHA_LAYER_SAVE_FLAG);
+		Drawable drawable = this.getDrawable();
+		if (drawable != null) {
+			drawable.setColorFilter(mBlackWhite ? filter : null);
+		}
+		super.onDraw(canvas);
+		if (this.mMaskPath != null) {
+			canvas.drawPath(this.mMaskPath, this.mMaskPaint);
+		}
+		canvas.restoreToCount(saveCount);
 	}
 }

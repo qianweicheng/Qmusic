@@ -12,6 +12,7 @@ import com.google.zxing.CaptureActivity;
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.activities.SplashActivity;
+import com.qmusic.controls.BImageView;
 import com.qmusic.dal.TestTable;
 
 public class TestActivity extends BaseActivity implements View.OnClickListener {
@@ -59,12 +60,14 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void onBtn1(final View view) {
-		startActivityForResult(new Intent(this, CaptureActivity.class), 101);
+		// startActivityForResult(new Intent(this, CaptureActivity.class), 101);
 		// for (int i = 0; i < 10; i++) {
 		// Thread thread = new Thread(runnable);
 		// thread.setName("T" + i);
 		// thread.start();
 		// }
+		BImageView img = (BImageView) findViewById(R.id.img);
+		img.setBlackWhite(!img.getBlackWhite());
 	}
 
 	Runnable runnable = new Runnable() {
@@ -83,21 +86,23 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	};
 
 	public void onBtn2(final View view) {
-		TestTable table = new TestTable();
-		Cursor cursor = table.query(null, null, null, null, null, null);
-		while (cursor.moveToNext()) {
-			int count = cursor.getColumnCount();
-			ContentValues cv = new ContentValues();
-			for (int i = 0; i < count; i++) {
-				cv.put(cursor.getColumnName(i), cursor.getString(i));
-			}
-			Log.i(TAG, cv.toString());
-		}
+		// TestTable table = new TestTable();
+		// Cursor cursor = table.query(null, null, null, null, null, null);
+		// while (cursor.moveToNext()) {
+		// int count = cursor.getColumnCount();
+		// ContentValues cv = new ContentValues();
+		// for (int i = 0; i < count; i++) {
+		// cv.put(cursor.getColumnName(i), cursor.getString(i));
+		// }
+		// Log.i(TAG, cv.toString());
+		// }
+		BImageView img = (BImageView) findViewById(R.id.img);
+		img.setRadius(img.getRadius() + 3);
 	}
 
 	public void onBtn3(final View view) {
-		TestTable table = new TestTable();
-		table.clear();
+		BImageView img = (BImageView) findViewById(R.id.img);
+		img.setRadius(img.getRadius() - 3);
 	}
 
 	public void onBtn4(final View view) {

@@ -12,9 +12,13 @@
             <enum name="tab2" value="2" />
         </attr>
         <attr name="activeType">
-			<flag name="stroke" value="0" />
-			<flag name="fill" value="1" />
-		</attr>
+            <flag name="stroke" value="0" />
+            <flag name="fill" value="1" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="RoundImage">
+        <attr name="roundradius" format="dimension" />
+        <attr name="blackwhite" format="boolean" />
     </declare-styleable>
 
 </resources>

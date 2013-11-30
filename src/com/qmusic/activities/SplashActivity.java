@@ -24,7 +24,7 @@ public class SplashActivity extends SherlockFragmentActivity {
 	static final int WAITING_TIME = 500;
 	public static final String SHUTDOWN = "shutdown";
 	public static final String RE_LOGIN = "re_login";
-	public static final boolean UI_TEST = false;// only for UI test.
+	public static final boolean UI_TEST = true;// only for UI test.
 	Intent newIntent;
 
 	@Override

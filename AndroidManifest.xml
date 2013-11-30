@@ -90,7 +90,7 @@
             android:theme="@style/b_empty_dialog" >
         </activity>
         <activity
-            android:name="com.qmusic.test.TestActivityActivity"
+            android:name="com.qmusic.test.TestActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
