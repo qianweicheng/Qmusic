@@ -1,19 +1,21 @@
 package com.qmusic.test;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.zxing.CaptureActivity;
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.activities.SplashActivity;
 import com.qmusic.controls.BImageView;
 import com.qmusic.dal.TestTable;
+import com.qmusic.uitls.BLog;
 
 public class TestActivity extends BaseActivity implements View.OnClickListener {
 	public static final String TAG = TestActivity.class.getSimpleName();
@@ -47,15 +49,6 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 			onBtn3(v);
 		} else if (viewId == R.id.button4) {
 			onBtn4(v);
-		}
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// 当前只有一个返回值
-		if (resultCode == RESULT_OK && requestCode == 101) {
-			String result = data.getExtras().getString("result");
-			Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -106,18 +99,25 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void onBtn4(final View view) {
-		Cursor cursor = getContentResolver().query(TestTable.CONTENT_URL, null, null, null, null);
-		if (cursor != null) {
-			while (cursor.moveToNext()) {
-				int count = cursor.getColumnCount();
-				ContentValues cv = new ContentValues();
-				for (int i = 0; i < count; i++) {
-					cv.put(cursor.getColumnName(i), cursor.getString(i));
-				}
-				Log.i(TAG, cv.toString());
+		try {
+			Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+			intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+			intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开启语音");
+
+			startActivityForResult(intent, 1001);
+		} catch (Exception e) {
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		if (1001 == requestCode && resultCode == RESULT_OK) {
+			Toast.makeText(this, "返回结果正常", Toast.LENGTH_LONG).show();
+			ArrayList<String> result = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS); // 获取语言的字符
+			for (int i = 0; i < result.size(); i++) {
+				BLog.i(TAG, result.get(i));
 			}
-		} else {
-			Log.e(TAG, "null");
 		}
 	}
 }

@@ -41,6 +41,23 @@ public final class FragmentUserGuide extends Fragment implements OnClickListener
 	}
 
 	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof GuideActivity) {
+			((GuideActivity) activity).registerPage(this);
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		Activity activity = getActivity();
+		if (activity instanceof GuideActivity) {
+			((GuideActivity) activity).unRegisterPage(this);
+		}
+	}
+
+	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putInt("index", index);
 	}
