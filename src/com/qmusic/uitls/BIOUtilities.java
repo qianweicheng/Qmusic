@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -255,14 +257,18 @@ public final class BIOUtilities {
 		BufferedReader localBufferedReader = null;
 		try {
 			FileReader fr = new FileReader("/proc/cpuinfo");
-			localBufferedReader = new BufferedReader(fr, 8192);
+			localBufferedReader = new BufferedReader(fr, 1024);
 			String line;
+			Pattern pattern = Pattern.compile("[(arm)|(intel)|(mips)]");
 			while ((line = localBufferedReader.readLine()) != null) {
-				Log.i(TAG, line);
-				if (line.startsWith("model name")) {
-					String[] s = line.split(":");
-					cpu = s[1].toLowerCase(Locale.getDefault());
-					break;
+				String[] secs = line.split(":");
+				if (secs.length > 1) {
+					String value = line.split(":")[1].toLowerCase(Locale.getDefault());
+					Matcher matcher = pattern.matcher(value);
+					if (matcher.find()) {
+						cpu = value;
+						break;
+					}
 				}
 			}
 		} catch (IOException ex) {
