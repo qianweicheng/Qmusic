@@ -12,6 +12,7 @@ import android.content.ServiceConnection;
 import android.content.pm.ApplicationInfo;
 import android.os.IBinder;
 import android.util.Log;
+import cn.jpush.android.api.JPushInterface;
 
 import com.androidquery.util.AQUtility;
 import com.qmusic.common.BConstants;
@@ -19,11 +20,12 @@ import com.qmusic.common.BUser;
 import com.qmusic.common.IAsyncDataCallback;
 import com.qmusic.common.IServiceCallback;
 import com.qmusic.dal.BDatabaseHelper;
+import com.qmusic.localplugin.PluginManager;
 import com.qmusic.notification.BNotification;
 import com.qmusic.notification.ScheduledReceiver;
-import com.qmusic.plugin.PluginManager;
 import com.qmusic.service.BDataService;
 import com.qmusic.uitls.BAppHelper;
+import com.qmusic.uitls.BIOUtilities;
 import com.qmusic.uitls.BLog;
 import com.umeng.analytics.MobclickAgent;
 
@@ -68,11 +70,14 @@ public class MyApplication extends Application {
 		BDatabaseHelper.init(ctx);
 		BAppHelper.init(ctx);
 		ctx.bindService(new Intent(ctx, BDataService.class), serviceConnection, Context.BIND_AUTO_CREATE);
-		// JPushInterface.setDebugMode(DEBUG);
-		// JPushInterface.init(ctx);
-		// if (BUser.isLogined()) {
-		// JPushInterface.setAlias(ctx, BUser.getUser().getId(), null);
-		// }
+		String cpuInfo = BIOUtilities.getCpuType();
+		if (cpuInfo.contains("arm")) {
+			JPushInterface.setDebugMode(DEBUG);
+			JPushInterface.init(ctx);
+			if (BUser.isLogined()) {
+				JPushInterface.setAlias(ctx, BUser.getUser().getId(), null);
+			}
+		}
 		MobclickAgent.setDebugMode(DEBUG);
 		MobclickAgent.setAutoLocation(true);
 		MobclickAgent.setSessionContinueMillis(60 * 1000);

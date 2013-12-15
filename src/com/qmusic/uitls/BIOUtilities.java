@@ -1,21 +1,24 @@
 package com.qmusic.uitls;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import com.androidquery.util.AQUtility;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.androidquery.util.AQUtility;
 
 public final class BIOUtilities {
 	static final String TAG = BIOUtilities.class.getSimpleName();
@@ -245,6 +248,37 @@ public final class BIOUtilities {
 		}
 
 		return ret;
+	}
+
+	public static final String getCpuType() {
+		String cpu = "";
+		BufferedReader localBufferedReader = null;
+		try {
+			FileReader fr = new FileReader("/proc/cpuinfo");
+			localBufferedReader = new BufferedReader(fr, 8192);
+			String line;
+			while ((line = localBufferedReader.readLine()) != null) {
+				Log.i(TAG, line);
+				if (line.startsWith("model name")) {
+					String[] s = line.split(":");
+					cpu = s[1].toLowerCase(Locale.getDefault());
+					break;
+				}
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (localBufferedReader != null) {
+				try {
+					localBufferedReader.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		return cpu;
 	}
 
 	public final static boolean writeToFile(String filename, String data) {

@@ -1,4 +1,4 @@
-package com.qmusic.plugin;
+package com.qmusic.localplugin;
 
 import android.content.Context;
 
