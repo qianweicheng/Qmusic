@@ -3,6 +3,8 @@ package com.qmusic.dal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.qmusic.uitls.BLog;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -24,6 +26,11 @@ public class BDatabaseHelper extends SQLiteOpenHelper {
 		context = ctx;
 	}
 
+	/**
+	 * Please do NOT close the database after you have used it.
+	 * 
+	 * @return
+	 */
 	public synchronized static final SQLiteDatabase getDatabase() {
 		if (instance == null) {
 			if (context == null) {
@@ -32,6 +39,12 @@ public class BDatabaseHelper extends SQLiteOpenHelper {
 			instance = new BDatabaseHelper(context);
 		}
 		return instance.getWritableDatabase();
+	}
+
+	@Override
+	public synchronized void close() {
+		super.close();
+		BLog.w(TAG, "do you really need to close the db? you are supporsed to close the db when you exit the app.");
 	}
 
 	public synchronized static final void closeDB() {

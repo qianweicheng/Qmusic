@@ -12,7 +12,6 @@ import android.provider.BaseColumns;
 public abstract class BaseTable implements BaseColumns {
 	static final String TAG = BaseTable.class.getSimpleName();
 	private HashMap<String, Class<?>> fields;
-	SQLiteDatabase db;
 
 	public BaseTable() {
 		fields = new HashMap<String, Class<?>>();
@@ -83,10 +82,8 @@ public abstract class BaseTable implements BaseColumns {
 			String orderBy) {
 		Cursor cursor = null;
 		try {
-			if (db == null) {
-				db = BDatabaseHelper.getDatabase();
-			}
-			cursor = db.query(getTableName(), columns, selection, selectionArgs, groupBy, having, orderBy);
+			cursor = BDatabaseHelper.getDatabase().query(getTableName(), columns, selection, selectionArgs, groupBy,
+					having, orderBy);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -97,10 +94,8 @@ public abstract class BaseTable implements BaseColumns {
 			String orderBy, String limit) {
 		Cursor cursor = null;
 		try {
-			if (db == null) {
-				db = BDatabaseHelper.getDatabase();
-			}
-			cursor = db.query(getTableName(), columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+			cursor = BDatabaseHelper.getDatabase().query(getTableName(), columns, selection, selectionArgs, groupBy,
+					having, orderBy, limit);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -110,10 +105,7 @@ public abstract class BaseTable implements BaseColumns {
 	public long insert(ContentValues values) {
 		long result = 0;
 		try {
-			if (db == null) {
-				db = BDatabaseHelper.getDatabase();
-			}
-			result = db.insert(getTableName(), null, values);
+			result = BDatabaseHelper.getDatabase().insert(getTableName(), null, values);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -123,10 +115,7 @@ public abstract class BaseTable implements BaseColumns {
 	public int update(ContentValues values, String whereClause, String[] whereArgs) {
 		int result = 0;
 		try {
-			if (db == null) {
-				db = BDatabaseHelper.getDatabase();
-			}
-			result = db.update(getTableName(), values, whereClause, whereArgs);
+			result = BDatabaseHelper.getDatabase().update(getTableName(), values, whereClause, whereArgs);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -136,10 +125,7 @@ public abstract class BaseTable implements BaseColumns {
 	public int delete(String whereClause, String[] whereArgs) {
 		int result = 0;
 		try {
-			if (db == null) {
-				db = BDatabaseHelper.getDatabase();
-			}
-			result = db.delete(getTableName(), whereClause, whereArgs);
+			result = BDatabaseHelper.getDatabase().delete(getTableName(), whereClause, whereArgs);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -148,10 +134,7 @@ public abstract class BaseTable implements BaseColumns {
 
 	public void clear() {
 		try {
-			if (db == null) {
-				db = BDatabaseHelper.getDatabase();
-			}
-			db.delete(getTableName(), "1=1", null);
+			BDatabaseHelper.getDatabase().delete(getTableName(), "1=1", null);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

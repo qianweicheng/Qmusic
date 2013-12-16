@@ -30,7 +30,7 @@ public class BAppHelper {
 	public final static boolean exit(Activity activity, boolean force) {
 		if (exiting == 1 || force) {
 			Intent intent = new Intent(activity, SplashActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent.putExtra(SplashActivity.SHUTDOWN, true);
 			activity.startActivity(intent);
 			activity.overridePendingTransition(0, 0);
