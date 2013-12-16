@@ -89,7 +89,7 @@ public class MyApplication extends Application {
 			PluginManager.destory();
 			// this is initialized in BDataService
 			ScheduledReceiver.shutdown(ctx);
-			ctx.stopService(new Intent(ctx, BDataService.class));
+			ctx.unbindService(serviceConnection);
 			BDatabaseHelper.closeDB();
 			BNotification.cancel(ctx);
 			MobclickAgent.onKillProcess(ctx);

@@ -24,7 +24,9 @@ public class SplashActivity extends SherlockFragmentActivity {
 	static final int WAITING_TIME = 500;
 	public static final String SHUTDOWN = "shutdown";
 	public static final String RE_LOGIN = "re_login";
-	public static final boolean UI_TEST = false;// only for UI test.
+	public static final String ROUTE = "route";
+	public static final String ORIGININTENT = "originIntent";
+	public static final boolean UI_TEST = true;// only for UI test.
 	Intent newIntent;
 
 	@Override
@@ -41,6 +43,47 @@ public class SplashActivity extends SherlockFragmentActivity {
 		if (newIntent == null) {
 			newIntent = getIntent();
 		}
+		process();
+		newIntent = null;
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		BLog.i(TAG, "onResume");
+		MobclickAgent.onResume(this);
+		// 在部分tablet上面会延迟调用onStop,导致onStart不会被调用
+		if (newIntent != null) {
+			process();
+		}
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		BLog.i(TAG, "onStop");
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		BLog.i(TAG, "onNewIntent");
+		newIntent = intent;
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		MyApplication.shutdown();
+	}
+
+	private void process() {
 		Bundle bundle = newIntent.getExtras();
 		if (bundle != null && bundle.size() > 0) {
 			if (bundle.getBoolean(SHUTDOWN, false)) {
@@ -67,6 +110,16 @@ public class SplashActivity extends SherlockFragmentActivity {
 			} else if (bundle.getBoolean(RE_LOGIN, false)) {
 				checkLogin();
 				return;
+			} else if (bundle.getBoolean(ROUTE, false)) {
+				BLog.w(TAG, "route");
+				try {
+					Intent originIntent = bundle.getParcelable(ORIGININTENT);
+					startActivity(originIntent);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					checkLogin();
+				}
+				return;
 			} else {
 				BLog.i(TAG, "bundle does not match any key. " + bundle.toString());
 				new MyAsyncTask().execute();
@@ -79,32 +132,6 @@ public class SplashActivity extends SherlockFragmentActivity {
 		} else {
 			new MyAsyncTask().execute();
 		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		MobclickAgent.onResume(this);
-		BLog.i(TAG, "onResume");
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		MobclickAgent.onPause(this);
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		BLog.i(TAG, "onNewIntent");
-		newIntent = intent;
-	}
-
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		MyApplication.shutdown();
 	}
 
 	class MyAsyncTask extends AsyncTask<Void, Void, Void> {

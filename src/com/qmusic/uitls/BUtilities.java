@@ -18,6 +18,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.text.TextUtils;
@@ -166,6 +167,33 @@ public class BUtilities {
 			return s;
 		else
 			return (new StringBuilder()).append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).toString();
+	}
+
+	public static final String getAuthorityFromPermission(Context context, String permission) {
+		if (TextUtils.isEmpty(permission)) {
+			return null;
+		}
+		List<PackageInfo> packs = context.getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS);
+		if (packs == null) {
+			return null;
+		}
+		for (PackageInfo pack : packs) {
+			ProviderInfo[] providers = pack.providers;
+			if (providers != null) {
+				for (ProviderInfo provider : providers) {
+					// if (!TextUtils.isEmpty(provider.readPermission)) {
+					// Log.i("ShortCutHelper_R:", provider.readPermission);
+					// }
+					// if (!TextUtils.isEmpty(provider.writePermission)) {
+					// Log.i("ShortCutHelper_W:", provider.writePermission);
+					// }
+					if (permission.equals(provider.readPermission) || permission.equals(provider.writePermission)) {
+						return provider.authority;
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	public final static String getCookieFromHeader(List<Header> headers) {

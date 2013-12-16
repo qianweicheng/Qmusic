@@ -9,6 +9,7 @@ import android.speech.RecognizerIntent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.qmusic.R;
@@ -18,9 +19,11 @@ import com.qmusic.dal.TestTable;
 import com.qmusic.extplugin.IPluginCallback;
 import com.qmusic.extplugin.PluginLoader;
 import com.qmusic.uitls.BLog;
+import com.qmusic.uitls.ShortCutHelper;
 
 public class TestActivity extends BaseActivity implements View.OnClickListener {
 	public static final String TAG = TestActivity.class.getSimpleName();
+	EditText edit;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +33,13 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 		findViewById(R.id.button2).setOnClickListener(this);
 		findViewById(R.id.button3).setOnClickListener(this);
 		findViewById(R.id.button4).setOnClickListener(this);
+		edit = (EditText) findViewById(R.id.test_type);
 	}
 
 	@Override
 	public void onBackPressed() {
 		Intent intent = new Intent(this, SplashActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		intent.putExtra(SplashActivity.SHUTDOWN, true);
 		startActivity(intent);
 	}
@@ -57,18 +61,27 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	String pluginId;
 
 	public void onBtn1(final View view) {
-		pluginId = PluginLoader.loadPlugin(getApplicationContext(), "/sdcard/loader_dex.jar",
-				"com.androidtest.DemoPlugin");
-		if (!TextUtils.isEmpty(pluginId)) {
-			String[] functions = PluginLoader.getFunctions(pluginId);
-			for (String function : functions) {
-				PluginLoader.execute(pluginId, function, callback);
-			}
-		}
+		// pluginId = PluginLoader.loadPlugin(getApplicationContext(),
+		// "/sdcard/loader_dex.jar",
+		// "com.androidtest.DemoPlugin");
+		// if (!TextUtils.isEmpty(pluginId)) {
+		// String[] functions = PluginLoader.getFunctions(pluginId);
+		// for (String function : functions) {
+		// PluginLoader.execute(pluginId, function, callback);
+		// }
+		// }
+		ShortCutHelper.listShortcut(this);
 	}
 
 	public void onBtn2(final View view) {
-		PluginLoader.removePlugin(pluginId);
+		String f = edit.getText().toString();
+		long result = ShortCutHelper.hasShortcut(this, "Title test" + f, getPackageName());
+		if (result > 0) {
+			ShortCutHelper.remove(this, "Title test" + f);
+		} else {
+			ShortCutHelper.create(this, "Title test" + f);
+		}
+		// PluginLoader.removePlugin(pluginId);
 		// TestTable table = new TestTable();
 		// Cursor cursor = table.query(null, null, null, null, null, null);
 		// while (cursor.moveToNext()) {
@@ -84,19 +97,28 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void onBtn3(final View view) {
-		PluginLoader.removeCache(this, "loader_dex.jar");
+		String f = edit.getText().toString();
+		ShortCutHelper.remove2(this, f, getPackageName());
 	}
 
-	public void onBtn4(final View view) {
-		try {
-			Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-			intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-			intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开启语音");
+	int i = 1;
 
-			startActivityForResult(intent, 1001);
-		} catch (Exception e) {
-			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+	public void onBtn4(final View view) {
+		long result = ShortCutHelper.hasShortcut(this, null, "com.android.mms");
+		if (result > 0) {
+			ShortCutHelper.update(this, result, "Balabal" + i, "com.qmusic", "com.qmusic:drawable/b_loader_" + i, i, i);
+			i = i % 4 + 1;
 		}
+		// try {
+		// Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		// intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+		// RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+		// intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开启语音");
+		//
+		// startActivityForResult(intent, 1001);
+		// } catch (Exception e) {
+		// Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+		// }
 	}
 
 	IPluginCallback callback = new IPluginCallback() {

@@ -22,6 +22,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS" />
     <uses-permission android:name="com.qmusic.permission.All" />
     <!-- zxing -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -115,6 +117,16 @@
         <activity
             android:name="com.google.zxing.CaptureActivity"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.qmusic.activities.ShortCutActivity"
+            android:icon="@drawable/tab1"
+            android:label="钱炜铖" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <!-- widget -->
         <receiver android:name="com.qmusic.widget.BWidgetProvidergetProvider" >

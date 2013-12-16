@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Debug;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -119,10 +118,12 @@ public class BAppHelper {
 			BLog.i(TAG, BUtilities.objToJsonString(System.getenv()));
 			BLog.i(TAG, BUtilities.objToJsonString(System.getProperties()));
 			// Do StrictMode setup here
-			StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().penaltyLog()
-					.penaltyDeath().build());
-			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites()
-					.detectNetwork().penaltyLog().build());
+			// StrictMode.setVmPolicy(new
+			// StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().penaltyLog()
+			// .penaltyDeath().build());
+			// StrictMode.setThreadPolicy(new
+			// StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites()
+			// .detectNetwork().penaltyLog().build());
 			// watchMem();
 		}
 		return count;
