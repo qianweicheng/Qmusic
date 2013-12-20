@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -15,9 +14,10 @@ import android.widget.Toast;
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.activities.SplashActivity;
+import com.qmusic.controls.BTouchView;
+import com.qmusic.controls.BTouchView.OnGesture;
 import com.qmusic.dal.TestTable;
 import com.qmusic.extplugin.IPluginCallback;
-import com.qmusic.extplugin.PluginLoader;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.ShortCutHelper;
 
@@ -70,7 +70,15 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 		// PluginLoader.execute(pluginId, function, callback);
 		// }
 		// }
-		ShortCutHelper.listShortcut(this);
+		// ShortCutHelper.listShortcut(this);
+		BTouchView t = (BTouchView) findViewById(R.id.touchTest);
+		t.setGestureListener(new OnGesture() {
+
+			@Override
+			public void onGesture(int type) {
+				Log.e(TAG, "onGesture:" + type);
+			}
+		});
 	}
 
 	public void onBtn2(final View view) {

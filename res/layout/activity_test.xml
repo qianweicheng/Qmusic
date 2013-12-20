@@ -41,14 +41,20 @@
         android:background="@drawable/round_item_footer_button"
         android:text="TestEvent" />
 
-    <com.qmusic.controls.BImageView
-        android:id="@+id/img"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_margin="10dp"
-        android:background="#ff0000"
-        android:scaleType="centerCrop"
-        android:src="@drawable/splash"
-        app:blackwhite="false" />
+    <com.qmusic.controls.BTouchView
+        android:id="@+id/touchTest"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" >
+
+        <com.qmusic.controls.BImageView
+            android:id="@+id/img"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_margin="10dp"
+            android:background="#ff0000"
+            android:scaleType="centerCrop"
+            android:src="@drawable/splash"
+            app:blackwhite="false" />
+    </com.qmusic.controls.BTouchView>
 
 </LinearLayout>
