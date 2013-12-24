@@ -40,7 +40,6 @@ public class BAccountSelectionFragment extends BaseDialogFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		TAG = BAccountSelectionFragment.class.getSimpleName();
 		try {
 			Activity act = getActivity();
 			AccountManager accountManager = AccountManager.get(act);

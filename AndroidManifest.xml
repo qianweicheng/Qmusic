@@ -107,6 +107,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.qmusic.test.Test2Activity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.qmusic.activities.LoginActivity"
             android:screenOrientation="portrait" >
         </activity>

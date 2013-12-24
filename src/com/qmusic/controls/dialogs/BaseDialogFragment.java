@@ -7,12 +7,13 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 
 public abstract class BaseDialogFragment extends DialogFragment {
-	static String TAG = BaseDialogFragment.class.getSimpleName();
+	static String TAG = "BaseDialogFragment";
 	IFragmentDialogCallback callback;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		TAG = this.getClass().getSimpleName();
 	}
 
 	@Override

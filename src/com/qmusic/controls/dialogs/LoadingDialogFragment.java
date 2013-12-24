@@ -5,10 +5,12 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.qmusic.controls.BProgressDialog;
-
 public class LoadingDialogFragment extends BaseDialogFragment {
 	String title, msg;
+
+	public static LoadingDialogFragment getInstance() {
+		return getInstance(null, true);
+	}
 
 	public static LoadingDialogFragment getInstance(final String msg, boolean cancelable) {
 		LoadingDialogFragment fragment = new LoadingDialogFragment();
@@ -39,7 +41,6 @@ public class LoadingDialogFragment extends BaseDialogFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		TAG = LoadingDialogFragment.class.getSimpleName();
 		Bundle arguments;
 		if (savedInstanceState != null) {
 			arguments = savedInstanceState;

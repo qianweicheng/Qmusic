@@ -25,7 +25,6 @@ public class ActionSheetDialogFragment extends BaseDialogFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		TAG = ActionSheetDialogFragment.class.getSimpleName();
 		Bundle arguments;
 		if (savedInstanceState != null) {
 			arguments = savedInstanceState;

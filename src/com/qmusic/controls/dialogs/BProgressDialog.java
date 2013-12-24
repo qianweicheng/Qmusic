@@ -1,9 +1,10 @@
-package com.qmusic.controls;
+package com.qmusic.controls.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +21,7 @@ public class BProgressDialog extends Dialog {
 	AnimationDrawable animation;
 	TextView txtLoading;
 
-	private BProgressDialog(Context context) {
+	public BProgressDialog(Context context) {
 		this(context, null);
 	}
 
@@ -42,13 +43,17 @@ public class BProgressDialog extends Dialog {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		ImageView icon = (ImageView) this.findViewById(R.id.dialog_image);
-		animation = (AnimationDrawable) icon.getDrawable();
-		animation.start();
+		Log.e(TAG, "onWindowFocusChanged");
+		if (hasFocus) {
+			ImageView icon = (ImageView) this.findViewById(R.id.dialog_image);
+			animation = (AnimationDrawable) icon.getDrawable();
+			animation.start();
+		}
 	}
 
 	@Override
 	public void onDetachedFromWindow() {
+		Log.e(TAG, "onDetachedFromWindow");
 		if (animation != null)
 			animation.stop();
 		super.onDetachedFromWindow();

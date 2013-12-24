@@ -14,7 +14,7 @@ import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.common.BConstants;
 import com.qmusic.common.BUser;
-import com.qmusic.test.TestActivity;
+import com.qmusic.test.Test2Activity;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
 import com.umeng.analytics.MobclickAgent;
@@ -128,7 +128,7 @@ public class SplashActivity extends SherlockFragmentActivity {
 		}
 		if (UI_TEST) {
 			MyApplication.STARTED = true;
-			startActivity(new Intent(SplashActivity.this, TestActivity.class));
+			startActivity(new Intent(SplashActivity.this, Test2Activity.class));
 		} else {
 			new MyAsyncTask().execute();
 		}

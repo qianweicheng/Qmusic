@@ -1,0 +1,14 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#cccccc"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/activity_test2_list"
+        style="@style/b_list_style" >
+    </ListView>
+
+</LinearLayout>

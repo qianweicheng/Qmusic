@@ -1,10 +1,12 @@
 package com.qmusic.uitls;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Debug;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -27,10 +29,15 @@ public class BAppHelper {
 	static final String TAG = BAppHelper.class.getSimpleName();
 	static int exiting;
 
+	@SuppressLint("InlinedApi")
 	public final static boolean exit(Activity activity, boolean force) {
 		if (exiting == 1 || force) {
 			Intent intent = new Intent(activity, SplashActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+			if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+			} else {
+				intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			}
 			intent.putExtra(SplashActivity.SHUTDOWN, true);
 			activity.startActivity(intent);
 			activity.overridePendingTransition(0, 0);
@@ -48,6 +55,20 @@ public class BAppHelper {
 			return false;
 		}
 		return false;
+	}
+
+	@SuppressLint("InlinedApi")
+	public final static void reLogin(Activity activity) {
+		Intent intent = new Intent(activity, SplashActivity.class);
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+		} else {
+			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		}
+		intent.putExtra(SplashActivity.RE_LOGIN, true);
+		activity.startActivity(intent);
+		activity.finish();
+		activity.overridePendingTransition(0, 0);
 	}
 
 	public static final void setTitle(SherlockFragmentActivity activity, int layoutResID, String title, boolean showBack) {

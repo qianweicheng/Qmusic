@@ -90,7 +90,6 @@ public class AlertDialogFragment extends BaseDialogFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		TAG = AlertDialogFragment.class.getSimpleName();
 		Bundle arguments;
 		if (savedInstanceState != null) {
 			arguments = savedInstanceState;

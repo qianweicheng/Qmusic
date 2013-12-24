@@ -41,7 +41,6 @@ public class InputDialogFragment extends BaseDialogFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		TAG = InputDialogFragment.class.getSimpleName();
 		Bundle arguments;
 		if (savedInstanceState != null) {
 			arguments = savedInstanceState;

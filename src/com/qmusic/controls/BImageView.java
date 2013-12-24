@@ -20,6 +20,12 @@ import android.widget.ImageView;
 import com.qmusic.R;
 import com.qmusic.uitls.BLog;
 
+/**
+ * 圆角与黑白效果
+ * 
+ * @author weicheng
+ * 
+ */
 public class BImageView extends ImageView {
 	static final String TAG = BImageView.class.getSimpleName();
 	ColorMatrixColorFilter filter;

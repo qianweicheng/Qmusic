@@ -16,6 +16,7 @@ import com.qmusic.activities.BaseActivity;
 import com.qmusic.activities.SplashActivity;
 import com.qmusic.controls.BTouchView;
 import com.qmusic.controls.BTouchView.OnGesture;
+import com.qmusic.controls.dialogs.LoadingDialogFragment;
 import com.qmusic.dal.TestTable;
 import com.qmusic.extplugin.IPluginCallback;
 import com.qmusic.uitls.BLog;
@@ -82,13 +83,16 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void onBtn2(final View view) {
-		String f = edit.getText().toString();
-		long result = ShortCutHelper.hasShortcut(this, "Title test" + f, getPackageName());
-		if (result > 0) {
-			ShortCutHelper.remove(this, "Title test" + f);
-		} else {
-			ShortCutHelper.create(this, "Title test" + f);
-		}
+		LoadingDialogFragment fragment = LoadingDialogFragment.getInstance("message", true);
+		fragment.show(getSupportFragmentManager());
+		// String f = edit.getText().toString();
+		// long result = ShortCutHelper.hasShortcut(this, "Title test" + f,
+		// getPackageName());
+		// if (result > 0) {
+		// ShortCutHelper.remove(this, "Title test" + f);
+		// } else {
+		// ShortCutHelper.create(this, "Title test" + f);
+		// }
 		// PluginLoader.removePlugin(pluginId);
 		// TestTable table = new TestTable();
 		// Cursor cursor = table.query(null, null, null, null, null, null);
