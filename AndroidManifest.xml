@@ -170,7 +170,8 @@
 
                 <category android:name="com.qmusic" />
             </intent-filter>
-            <intent-filter>
+            <!--
+                 <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
@@ -180,6 +181,7 @@
 
                 <data android:scheme="package" />
             </intent-filter>
+            -->
         </receiver>
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
         <receiver
