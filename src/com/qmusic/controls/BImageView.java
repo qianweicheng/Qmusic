@@ -87,6 +87,7 @@ public class BImageView extends ImageView {
 			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
 		mMaskPaint = new Paint();
+		mMaskPaint.setAntiAlias(true);
 		mMaskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 	}
 
