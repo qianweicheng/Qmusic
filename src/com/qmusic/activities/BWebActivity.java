@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 
 import com.qmusic.R;
 import com.qmusic.controls.dialogs.BToast;
-import com.qmusic.uitls.BAppHelper;
 import com.qmusic.uitls.BLog;
 
 public class BWebActivity extends BaseActivity {
@@ -40,7 +39,7 @@ public class BWebActivity extends BaseActivity {
 			if (TextUtils.isEmpty(title)) {
 				title = getString(R.string.app_name);
 			}
-			BAppHelper.setTitle(this, R.layout.activity_web, title);
+			setContentView(R.layout.activity_web);
 			boolean showProgressBar = bundle.getBoolean(SHOW_PROGRESS_BAR, true);
 			progressBar = (ProgressBar) findViewById(R.id.activity_web_progressbar);
 			if (showProgressBar) {

@@ -11,14 +11,8 @@ import android.os.Debug;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.androidquery.util.AQUtility;
 import com.qmusic.MyApplication;
 import com.qmusic.R;
@@ -69,55 +63,6 @@ public class BAppHelper {
 		activity.startActivity(intent);
 		activity.finish();
 		activity.overridePendingTransition(0, 0);
-	}
-
-	public static final void setTitle(SherlockFragmentActivity activity, int layoutResID, String title, boolean showBack) {
-		activity.setContentView(layoutResID);
-		ActionBar actionBar = activity.getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(showBack);
-		actionBar.setDisplayShowHomeEnabled(false);
-		actionBar.setDisplayUseLogoEnabled(false);
-		actionBar.setDisplayShowTitleEnabled(true);
-		// actionBar.setDisplayShowCustomEnabled(true);
-		// actionBar.setDisplayShowHomeEnabled(true);
-		// actionBar.setBackgroundDrawable(AQUtility.getContext().getResources().getDrawable(R.drawable.edo_navbar));
-		if (TextUtils.isEmpty(title)) {
-			actionBar.setTitle("  ");
-		} else {
-			// add padding between back button and title
-			actionBar.setTitle(" " + title);
-		}
-	}
-
-	public static final void setTitle(final Activity activity, int layoutResID, String title) {
-		setTitle(activity, layoutResID, title, R.drawable.icon, new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				activity.finish();
-			}
-		}, 0, null);
-	}
-
-	public static final void setTitle(final Activity activity, int layoutResID, String title, int leftResId,
-			OnClickListener leftButtonCallback, int rightResId, OnClickListener rightButtonCallback) {
-		activity.setContentView(layoutResID);
-		ImageButton btnLeft = (ImageButton) activity.findViewById(R.id.common_title_left_icon);
-		ImageButton btnRight = (ImageButton) activity.findViewById(R.id.common_title_right_icon);
-		TextView txtTitle = (TextView) activity.findViewById(R.id.common_title_title);
-		txtTitle.setText(title);
-		if (leftResId == 0 || leftButtonCallback == null) {
-			btnLeft.setVisibility(View.INVISIBLE);
-		} else {
-			btnLeft.setImageResource(leftResId);
-			btnLeft.setOnClickListener(leftButtonCallback);
-		}
-		if (rightResId == 0 || rightButtonCallback == null) {
-			btnRight.setVisibility(View.INVISIBLE);
-		} else {
-			btnRight.setImageResource(rightResId);
-			btnRight.setOnClickListener(rightButtonCallback);
-		}
 	}
 
 	public final static int init(Context ctx) {

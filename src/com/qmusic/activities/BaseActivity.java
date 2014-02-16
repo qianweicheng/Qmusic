@@ -1,10 +1,18 @@
 package com.qmusic.activities;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+
 import com.qmusic.MyApplication;
 
-public abstract class BaseActivity extends SherlockFragmentActivity {
+public abstract class BaseActivity extends FragmentActivity {
+	String TAG = "BaseActivity";
+
+	@Override
+	protected void onCreate(Bundle arg0) {
+		super.onCreate(arg0);
+		TAG = this.getClass().getSimpleName();
+	}
 
 	@Override
 	protected void onStart() {
@@ -18,15 +26,4 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
 		super.onStop();
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int itemId = item.getItemId();
-		switch (itemId) {
-		case android.R.id.home:
-			finish();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
 }

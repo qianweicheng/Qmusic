@@ -3,13 +3,13 @@ package com.qmusic.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.common.BConstants;
@@ -19,7 +19,7 @@ import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
 import com.umeng.analytics.MobclickAgent;
 
-public class SplashActivity extends SherlockFragmentActivity {
+public class SplashActivity extends FragmentActivity {
 	static final String TAG = SplashActivity.class.getSimpleName();
 	static final int WAITING_TIME = 500;
 	public static final String SHUTDOWN = "shutdown";
