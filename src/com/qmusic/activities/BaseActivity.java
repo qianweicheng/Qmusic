@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import com.qmusic.MyApplication;
 
 public abstract class BaseActivity extends FragmentActivity {
-	String TAG = "BaseActivity";
+	protected String TAG = "BaseActivity";
 
 	@Override
 	protected void onCreate(Bundle arg0) {

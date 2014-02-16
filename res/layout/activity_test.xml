@@ -3,58 +3,46 @@
     xmlns:app="http://schemas.android.com/apk/res/com.qmusic"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#cccccc"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="20dp" >
+    android:orientation="vertical" >
+
+    <com.qmusic.controls.CommonTitle
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_h"
+        app:common_title="Test1" >
+    </com.qmusic.controls.CommonTitle>
 
     <EditText
-        android:id="@+id/test_type"
+        android:id="@+id/activity_test1_input_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/activity_test1_button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_head_button"
         android:text="TestCalendar" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/activity_test1_button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_middle_button"
         android:text="TestContract" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/activity_test1_button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_middle_button"
         android:text="TestAlarm" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/activity_test1_button4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_footer_button"
         android:text="TestEvent" />
-
-    <com.qmusic.controls.BTouchView
-        android:id="@+id/touchTest"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" >
-
-        <com.qmusic.controls.BImageView
-            android:id="@+id/img"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:layout_margin="10dp"
-            android:background="#ff0000"
-            android:scaleType="centerCrop"
-            android:src="@drawable/splash"
-            app:blackwhite="false" />
-    </com.qmusic.controls.BTouchView>
 
 </LinearLayout>
