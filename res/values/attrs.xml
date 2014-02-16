@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <declare-styleable name="CommonTitle">
+        <attr name="common_title" format="string" />
+        <attr name="right_text" format="string" />
+        <attr name="right_img" format="reference" />
+        <attr name="left_img" format="reference" />
+        <attr name="left_text" format="string" />
+    </declare-styleable>
     <declare-styleable name="SectionTab">
 
         <!-- =================== -->

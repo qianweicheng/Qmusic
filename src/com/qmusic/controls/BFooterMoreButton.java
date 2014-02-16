@@ -24,7 +24,7 @@ public class BFooterMoreButton extends Button {
 	void init() {
 		setGravity(Gravity.CENTER);
 		setTextAppearance(this.getContext(), android.R.style.TextAppearance_Small);
-		setBackgroundResource(R.drawable.b_button_round);
+		setBackgroundResource(R.drawable.b_button);
 		enableText = "点击获取更多";
 		loadingText = "正在加载中...";
 		setText(enableText);
@@ -36,13 +36,14 @@ public class BFooterMoreButton extends Button {
 
 	public void startLoading() {
 		setClickable(false);
-		setCompoundDrawables(getResources().getDrawable(R.drawable.b_loading), null, null, null);
+		// setCompoundDrawables(getResources().getDrawable(R.drawable.b_loading),
+		// null, null, null);
 		setText(loadingText);
 	}
 
 	public void stopLoading() {
 		setClickable(true);
-		setCompoundDrawables(null, null, null, null);
+		// setCompoundDrawables(null, null, null, null);
 		setText(enableText);
 	}
 }

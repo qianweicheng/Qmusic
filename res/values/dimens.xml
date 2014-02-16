@@ -8,5 +8,7 @@
     <dimen name="margin_xl">10dp</dimen>
     <dimen name="button_w">96dp</dimen>
     <dimen name="button_h">48dp</dimen>
+    <dimen name="padding_drawable">10dp</dimen>
+    <dimen name="padding">3dp</dimen>
 
 </resources>
