@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/common_title_bg"
+    android:insetBottom="20dp"
+    android:insetLeft="20dp"
+    android:insetRight="20dp"
+    android:insetTop="20dp" >
+
+</inset>

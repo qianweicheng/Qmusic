@@ -1,8 +1,13 @@
 package com.qmusic.test;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Shader.TileMode;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
@@ -41,8 +46,12 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 		}
 	}
 
-	public void onBtn1(final View view) {
+	BDrawable bd;
 
+	public void onBtn1(final View view) {
+		ImageView img = (ImageView) findViewById(R.id.activity_test1_image1);
+		bd = new BDrawable(this);
+		img.setImageDrawable(bd);
 	}
 
 	public void onBtn2(final View view) {

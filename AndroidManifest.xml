@@ -122,7 +122,7 @@
             android:name="com.google.zxing.CaptureActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
+       <!--  <activity
             android:name="com.qmusic.activities.ShortCutActivity"
             android:icon="@drawable/tab1"
             android:label="钱炜铖" >
@@ -131,7 +131,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity> -->
         <!-- widget -->
         <receiver android:name="com.qmusic.widget.BWidgetProvidergetProvider" >
             <intent-filter>

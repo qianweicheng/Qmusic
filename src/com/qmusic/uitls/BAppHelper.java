@@ -1,14 +1,18 @@
 package com.qmusic.uitls;
 
+import java.util.HashMap;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Debug;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
@@ -83,6 +87,21 @@ public class BAppHelper {
 			BLog.i(TAG, configuration.toString());
 			BLog.i(TAG, BUtilities.objToJsonString(System.getenv()));
 			BLog.i(TAG, BUtilities.objToJsonString(System.getProperties()));
+			BLog.i(TAG, "DeviceID:" + BUtilities.getDeviceId());
+			TelephonyManager telManager = (TelephonyManager) ctx.getSystemService(Service.TELEPHONY_SERVICE);
+			HashMap<String, Object> telInfo = new HashMap<String, Object>();
+			telInfo.put("DeviceID(IMEI,MEID)", telManager.getDeviceId());
+			telInfo.put("Line1Number", telManager.getLine1Number());
+			telInfo.put("NetworkCountryIso", telManager.getNetworkCountryIso());
+			telInfo.put("NetworkOperator", telManager.getNetworkOperator());
+			telInfo.put("NetworkOperatorName", telManager.getNetworkOperatorName());
+			telInfo.put("SimCountryIso", telManager.getSimCountryIso());
+			telInfo.put("SimOperator", telManager.getSimOperator());
+			telInfo.put("SimOperatorName", telManager.getSimOperatorName());
+			telInfo.put("SimSerialNumber", telManager.getSimSerialNumber());
+			telInfo.put("SimState", telManager.getSimState());
+			telInfo.put("SubscriberId", telManager.getSubscriberId());
+			BLog.i(TAG, BUtilities.objToJsonString(telInfo));
 			// Do StrictMode setup here
 			// StrictMode.setVmPolicy(new
 			// StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().penaltyLog()

@@ -1,10 +1,12 @@
 package com.qmusic.uitls;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +21,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
+import android.provider.Settings.Secure;
 import android.support.v4.app.FragmentActivity;
+import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.TextUtils;
 
@@ -34,6 +38,7 @@ import com.qmusic.controls.dialogs.BToast;
 public class BUtilities {
 	static final String TAG = BUtilities.class.getSimpleName();
 	private static ObjectMapper mapper;
+	protected volatile static UUID uuid;
 
 	public final static ObjectMapper jsonMapper() {
 		if (mapper == null) {
@@ -207,5 +212,39 @@ public class BUtilities {
 			// BLog.i(header.getName(), header.getValue());
 		}
 		return token;
+	}
+
+	// Refer to http://blog.csdn.net/billpig/article/details/6728573
+	public final static String getDeviceId() {
+		Context ctx = AQUtility.getContext();
+		if (uuid == null) {
+			final String id = getPref(BConstants.PREFS_DEVICE_ID);
+			if (!TextUtils.isEmpty(id)) {
+				// Use the ids previously computed and stored in the prefs file
+				uuid = UUID.fromString(id);
+			} else {
+				final String androidId = Secure.getString(ctx.getContentResolver(), Secure.ANDROID_ID);
+
+				// Use the Android ID unless it's broken, in which case fallback
+				// on deviceId,
+				// unless it's not available, then fallback on a random number
+				// which we store
+				// to a prefs file
+				try {
+					if (!"9774d56d682e549c".equals(androidId)) {
+						uuid = UUID.nameUUIDFromBytes(androidId.getBytes("utf8"));
+					} else {
+						final String deviceId = ((TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE))
+								.getDeviceId();
+						uuid = deviceId != null ? UUID.nameUUIDFromBytes(deviceId.getBytes("utf8")) : UUID.randomUUID();
+					}
+				} catch (UnsupportedEncodingException e) {
+					throw new RuntimeException(e);
+				}
+				// Write the value out to the prefs file
+				setPref(BConstants.PREFS_DEVICE_ID, uuid.toString());
+			}
+		}
+		return uuid.toString();
 	}
 }
