@@ -20,11 +20,6 @@ public final class BConstants {
 	public static final String PRE_KEY_SHOW_RATING = "show_rating";
 	public static final String PRE_KEY_RUN_COUNT = "run_count";
 	public static final String PRE_KEY_USER_INFO = "user_info";
-	public static final String PRE_KEY_ORDER_USERNAME = "order_username";
-	public static final String PRE_KEY_ORDER_ADDRESS = "order_address";
-	public static final String PRE_KEY_ORDER_PHONE = "order_phone";
-	public static final String PRE_KEY_ORDER_ZIP = "order_zip";
-	public static final String PRE_KEY_RING = "ring";
 	public static final String PREFS_DEVICE_ID = "device_id";
 	public static final String APP_KEY = "";
 	public static final String APP_SEC = "";

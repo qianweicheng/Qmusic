@@ -2,7 +2,6 @@ package com.qmusic.dal;
 
 import java.util.HashMap;
 
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
@@ -27,14 +26,4 @@ public class TestTable extends BaseTable {
 		createIndex(db, new String[] { FIELD_NAME });
 	}
 
-	public int count() {
-		Cursor cursor = query(new String[] { FIELD_NAME }, null, null, null, null, null, null);
-		if (cursor != null) {
-			int result = cursor.getCount();
-			cursor.close();
-			return result;
-		} else {
-			return 0;
-		}
-	}
 }

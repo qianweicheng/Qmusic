@@ -12,9 +12,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class BDatabaseHelper extends SQLiteOpenHelper {
 	static final String TAG = BDatabaseHelper.class.getSimpleName();
 	// db name
-	private final static String DATABASE_NAME = "bohan.db";
+	private final static String DATABASE_NAME = "qmusic.db";
 	// db version
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 1;
 	static BDatabaseHelper instance;
 	static Context context;
 
@@ -93,7 +93,6 @@ public class BDatabaseHelper extends SQLiteOpenHelper {
 	private static List<BaseTable> getTables() {
 		ArrayList<BaseTable> tables = new ArrayList<BaseTable>();
 		tables.add(new AlarmTable());
-		tables.add(new CommonTable());
 		tables.add(new TestTable());
 		return tables;
 	}

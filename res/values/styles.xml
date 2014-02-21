@@ -23,7 +23,6 @@
     <style name="AppTheme" parent="AppBaseTheme">
 
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
         <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
         <item name="vpiTitlePageIndicatorStyle">@style/CustomTitlePageIndicator</item>
@@ -34,6 +33,10 @@
         <item name="android:button">@style/b_button_style</item>
     </style>
 
+    <style name="AppTheme.NoTitleBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
     <!-- common theme -->
     <style name="b_edittext_style" parent="base_edittext_style">
         <item name="android:layout_width">match_parent</item>
@@ -86,38 +89,6 @@
         <item name="android:footerDividersEnabled">true</item>
         <item name="android:headerDividersEnabled">true</item>
         <item name="android:smoothScrollbar">true</item>
-    </style>
-
-    <style name="settings_item_button_style">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/button_h</item>
-        <item name="android:layout_marginBottom">0dp</item>
-        <item name="android:layout_marginLeft">@dimen/margin</item>
-        <item name="android:layout_marginRight">@dimen/margin</item>
-        <item name="android:layout_marginTop">@dimen/margin</item>
-        <item name="android:background">@drawable/b_button_round</item>
-        <item name="android:drawablePadding">5dp</item>
-        <item name="android:drawableRight">@drawable/arrow_right</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">@dimen/margin_xl</item>
-        <item name="android:paddingRight">@dimen/margin_l</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:text">@string/loading</item>
-        <item name="android:textColor">#000</item>
-    </style>
-
-    <style name="settings_item_style">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/button_h</item>
-        <item name="android:layout_marginBottom">0dp</item>
-        <item name="android:layout_marginLeft">@dimen/margin</item>
-        <item name="android:layout_marginRight">@dimen/margin</item>
-        <item name="android:layout_marginTop">@dimen/margin</item>
-        <item name="android:background">@drawable/b_button_round</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">@dimen/margin_xl</item>
-        <item name="android:paddingRight">@dimen/margin_l</item>
-        <item name="android:textColor">#000</item>
     </style>
 
 </resources>
