@@ -14,7 +14,7 @@ public class BAjaxStringCallback extends AjaxCallback<String> {
 
 	public BAjaxStringCallback() {
 		this.header("x-author", "weicheng.qian@hotmail.com");
-		this.header("Cookie", BUser.getUser().getToken());
+		this.header("Cookie", BUser.getUser().getString(BUser.FIELD_TOKEN));
 		this.type(String.class);
 	}
 

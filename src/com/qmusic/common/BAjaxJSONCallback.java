@@ -16,7 +16,7 @@ public class BAjaxJSONCallback extends AjaxCallback<JSONObject> {
 
 	public BAjaxJSONCallback() {
 		this.header("x-author", "weicheng.qian@hotmail.com");
-		this.header("Cookie", BUser.getUser().getToken());
+		this.header("Cookie", BUser.getUser().getString(BUser.FIELD_TOKEN));
 		this.type(JSONObject.class);
 	}
 

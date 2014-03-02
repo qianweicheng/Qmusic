@@ -75,7 +75,7 @@ public class MyApplication extends Application {
 			JPushInterface.setDebugMode(DEBUG);
 			JPushInterface.init(ctx);
 			if (BUser.isLogined()) {
-				JPushInterface.setAlias(ctx, BUser.getUser().getId(), null);
+				JPushInterface.setAlias(ctx, BUser.getUser().getString(BUser.FIELD_ID), null);
 			}
 		}
 		MobclickAgent.setDebugMode(DEBUG);

@@ -1,11 +1,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/com.qmusic"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <include
+    <com.qmusic.controls.CommonTitle
         android:id="@+id/activity_web_title"
-        layout="@layout/common_title" />
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_h"
+        app:common_title="@string/app_name" >
+    </com.qmusic.controls.CommonTitle>
 
     <WebView
         android:id="@+id/activity_web_webview"

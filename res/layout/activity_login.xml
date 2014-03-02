@@ -5,8 +5,6 @@
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
-    <include layout="@layout/common_title" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -74,12 +72,13 @@
                 android:layout_marginTop="@dimen/margin_xl" >
 
                 <Button
+                    android:id="@+id/activity_login_cancel_btn"
                     style="@style/b_button_style"
                     android:layout_marginLeft="10dp"
-                    android:onClick="onCancleClicked"
                     android:text="@android:string/cancel" />
 
                 <Button
+                    android:id="@+id/activity_login_login_btn"
                     style="@style/b_button_style"
                     android:layout_marginLeft="10dp"
                     android:onClick="onLoginClicked"
