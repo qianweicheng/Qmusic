@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 
 import com.androidquery.util.AQUtility;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -246,5 +248,28 @@ public class BUtilities {
 			}
 		}
 		return uuid.toString();
+	}
+
+	public final static int[] getScreenSize(Context ctx) {
+		int[] screenSize = new int[2];
+		try {
+			DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
+			screenSize[0] = displayMetrics.widthPixels < displayMetrics.heightPixels ? displayMetrics.widthPixels
+					: displayMetrics.heightPixels;
+			screenSize[1] = displayMetrics.widthPixels > displayMetrics.heightPixels ? displayMetrics.widthPixels
+					: displayMetrics.heightPixels;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return screenSize;
+	}
+
+	public final static int[] getScreenSize(Activity ctx) {
+		int[] screenSize = new int[2];
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		ctx.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		screenSize[0] = displayMetrics.widthPixels;
+		screenSize[1] = displayMetrics.heightPixels;
+		return screenSize;
 	}
 }
