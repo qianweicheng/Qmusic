@@ -60,13 +60,15 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void onBtn2(final View view) {
+		BToast.toast(view, "cccc", RelativeLayout.ALIGN_TOP);
 	}
 
 	public void onBtn3(final View view) {
+		BToast.toast(view, "cccc", RelativeLayout.ALIGN_BOTTOM);
 	}
 
 	public void onBtn4(final View view) {
-
+		BToast.toast(view, "cccc", 0);
 	}
 
 	public void onBtn5(final View view) {

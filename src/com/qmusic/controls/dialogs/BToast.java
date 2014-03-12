@@ -51,8 +51,6 @@ public final class BToast {
 			DisplayMetrics displayMetrics = view.getContext().getResources().getDisplayMetrics();
 			toast.setGravity(Gravity.LEFT | Gravity.TOP, location[0], location[1] + rect.top
 					- (int) (10 * displayMetrics.density));
-		} else {
-			toast.setGravity(Gravity.LEFT | Gravity.TOP, 0, 0);
 		}
 		toast.show();
 	}

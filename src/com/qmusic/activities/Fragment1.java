@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qmusic.R;
+import com.qmusic.controls.BTabFragment;
 
-public class Fragment1 extends TabFragment {
+public class Fragment1 extends BTabFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -19,8 +20,4 @@ public class Fragment1 extends TabFragment {
 		return view;
 	}
 
-	@Override
-	public void bindData() {
-
-	}
 }

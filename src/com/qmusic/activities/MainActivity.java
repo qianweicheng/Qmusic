@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import cn.jpush.android.api.JPushInterface;
 
 import com.qmusic.R;
+import com.qmusic.controls.BTabFragment;
 import com.qmusic.uitls.BAppHelper;
 import com.qmusic.uitls.BLog;
 import com.umeng.analytics.MobclickAgent;
@@ -55,7 +56,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				ex.printStackTrace();
 			}
 		}
-		changeTab(currentTab, false);
+		changeTab(currentTab);
 	}
 
 	@Override
@@ -85,16 +86,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			newTab = 3;
 		}
 		if (currentTab != newTab) {
-			changeTab(newTab, false);
+			changeTab(newTab);
 		}
 	}
 
-	private void changeTab(int newTab, boolean refresh) {
+	private void changeTab(int newTab) {
 		FragmentManager manager = getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
-		TabFragment fragment1 = (Fragment1) manager.findFragmentByTag("fragment1");
-		TabFragment fragment2 = (Fragment2) manager.findFragmentByTag("fragment2");
-		TabFragment fragment3 = (Fragment3) manager.findFragmentByTag("fragment3");
+		BTabFragment fragment1 = (Fragment1) manager.findFragmentByTag("fragment1");
+		BTabFragment fragment2 = (Fragment2) manager.findFragmentByTag("fragment2");
+		BTabFragment fragment3 = (Fragment3) manager.findFragmentByTag("fragment3");
 		if (newTab == 1) {
 			if (fragment1 == null) {
 				fragment1 = new Fragment1();
@@ -102,9 +103,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			} else {
 				transaction.show(fragment1);
 			}
-			if (refresh) {
-				fragment1.bindData();
-			}
+			fragment1.onSelected();
 			tab1.setSelected(true);
 			tab2.setSelected(false);
 			tab3.setSelected(false);
@@ -128,9 +127,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			} else {
 				transaction.show(fragment2);
 			}
-			if (refresh) {
-				fragment2.bindData();
-			}
+			fragment2.onSelected();
 			tab2.setSelected(true);
 			tab1.setSelected(false);
 			tab3.setSelected(false);
@@ -153,9 +150,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			} else {
 				transaction.show(fragment3);
 			}
-			if (refresh) {
-				fragment3.bindData();
-			}
+			fragment3.onSelected();
 			tab3.setSelected(true);
 			tab1.setSelected(false);
 			tab2.setSelected(false);
@@ -203,7 +198,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				break;
 			}
 			case MainActivity.MSG_LOGOUT: {
-				activity.changeTab(1, true);
+				activity.changeTab(1);
 				break;
 			}
 			default:
