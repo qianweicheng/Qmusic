@@ -45,24 +45,6 @@
         android:background="@drawable/round_item_footer_button"
         android:text="TestEvent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/activity_test1_button5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TestAlarm1" />
-
-        <Button
-            android:id="@+id/activity_test1_button6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TestAlarm2" />
-    </LinearLayout>
-
     <ImageView
         android:id="@+id/activity_test1_image1"
         android:layout_width="match_parent"
