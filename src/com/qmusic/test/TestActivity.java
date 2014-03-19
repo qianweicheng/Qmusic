@@ -1,5 +1,7 @@
 package com.qmusic.test;
 
+import java.util.Stack;
+
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,6 +17,7 @@ import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.controls.BDrawable;
 import com.qmusic.controls.BClipDrawable;
+import com.qmusic.controls.dialogs.BPopupDialog;
 import com.qmusic.uitls.BAppHelper;
 
 public class TestActivity extends BaseActivity implements View.OnClickListener {
@@ -75,14 +78,23 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 		img.setImageDrawable(d);
 	}
 
+	Stack<BPopupDialog> stack;
+
 	public void onBtn3(final View view) {
-		d.start();
+		if (stack == null) {
+			stack = new Stack<BPopupDialog>();
+		}
+		BPopupDialog dialog = new BPopupDialog(this);
+		// dialog.showAsDropDown(view);
+		dialog.showAtLocation(view.getRootView(), Gravity.BOTTOM, 0, 0);
+		stack.push(dialog);
 	}
 
 	public void onBtn4(final View view) {
-		BitmapDrawable d = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(),
-				R.drawable.tab1));
-		ImageView img = (ImageView) findViewById(R.id.activity_test1_image1);
-		img.setImageDrawable(d);
+		if (stack.size() > 0) {
+			BPopupDialog dialog = stack.pop();
+			dialog.dismiss();
+		}
+
 	}
 }
