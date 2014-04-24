@@ -2,12 +2,13 @@ package com.qmusic.test;
 
 import java.util.Stack;
 
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -15,10 +16,10 @@ import android.widget.ImageView;
 
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
-import com.qmusic.controls.BDrawable;
 import com.qmusic.controls.BClipDrawable;
 import com.qmusic.controls.dialogs.BPopupDialog;
 import com.qmusic.uitls.BAppHelper;
+import com.qmusic.uitls.ShortCutHelper;
 
 public class TestActivity extends BaseActivity implements View.OnClickListener {
 	EditText edit;
@@ -57,37 +58,38 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	int i = 200;
 
 	public void onBtn1(final View view) {
-		ImageView img = (ImageView) findViewById(R.id.activity_test1_image1);
-		// bd = new BDrawable(this);
-		bd = new BClipDrawable(new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(),
-				R.drawable.icon)), Gravity.CENTER, BClipDrawable.HORIZONTAL);
-		img.setImageDrawable(bd);
-		bd.setLevel(i);
+		String text = "钱" + (i++);
+		ShortCutHelper.create(this, text);
 	}
 
-	// RotateDrawable d;
-	BDrawable d;
-
 	public void onBtn2(final View view) {
-		// d = new RotateDrawable();
-		// d.setDrawable(new BitmapDrawable(getResources(),
-		// BitmapFactory.decodeResource(getResources(), R.drawable.tab1)));
-
-		d = new BDrawable(this);
-		ImageView img = (ImageView) findViewById(R.id.activity_test1_image1);
-		img.setImageDrawable(d);
+		String text = "伟" + (i++);
+		Bitmap bitmapEasilydo = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+		bitmapEasilydo = bitmapEasilydo.copy(Config.ARGB_8888, true);
+		int iconWidth = bitmapEasilydo.getWidth();
+		int iconHeight = bitmapEasilydo.getHeight();
+		// if (bitmapEasilydo.getWidth() != 128 || bitmapEasilydo.getHeight() !=
+		// 128) {
+		// Bitmap newicon = Bitmap.createScaledBitmap(bitmapEasilydo, 128, 128,
+		// true);
+		// bitmapEasilydo.recycle();
+		// bitmapEasilydo = newicon;
+		// }
+		Paint paint = new Paint();
+		paint.setTextSize(14);
+		paint.setColor(0xffff0000);
+		float txtWidth = paint.measureText(text);
+		Canvas canvas = new Canvas(bitmapEasilydo);
+		canvas.drawText(text, iconWidth - txtWidth, iconHeight, paint);
+		ImageView img1 = (ImageView) findViewById(R.id.activity_test1_image1);
+		img1.setImageBitmap(bitmapEasilydo);
+		ShortCutHelper.create(this, text, bitmapEasilydo);
 	}
 
 	Stack<BPopupDialog> stack;
 
 	public void onBtn3(final View view) {
-		if (stack == null) {
-			stack = new Stack<BPopupDialog>();
-		}
-		BPopupDialog dialog = new BPopupDialog(this);
-		// dialog.showAsDropDown(view);
-		dialog.showAtLocation(view.getRootView(), Gravity.BOTTOM, 0, 0);
-		stack.push(dialog);
+		ShortCutHelper.listShortcut(this);
 	}
 
 	public void onBtn4(final View view) {

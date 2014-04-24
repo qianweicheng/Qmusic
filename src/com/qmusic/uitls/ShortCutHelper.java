@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -19,6 +20,38 @@ public final class ShortCutHelper {
 	static final String UNINSTALL_SHORTCUT = "com.android.launcher.action.UNINSTALL_SHORTCUT";
 	static final String READ_SETTINGS = "com.android.launcher.permission.READ_SETTINGS";
 	static final String WRITE_SETTINGS = "com.android.launcher.permission.WRITE_SETTINGS";
+
+	/**
+	 * 
+	 * @param ctx
+	 * @param title
+	 * @param icon
+	 */
+	public static final void create(Context ctx, String title, Bitmap icon) {
+		if (icon == null) {
+			return;
+		}
+		// 创建快捷方式的Intent
+		Intent shortcutintent = new Intent(INSTALL_SHORTCUT);
+		shortcutintent.putExtra("duplicate", false);
+		shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
+		shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon);
+		// shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_ICON,
+		// BitmapFactory.decodeResource(ctx.getResources(), R.drawable.tab1));
+		Intent target = new Intent();
+		// target.setComponent(new ComponentName(ctx.getPackageName(),
+		// TestActivity.class.getName()));
+		target.setClass(ctx.getApplicationContext(), SplashActivity.class);
+		/* 以下两句是为了在卸载应用的时候同时删除桌面快捷方式 */
+		target.setAction(Intent.ACTION_MAIN);
+		target.addCategory(Intent.CATEGORY_LAUNCHER);
+		target.putExtra(SplashActivity.ROUTE, true);
+		target.putExtra(SplashActivity.ORIGININTENT, new Intent(ctx.getApplicationContext(), MainActivity.class));
+		target.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		target.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, target);
+		ctx.sendBroadcast(shortcutintent);
+	}
 
 	public static final void create(Context ctx, String title) {
 		// 创建快捷方式的Intent
