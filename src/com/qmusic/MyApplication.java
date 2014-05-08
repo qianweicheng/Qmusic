@@ -32,7 +32,7 @@ import com.umeng.analytics.MobclickAgent;
 public class MyApplication extends Application {
 	public static final String TAG = MyApplication.class.getSimpleName();
 	public static boolean DEBUG;
-	public static boolean STARTED;
+	public static volatile boolean STARTED;
 	static ArrayList<WeakReference<IAsyncDataCallback>> callbackList;
 	static IServiceCallback dataService;
 	static Stack<String> foreground;

@@ -47,7 +47,6 @@ public class CommonTable extends BaseTable {
 			cursor = query(new String[] { _ID }, FIELD_CATEGORY + "=?", new String[] { category }, null, null, null,
 					null);
 			result = cursor.getCount();
-			cursor.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {

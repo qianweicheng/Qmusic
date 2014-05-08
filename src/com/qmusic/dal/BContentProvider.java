@@ -13,7 +13,7 @@ public class BContentProvider extends ContentProvider {
 	static final String TAG = "BContentProvider";
 	public static final String AUTHORITY = "com.qmusic.provider";
 	private UriMatcher sMatcher;
-	public static final int SCHEME_ALARM = 1;
+	public static final int SCHEME_COMMON = 1;
 	public static final int SCHEME_TEST = 2;
 
 	@Override
@@ -24,7 +24,7 @@ public class BContentProvider extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		sMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		sMatcher.addURI(AUTHORITY, AlarmTable.TABLE_NAME, SCHEME_ALARM);
+		sMatcher.addURI(AUTHORITY, AlarmTable.TABLE_NAME, SCHEME_COMMON);
 		sMatcher.addURI(AUTHORITY, TestTable.TABLE_NAME, SCHEME_TEST);
 		return true;
 	}
@@ -34,7 +34,7 @@ public class BContentProvider extends ContentProvider {
 		SQLiteDatabase db = BDatabaseHelper.getDatabase();
 		long result = 0;
 		switch (sMatcher.match(uri)) {
-		case SCHEME_ALARM: {
+		case SCHEME_COMMON: {
 			result = db.insert(AlarmTable.TABLE_NAME, null, values);
 			break;
 		}
@@ -58,7 +58,7 @@ public class BContentProvider extends ContentProvider {
 		SQLiteDatabase db = BDatabaseHelper.getDatabase();
 		int result = 0;
 		switch (sMatcher.match(uri)) {
-		case SCHEME_ALARM:
+		case SCHEME_COMMON:
 			result = db.delete(AlarmTable.TABLE_NAME, selection, selectionArgs);
 			break;
 		case SCHEME_TEST:
@@ -79,7 +79,7 @@ public class BContentProvider extends ContentProvider {
 		SQLiteDatabase db = BDatabaseHelper.getDatabase();
 		Cursor cursor = null;
 		switch (sMatcher.match(uri)) {
-		case SCHEME_ALARM: {
+		case SCHEME_COMMON: {
 			cursor = db.query(AlarmTable.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
 			break;
 		}
@@ -100,7 +100,7 @@ public class BContentProvider extends ContentProvider {
 		SQLiteDatabase db = BDatabaseHelper.getDatabase();
 		int result = 0;
 		switch (sMatcher.match(uri)) {
-		case SCHEME_ALARM: {
+		case SCHEME_COMMON: {
 			result = db.update(AlarmTable.TABLE_NAME, values, selection, selectionArgs);
 			break;
 		}

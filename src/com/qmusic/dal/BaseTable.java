@@ -70,9 +70,10 @@ public abstract class BaseTable implements BaseColumns {
 	protected void createIndex(SQLiteDatabase db, String[] cloumns) {
 		if (cloumns != null && cloumns.length > 0) {
 			StringBuilder sb = new StringBuilder();
-			final String FORMAT = " CREATE INDEX INDEX%d on %s ([%s]); ";
+			final String FORMAT = " CREATE INDEX INDEX%s_%d on %s ([%s]); ";
+			final String tableName = getTableName();
 			for (int i = 0; i < cloumns.length; i++) {
-				sb.append(String.format(FORMAT, i, getTableName(), cloumns[i]));
+				sb.append(String.format(FORMAT, tableName, i, tableName, cloumns[i]));
 			}
 			db.execSQL(sb.toString());
 		}
