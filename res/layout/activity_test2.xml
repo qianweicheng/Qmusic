@@ -6,9 +6,18 @@
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
-    <ListView
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
         android:id="@+id/activity_test2_list"
-        style="@style/b_list_style" >
-    </ListView>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:padding="8dp"
+            android:text="@string/app_name"
+            android:textColor="#ffff0000"
+            android:textSize="16sp" />
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 
 </LinearLayout>

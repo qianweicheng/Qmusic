@@ -13,8 +13,9 @@ import android.view.animation.AnimationUtils;
 import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.common.BConstants;
+import com.qmusic.common.BEnvironment;
 import com.qmusic.common.BUser;
-import com.qmusic.test.TestActivity;
+import com.qmusic.test.Test2Activity;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
 import com.umeng.analytics.MobclickAgent;
@@ -26,7 +27,6 @@ public class SplashActivity extends FragmentActivity {
 	public static final String RE_LOGIN = "re_login";
 	public static final String ROUTE = "route";
 	public static final String ORIGININTENT = "originIntent";
-	public static final boolean UI_TEST = true;// only for UI test.
 	Intent newIntent;
 
 	@Override
@@ -126,9 +126,9 @@ public class SplashActivity extends FragmentActivity {
 				return;
 			}
 		}
-		if (UI_TEST) {
+		if (BEnvironment.UI_TEST) {
 			MyApplication.STARTED = true;
-			startActivity(new Intent(SplashActivity.this, TestActivity.class));
+			startActivity(new Intent(SplashActivity.this, Test2Activity.class));
 		} else {
 			new MyAsyncTask().execute();
 		}
