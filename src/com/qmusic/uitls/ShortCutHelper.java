@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.qmusic.R;
 import com.qmusic.activities.MainActivity;
@@ -71,8 +70,7 @@ public final class ShortCutHelper {
 		target.addCategory(Intent.CATEGORY_LAUNCHER);
 		target.putExtra(SplashActivity.ROUTE, true);
 		target.putExtra(SplashActivity.ORIGININTENT, new Intent(ctx.getApplicationContext(), MainActivity.class));
-		target.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		target.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		target.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, target);
 		ctx.sendBroadcast(shortcutintent);
 	}
@@ -179,13 +177,12 @@ public final class ShortCutHelper {
 		Cursor c = null;
 		try {
 			c = ctx.getContentResolver().query(CONTENT_URI, null, null, null, null);
-
 			while (c.moveToNext()) {
 				int count = c.getColumnCount();
 				for (int i = 0; i < count; i++) {
 					if ("icon".equals(c.getColumnName(i))) {
 					} else {
-						Log.i("ShortCutHelper", c.getColumnName(i) + ":" + c.getString(i));
+						BLog.i("ShortCutHelper", c.getColumnName(i) + ":" + c.getString(i));
 					}
 				}
 			}
