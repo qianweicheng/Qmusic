@@ -2,15 +2,9 @@ package com.qmusic.test;
 
 import java.util.Stack;
 
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
@@ -61,27 +55,7 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void onBtn2(final View view) {
-		String text = "伟" + (i++);
-		Bitmap bitmapEasilydo = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
-		bitmapEasilydo = bitmapEasilydo.copy(Config.ARGB_8888, true);
-		int iconWidth = bitmapEasilydo.getWidth();
-		int iconHeight = bitmapEasilydo.getHeight();
-		// if (bitmapEasilydo.getWidth() != 128 || bitmapEasilydo.getHeight() !=
-		// 128) {
-		// Bitmap newicon = Bitmap.createScaledBitmap(bitmapEasilydo, 128, 128,
-		// true);
-		// bitmapEasilydo.recycle();
-		// bitmapEasilydo = newicon;
-		// }
-		Paint paint = new Paint();
-		paint.setTextSize(14);
-		paint.setColor(0xffff0000);
-		float txtWidth = paint.measureText(text);
-		Canvas canvas = new Canvas(bitmapEasilydo);
-		canvas.drawText(text, iconWidth - txtWidth, iconHeight, paint);
-		ImageView img1 = (ImageView) findViewById(R.id.activity_test1_image1);
-		img1.setImageBitmap(bitmapEasilydo);
-		ShortCutHelper.create(this, text, bitmapEasilydo);
+
 	}
 
 	Stack<BPopupDialog> stack;
