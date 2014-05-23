@@ -70,7 +70,7 @@ public abstract class BaseTable implements BaseColumns {
 	protected void createIndex(SQLiteDatabase db, String[] cloumns) {
 		if (cloumns != null && cloumns.length > 0) {
 			StringBuilder sb = new StringBuilder();
-			final String FORMAT = " CREATE INDEX INDEX%s_%d on %s ([%s]); ";
+			final String FORMAT = " CREATE INDEX INDEX_%s_%d on %s ([%s]); ";
 			final String tableName = getTableName();
 			for (int i = 0; i < cloumns.length; i++) {
 				sb.append(String.format(FORMAT, tableName, i, tableName, cloumns[i]));
@@ -135,7 +135,7 @@ public abstract class BaseTable implements BaseColumns {
 
 	public void clear() {
 		try {
-			BDatabaseHelper.getDatabase().delete(getTableName(), "1=1", null);
+			BDatabaseHelper.getDatabase().delete(getTableName(), null, null);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

@@ -24,6 +24,7 @@
         android:background="@drawable/round_item_head_button"
         android:text="TestCalendar" />
 
+    <!--
     <Button
         android:id="@+id/activity_test1_button2"
         android:layout_width="match_parent"
@@ -43,7 +44,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_footer_button"
-        android:text="TestEvent" />
+        android:text="TestEvent" /
+    -->
+>
 
     <com.qmusic.controls.BPulldownView
         android:id="@+id/activity_test1_pull"

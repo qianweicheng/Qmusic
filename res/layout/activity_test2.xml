@@ -1,23 +1,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/com.qmusic"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#cccccc"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
-    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+    <com.qmusic.controls.CommonTitle
+        android:id="@+id/activity_test2_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_h"
+        app:common_title="Test1"
+        app:right_img="@drawable/tab1" >
+    </com.qmusic.controls.CommonTitle>
+
+    <ListView
         android:id="@+id/activity_test2_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:padding="8dp"
-            android:text="@string/app_name"
-            android:textColor="#ffff0000"
-            android:textSize="16sp" />
-    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+        android:layout_height="match_parent"
+        android:cacheColorHint="#00000000"
+        android:descendantFocusability="beforeDescendants"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:paddingTop="5dp"
+        android:scrollingCache="true" >
+    </ListView>
 
 </LinearLayout>

@@ -1,13 +1,14 @@
 package com.qmusic.controls;
 
-import com.qmusic.uitls.BLog;
-
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import com.qmusic.uitls.BLog;
 
 public class BPulldownView extends LinearLayout {
 	static final String TAG = "BPulldownView";
@@ -82,6 +83,17 @@ public class BPulldownView extends LinearLayout {
 		}
 		case MotionEvent.ACTION_MOVE: {
 			scrollTo(0, (int) (y - event.getY()));
+			View view = getChildAt(0);
+			Rect outRect = new Rect();
+			view.getHitRect(outRect);
+			BLog.i(TAG, "Hit: " + outRect.toShortString());
+			view.getLocalVisibleRect(outRect);
+			BLog.i(TAG, "Visible: " + outRect.toShortString());
+			int[] location = new int[4];
+			view.getLocationInWindow(location);
+			BLog.i(TAG, String.format("InWindow: %d,%d,%d,%d", location[0], location[1], location[2], location[3]));
+			view.getLocationOnScreen(location);
+			BLog.i(TAG, String.format("OnScreen:%d,%d,%d,%d", location[0], location[1], location[2], location[3]));
 			break;
 		}
 		case MotionEvent.ACTION_CANCEL: {
@@ -93,5 +105,4 @@ public class BPulldownView extends LinearLayout {
 		}
 		return true;
 	}
-
 }

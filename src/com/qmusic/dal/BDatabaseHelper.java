@@ -3,27 +3,29 @@ package com.qmusic.dal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.qmusic.uitls.BLog;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.androidquery.util.AQUtility;
+import com.qmusic.common.BConstants;
+import com.qmusic.uitls.BLog;
+
 public class BDatabaseHelper extends SQLiteOpenHelper {
 	static final String TAG = BDatabaseHelper.class.getSimpleName();
+	public static final Object write_lock = new Object();
 	// db name
-	private final static String DATABASE_NAME = "qmusic.db";
+	private final static String DATABASE_NAME = BConstants.APP_NAME + ".db";
 	// db version
 	private static final int DATABASE_VERSION = 1;
 	static BDatabaseHelper instance;
-	static Context context;
 
 	private BDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
-	public static final void init(Context ctx) {
-		context = ctx;
+	public static final BDatabaseHelper createInstance() {
+		return new BDatabaseHelper(AQUtility.getContext());
 	}
 
 	/**
@@ -33,10 +35,7 @@ public class BDatabaseHelper extends SQLiteOpenHelper {
 	 */
 	public synchronized static final SQLiteDatabase getDatabase() {
 		if (instance == null) {
-			if (context == null) {
-				throw new NullPointerException("Context is null");
-			}
-			instance = new BDatabaseHelper(context);
+			instance = new BDatabaseHelper(AQUtility.getContext());
 		}
 		return instance.getWritableDatabase();
 	}
@@ -51,6 +50,7 @@ public class BDatabaseHelper extends SQLiteOpenHelper {
 		if (instance != null) {
 			try {
 				instance.close();
+				instance = null;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -92,8 +92,8 @@ public class BDatabaseHelper extends SQLiteOpenHelper {
 	 */
 	private static List<BaseTable> getTables() {
 		ArrayList<BaseTable> tables = new ArrayList<BaseTable>();
-		tables.add(new AlarmTable());
 		tables.add(new TestTable());
+		tables.add(new CommonTable());
 		return tables;
 	}
 

@@ -12,6 +12,8 @@ import com.qmusic.uitls.BLog;
 public class BContentProvider extends ContentProvider {
 	static final String TAG = "BContentProvider";
 	public static final String AUTHORITY = "com.qmusic.provider";
+	public static final Uri TEST_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TestTable.TABLE_NAME);
+	public static final Uri COMMON_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + CommonTable.TABLE_NAME);
 	private UriMatcher sMatcher;
 	public static final int SCHEME_COMMON = 1;
 	public static final int SCHEME_TEST = 2;
@@ -24,7 +26,7 @@ public class BContentProvider extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		sMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		sMatcher.addURI(AUTHORITY, AlarmTable.TABLE_NAME, SCHEME_COMMON);
+		sMatcher.addURI(AUTHORITY, CommonTable.TABLE_NAME, SCHEME_COMMON);
 		sMatcher.addURI(AUTHORITY, TestTable.TABLE_NAME, SCHEME_TEST);
 		return true;
 	}
@@ -35,7 +37,7 @@ public class BContentProvider extends ContentProvider {
 		long result = 0;
 		switch (sMatcher.match(uri)) {
 		case SCHEME_COMMON: {
-			result = db.insert(AlarmTable.TABLE_NAME, null, values);
+			result = db.insert(CommonTable.TABLE_NAME, null, values);
 			break;
 		}
 		case SCHEME_TEST: {
@@ -58,9 +60,10 @@ public class BContentProvider extends ContentProvider {
 		SQLiteDatabase db = BDatabaseHelper.getDatabase();
 		int result = 0;
 		switch (sMatcher.match(uri)) {
-		case SCHEME_COMMON:
-			result = db.delete(AlarmTable.TABLE_NAME, selection, selectionArgs);
+		case SCHEME_COMMON: {
+			result = db.delete(CommonTable.TABLE_NAME, selection, selectionArgs);
 			break;
+		}
 		case SCHEME_TEST:
 			result = db.delete(TestTable.TABLE_NAME, selection, selectionArgs);
 			break;
@@ -80,7 +83,7 @@ public class BContentProvider extends ContentProvider {
 		Cursor cursor = null;
 		switch (sMatcher.match(uri)) {
 		case SCHEME_COMMON: {
-			cursor = db.query(AlarmTable.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+			cursor = db.query(CommonTable.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
 			break;
 		}
 		case SCHEME_TEST: {
@@ -101,7 +104,7 @@ public class BContentProvider extends ContentProvider {
 		int result = 0;
 		switch (sMatcher.match(uri)) {
 		case SCHEME_COMMON: {
-			result = db.update(AlarmTable.TABLE_NAME, values, selection, selectionArgs);
+			result = db.update(CommonTable.TABLE_NAME, values, selection, selectionArgs);
 			break;
 		}
 		case SCHEME_TEST: {

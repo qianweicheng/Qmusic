@@ -3,43 +3,31 @@ package com.qmusic.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 
 import com.qmusic.MyApplication;
 import com.qmusic.R;
-import com.qmusic.common.BConstants;
-import com.qmusic.common.BEnvironment;
-import com.qmusic.common.BUser;
-import com.qmusic.test.TestActivity;
 import com.qmusic.uitls.BLog;
-import com.qmusic.uitls.BUtilities;
-import com.umeng.analytics.MobclickAgent;
 
-public class SplashActivity extends FragmentActivity {
-	static final String TAG = SplashActivity.class.getSimpleName();
+public class SplashActivity extends BaseActivity {
 	static final int WAITING_TIME = 500;
 	public static final String SHUTDOWN = "shutdown";
 	public static final String RE_LOGIN = "re_login";
 	public static final String ROUTE = "route";
 	public static final String ORIGININTENT = "originIntent";
+	public static final boolean UI_TEST = true;// only for UI test.
 	Intent newIntent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-		BLog.i(TAG, "onCreate");
+		// BLog.i(TAG, "onCreate");
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		BLog.i(TAG, "onStart");
+		// BLog.i(TAG, "onStart");
 		if (newIntent == null) {
 			newIntent = getIntent();
 		}
@@ -50,8 +38,6 @@ public class SplashActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		BLog.i(TAG, "onResume");
-		MobclickAgent.onResume(this);
 		// 在部分tablet上面会延迟调用onStop,导致onStart不会被调用
 		if (newIntent != null) {
 			process();
@@ -59,21 +45,9 @@ public class SplashActivity extends FragmentActivity {
 	}
 
 	@Override
-	protected void onPause() {
-		super.onPause();
-		MobclickAgent.onPause(this);
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		BLog.i(TAG, "onStop");
-	}
-
-	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		BLog.i(TAG, "onNewIntent");
+		// BLog.i(TAG, "onNewIntent");
 		newIntent = intent;
 	}
 
@@ -87,31 +61,13 @@ public class SplashActivity extends FragmentActivity {
 		Bundle bundle = newIntent.getExtras();
 		if (bundle != null && bundle.size() > 0) {
 			if (bundle.getBoolean(SHUTDOWN, false)) {
-				Animation anim = AnimationUtils.loadAnimation(this, R.anim.tv_off);
-				anim.setAnimationListener(new AnimationListener() {
-
-					@Override
-					public void onAnimationStart(Animation animation) {
-					}
-
-					@Override
-					public void onAnimationRepeat(Animation animation) {
-					}
-
-					@Override
-					public void onAnimationEnd(Animation animation) {
-						finish();
-						MyApplication.shutdown();
-					}
-				});
-				View v = findViewById(R.id.activity_splash_img);
-				v.startAnimation(anim);
+				finish();
+				// MyApplication.shutdown();
 				return;
 			} else if (bundle.getBoolean(RE_LOGIN, false)) {
 				checkLogin();
 				return;
 			} else if (bundle.getBoolean(ROUTE, false)) {
-				BLog.w(TAG, "route");
 				try {
 					Intent originIntent = bundle.getParcelable(ORIGININTENT);
 					startActivity(originIntent);
@@ -122,13 +78,11 @@ public class SplashActivity extends FragmentActivity {
 				return;
 			} else {
 				BLog.i(TAG, "bundle does not match any key. " + bundle.toString());
-				new MyAsyncTask().execute();
-				return;
 			}
 		}
-		if (BEnvironment.UI_TEST) {
-			MyApplication.STARTED = true;
-			startActivity(new Intent(SplashActivity.this, TestActivity.class));
+		if (UI_TEST) {
+			Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+			startActivity(intent);
 		} else {
 			new MyAsyncTask().execute();
 		}
@@ -144,7 +98,7 @@ public class SplashActivity extends FragmentActivity {
 		protected Void doInBackground(Void... params) {
 			try {
 				long startTime = System.nanoTime();
-				while (!MyApplication.STARTED) {
+				while (MyApplication.STARTED_TIME == 0) {
 					Thread.sleep(20);
 				}
 				long endTime = System.nanoTime();
@@ -161,30 +115,17 @@ public class SplashActivity extends FragmentActivity {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			String showTutorial = BUtilities.getPref(BConstants.PRE_KEY_SHOW_TUTORIAL);
-			if (TextUtils.isEmpty(showTutorial)) {
-				Intent intent = new Intent(SplashActivity.this, GuideActivity.class);
-				startActivity(intent);
-			} else {
-				checkLogin();
-			}
+			checkLogin();
 		}
 	}
 
 	void checkLogin() {
-		if (BUser.isLogined()) {
-			Intent intent = new Intent(this, MainActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			Bundle bundle = getIntent().getExtras();
-			if (bundle != null) {
-				intent.putExtras(bundle);
-			}
-			startActivity(intent);
-		} else {
-			Intent intent = new Intent(this, LoginActivity.class);
-			intent.putExtra(LoginActivity.EXIT_WHEN_BACK, true);
-			startActivity(intent);
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null) {
+			intent.putExtras(bundle);
 		}
-		overridePendingTransition(R.anim.fadein, 0);
+		startActivity(intent);
 	}
 }

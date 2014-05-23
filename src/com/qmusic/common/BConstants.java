@@ -23,4 +23,5 @@ public final class BConstants {
 	public static final String PREFS_DEVICE_ID = "device_id";
 	public static final String APP_KEY = "";
 	public static final String APP_SEC = "";
+	public static final String APP_NAME = "qmusic";
 }
