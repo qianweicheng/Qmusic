@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import com.qmusic.MyApplication;
 import com.qmusic.R;
+import com.qmusic.common.BEnvironment;
+import com.qmusic.test.TestActivity;
 import com.qmusic.uitls.BLog;
 
 public class SplashActivity extends BaseActivity {
@@ -14,7 +16,6 @@ public class SplashActivity extends BaseActivity {
 	public static final String RE_LOGIN = "re_login";
 	public static final String ROUTE = "route";
 	public static final String ORIGININTENT = "originIntent";
-	public static final boolean UI_TEST = true;// only for UI test.
 	Intent newIntent;
 
 	@Override
@@ -80,8 +81,8 @@ public class SplashActivity extends BaseActivity {
 				BLog.i(TAG, "bundle does not match any key. " + bundle.toString());
 			}
 		}
-		if (UI_TEST) {
-			Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+		if (BEnvironment.UI_TEST) {
+			Intent intent = new Intent(SplashActivity.this, TestActivity.class);
 			startActivity(intent);
 		} else {
 			new MyAsyncTask().execute();

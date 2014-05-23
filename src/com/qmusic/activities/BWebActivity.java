@@ -68,6 +68,7 @@ public class BWebActivity extends BaseActivity {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void syncStaticSettings(WebSettings settings, Context context) {
 		// settings.setDefaultFontSize(16);
 		// settings.setDefaultFixedFontSize(13);
