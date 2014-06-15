@@ -11,6 +11,7 @@ import android.util.Log;
 import com.androidquery.util.AQUtility;
 import com.qmusic.common.BUser;
 import com.qmusic.dal.BDatabaseHelper;
+import com.qmusic.localplugin.PluginManager;
 import com.qmusic.notification.BNotification;
 import com.qmusic.service.BDataService;
 import com.qmusic.uitls.BAppHelper;
@@ -52,6 +53,7 @@ public class MyApplication extends Application {
 		BAppHelper.init(ctx);
 		BUser.init();
 		ctx.startService(new Intent(ctx, BDataService.class));
+		PluginManager.init(ctx);
 		MobclickAgent.setDebugMode(DEBUG);
 		MobclickAgent.updateOnlineConfig(ctx);
 		MobclickAgent.setSessionContinueMillis(60 * 1000);

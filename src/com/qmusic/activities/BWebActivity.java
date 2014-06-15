@@ -54,8 +54,8 @@ public class BWebActivity extends BaseActivity {
 			settins.setBuiltInZoomControls(true);
 			syncStaticSettings(settins, this);
 			webView.setWebViewClient(new BWebClient());
-			String url = bundle.getString("url");
-			String htmlData = bundle.getString("htmlData");
+			String url = bundle.getString(URL);
+			String htmlData = bundle.getString(HTML_DATA);
 			if (htmlData != null) {
 				BLog.v(TAG, "htmlData:" + htmlData);
 				webView.loadDataWithBaseURL(url, htmlData, "text/html", "utf-8", null);

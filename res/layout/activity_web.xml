@@ -11,7 +11,7 @@
         app:common_title="@string/app_name" >
     </com.qmusic.controls.CommonTitle>
 
-    <WebView
+    <com.qmusic.controls.BWebview
         android:id="@+id/activity_web_webview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

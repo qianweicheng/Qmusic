@@ -13,7 +13,7 @@ public abstract class PluginManager {
 
 	public static void init(Context ctx) {
 		plugins = new HashMap<String, BasePlug>();
-		BasePlug plug = new HeadsetPlug();
+		BasePlug plug = new LockScreenPlug();
 		plugins.put(plug.plugName(), plug);
 		for (BasePlug p : plugins.values()) {
 			BLog.i(TAG, "initing plugin:" + p.plugName());

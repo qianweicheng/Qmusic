@@ -22,16 +22,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_head_button"
-        android:text="TestCalendar" />
+        android:text="Test1" />
 
-    <!--
     <Button
         android:id="@+id/activity_test1_button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_middle_button"
-        android:text="TestContract" />
-
+        android:text="Test2" />
+    <!--
     <Button
         android:id="@+id/activity_test1_button3"
         android:layout_width="match_parent"

@@ -31,6 +31,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:buttonStyle">@style/b_button_style</item>
         <item name="android:button">@style/b_button_style</item>
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
     </style>
 
     <style name="AppTheme.NoTitleBar">
@@ -103,6 +104,13 @@
         <item name="android:footerDividersEnabled">true</item>
         <item name="android:headerDividersEnabled">true</item>
         <item name="android:smoothScrollbar">true</item>
+    </style>
+
+    <style name="AnimationActivity" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_to_top</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_from_top</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_to_bottom</item>
     </style>
 
 </resources>

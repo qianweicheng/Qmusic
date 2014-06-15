@@ -92,6 +92,7 @@ public class BDatabaseHelper extends SQLiteOpenHelper {
 	 */
 	private static List<BaseTable> getTables() {
 		ArrayList<BaseTable> tables = new ArrayList<BaseTable>();
+		tables.add(new AlarmTable());
 		tables.add(new TestTable());
 		tables.add(new CommonTable());
 		return tables;

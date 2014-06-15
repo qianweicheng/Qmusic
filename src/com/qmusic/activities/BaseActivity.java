@@ -18,20 +18,29 @@ public abstract class BaseActivity extends FragmentActivity {
 	@Override
 	protected void onStart() {
 		MyApplication.foreground(this.getClass().getSimpleName());
-		MobclickAgent.onResume(this);
 		super.onStart();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
 	@Override
 	protected void onStop() {
 		MyApplication.background(this.getClass().getSimpleName());
-		MobclickAgent.onPause(this);
 		super.onStop();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-
 	}
 }

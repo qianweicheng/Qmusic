@@ -116,7 +116,7 @@ public class ScheduledReceiver extends BroadcastReceiver {
 	}
 
 	private static final boolean enableAlarm() {
-		return true;
+		return false;
 	}
 
 	private static final boolean enableDiscover() {
