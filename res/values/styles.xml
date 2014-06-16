@@ -56,7 +56,7 @@
     </style>
 
     <style name="b_button_style" parent="base_button_style">
-        <item name="android:background">@drawable/b_button_round</item>
+        <item name="android:background">#ffffffff</item>
         <item name="android:layout_width">@dimen/button_w</item>
         <item name="android:layout_height">@dimen/button_h</item>
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>

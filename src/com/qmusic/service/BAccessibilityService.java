@@ -1,17 +1,15 @@
 package com.qmusic.service;
 
-import com.qmusic.uitls.BLog;
-
 import android.accessibilityservice.AccessibilityService;
-import android.accessibilityservice.AccessibilityServiceInfo;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+
+import com.qmusic.uitls.BLog;
 
 public class BAccessibilityService extends AccessibilityService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		getServiceInfo().flags = AccessibilityServiceInfo.FLAG_REQUEST_TOUCH_EXPLORATION_MODE;
 	}
 
 	@Override

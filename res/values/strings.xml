@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">QMuisc</string>
+    <string name="app_name">Elocker</string>
     <string name="action_settings">Settings</string>
     <string name="press_back_to_exit">再按一次返回退出</string>
     <string name="local">本地</string>
