@@ -14,6 +14,8 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -132,8 +134,7 @@ public class BUtilities {
 	public final static String getChannelNo(Context context) {
 		String appKey = "";
 		try {
-			ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(),
-					PackageManager.GET_META_DATA);
+			ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
 			if (null != ai && null != ai.metaData) {
 				appKey = ai.metaData.getString("channel");
 			}
@@ -236,8 +237,7 @@ public class BUtilities {
 					if (!"9774d56d682e549c".equals(androidId)) {
 						uuid = UUID.nameUUIDFromBytes(androidId.getBytes("utf8"));
 					} else {
-						final String deviceId = ((TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE))
-								.getDeviceId();
+						final String deviceId = ((TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
 						uuid = deviceId != null ? UUID.nameUUIDFromBytes(deviceId.getBytes("utf8")) : UUID.randomUUID();
 					}
 				} catch (UnsupportedEncodingException e) {
@@ -254,10 +254,8 @@ public class BUtilities {
 		int[] screenSize = new int[2];
 		try {
 			DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
-			screenSize[0] = displayMetrics.widthPixels < displayMetrics.heightPixels ? displayMetrics.widthPixels
-					: displayMetrics.heightPixels;
-			screenSize[1] = displayMetrics.widthPixels > displayMetrics.heightPixels ? displayMetrics.widthPixels
-					: displayMetrics.heightPixels;
+			screenSize[0] = displayMetrics.widthPixels < displayMetrics.heightPixels ? displayMetrics.widthPixels : displayMetrics.heightPixels;
+			screenSize[1] = displayMetrics.widthPixels > displayMetrics.heightPixels ? displayMetrics.widthPixels : displayMetrics.heightPixels;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -271,5 +269,17 @@ public class BUtilities {
 		screenSize[0] = displayMetrics.widthPixels;
 		screenSize[1] = displayMetrics.heightPixels;
 		return screenSize;
+	}
+
+	public static final RunningAppProcessInfo getCurProcess(Context context) {
+		int pid = android.os.Process.myPid();
+		ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		RunningAppProcessInfo result = null;
+		for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager.getRunningAppProcesses()) {
+			if (appProcess.pid == pid) {
+				result = appProcess;
+			}
+		}
+		return result;
 	}
 }

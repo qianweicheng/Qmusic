@@ -2,6 +2,7 @@ package com.qmusic;
 
 import java.util.Stack;
 
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import com.qmusic.notification.BNotification;
 import com.qmusic.service.BDataService;
 import com.qmusic.uitls.BAppHelper;
 import com.qmusic.uitls.BLog;
+import com.qmusic.uitls.BUtilities;
 import com.umeng.analytics.MobclickAgent;
 
 public class MyApplication extends Application {
@@ -39,8 +41,6 @@ public class MyApplication extends Application {
 
 	public static void init(Application ctx) {
 		STARTED_TIME = System.currentTimeMillis();
-		foreground = new Stack<String>();
-		foreground.setSize(2);
 		ApplicationInfo appInfo = ctx.getApplicationInfo();
 		if ((appInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
 			DEBUG = false;
@@ -50,13 +50,27 @@ public class MyApplication extends Application {
 		AQUtility.setContext(ctx);
 		AQUtility.setDebug(DEBUG);
 		BLog.setLevel(BLog.ALL);
-		BAppHelper.init(ctx);
-		BUser.init();
-		ctx.startService(new Intent(ctx, BDataService.class));
-		PluginManager.init(ctx);
-		MobclickAgent.setDebugMode(DEBUG);
-		MobclickAgent.updateOnlineConfig(ctx);
-		MobclickAgent.setSessionContinueMillis(60 * 1000);
+		RunningAppProcessInfo appProcessInfo = BUtilities.getCurProcess(ctx);
+		BLog.i(TAG, BUtilities.objToJsonString(appProcessInfo));
+		if (appProcessInfo != null) {
+			BLog.i(TAG, "name:%s,pid:%d,uid:%d", appProcessInfo.processName, appProcessInfo.pid, appProcessInfo.uid);
+			if (appInfo.packageName.equals(appProcessInfo.processName)) {
+				// Note: UI component
+				foreground = new Stack<String>();
+				foreground.setSize(2);
+				BAppHelper.init(ctx);
+				BUser.init();
+				ctx.startService(new Intent(ctx, BDataService.class));
+				PluginManager.init(ctx);
+				MobclickAgent.setDebugMode(DEBUG);
+				MobclickAgent.updateOnlineConfig(ctx);
+				MobclickAgent.setSessionContinueMillis(60 * 1000);
+			} else {
+				// Note:Other component for remote process
+			}
+		} else {
+			BLog.e(TAG, "Should never get here");
+		}
 	}
 
 	public static final void shutdown() {
@@ -76,6 +90,11 @@ public class MyApplication extends Application {
 		System.exit(0);
 	}
 
+	/**
+	 * should only be called from UI
+	 * 
+	 * @param tag
+	 */
 	public static final void foreground(String tag) {
 		if (foreground.size() == 0) {
 			// Note: session start
@@ -84,6 +103,11 @@ public class MyApplication extends Application {
 		foreground.push(tag);
 	}
 
+	/**
+	 * should only be called from UI
+	 * 
+	 * @param tag
+	 */
 	public static final void background(String tag) {
 		BLog.v(TAG, "close:" + tag);
 		foreground.remove(tag);
@@ -93,12 +117,13 @@ public class MyApplication extends Application {
 	}
 
 	/*
-	 * this method can't be called from the onCreate or onStart of an activity
+	 * should only be called from UI. This method can't be called from the
+	 * onCreate or onStart of an activity
 	 * 
 	 * @return current activity
 	 */
 	public static final String foreground() {
-		if (foreground.size() > 0) {
+		if (foreground != null && foreground.size() > 0) {
 			return foreground.peek();
 		} else {
 			return null;

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -69,7 +70,7 @@ public class BAppHelper {
 		activity.overridePendingTransition(0, 0);
 	}
 
-	public final static int init(Context ctx) {
+	public final static void init(Context ctx) {
 		String countStr = BUtilities.getPref(BConstants.PRE_KEY_RUN_COUNT);
 		int count;
 		if (TextUtils.isEmpty(countStr)) {
@@ -110,13 +111,14 @@ public class BAppHelper {
 			// StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites()
 			// .detectNetwork().penaltyLog().build());
 			// watchMem();
+			BLog.i(TAG, BUtilities.objToJsonString(ctx.getApplicationInfo()));
 		}
-		return count;
 	}
 
-	static final void watchMem() {
+	public static final void watchMem() {
 		final Debug.MemoryInfo outInfo = new Debug.MemoryInfo();
 		final ActivityManager.MemoryInfo outInfo1 = new ActivityManager.MemoryInfo();
+		final ActivityManager am = (ActivityManager) AQUtility.getContext().getSystemService(Context.ACTIVITY_SERVICE);
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -126,21 +128,15 @@ public class BAppHelper {
 					int pss0 = outInfo.getTotalPss();
 					int rss0 = outInfo.getTotalSharedDirty();
 					BLog.i(TAG, "uss0=" + uss0 + ";pss0=" + pss0 + ";rss0=" + (uss0 + rss0));
-
-					ActivityManager am = (ActivityManager) AQUtility.getContext().getSystemService(
-							Context.ACTIVITY_SERVICE);
 					am.getMemoryInfo(outInfo1);
-					BLog.i(TAG, "availMem=" + outInfo1.availMem + ";threshold=" + outInfo1.threshold + ";lowMemory="
-							+ outInfo1.lowMemory);
-
+					BLog.i(TAG, "availMem=" + outInfo1.availMem + ";threshold=" + outInfo1.threshold + ";lowMemory=" + outInfo1.lowMemory);
 					long nativeHeapAllocatedSize = Debug.getNativeHeapAllocatedSize();
 					long nativeHeapFreeSize = Debug.getNativeHeapFreeSize();
 					long nativeHeapSize = Debug.getNativeHeapSize();
 					long globalAllocSize = Debug.getGlobalAllocSize();
 					long threadAllocSize = Debug.getThreadAllocSize();
-					BLog.i(TAG, "nativeHeapAllocatedSize=" + nativeHeapAllocatedSize + ";nativeHeapFreeSize="
-							+ nativeHeapFreeSize + ";nativeHeapSize=" + nativeHeapSize + ";globalAllocSize="
-							+ globalAllocSize + ";threadAllocSize=" + threadAllocSize);
+					BLog.i(TAG, "nativeHeapAllocatedSize=" + nativeHeapAllocatedSize + ";nativeHeapFreeSize=" + nativeHeapFreeSize + ";nativeHeapSize="
+							+ nativeHeapSize + ";globalAllocSize=" + globalAllocSize + ";threadAllocSize=" + threadAllocSize);
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {

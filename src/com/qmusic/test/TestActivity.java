@@ -1,34 +1,20 @@
 package com.qmusic.test;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import android.app.DownloadManager;
 import android.app.DownloadManager.Query;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.HandlerThread;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.androidquery.util.AQUtility;
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.uitls.BAppHelper;
-import com.qmusic.uitls.BIOUtilities;
 import com.qmusic.uitls.BLog;
 
 public class TestActivity extends BaseActivity implements View.OnClickListener {

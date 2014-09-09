@@ -70,7 +70,9 @@
         android:label="@string/app_name"
         android:persistent="true"
         android:theme="@style/AppTheme" >
-        <service android:name="com.qmusic.service.BDataService" />
+        <service
+            android:name="com.qmusic.service.BDataService"
+            android:process=":remote_qmusic" />
 
         <receiver android:name="com.qmusic.notification.ScheduledReceiver" />
         <receiver android:name="com.qmusic.notification.StartupReceiver" >
