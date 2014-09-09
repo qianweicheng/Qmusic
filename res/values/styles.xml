@@ -32,6 +32,7 @@
         <item name="android:buttonStyle">@style/b_button_style</item>
         <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
         <item name="myCommonTitleStyle">@style/myCommonTitle</item>
+        <item name="myBEditTextStyle">@style/myBEditText</item>
     </style>
 
     <style name="AppTheme.NoTitleBar">
@@ -47,8 +48,8 @@
         <item name="android:paddingBottom">3dp</item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
-        <item name="android:layout_marginLeft">@dimen/margin</item>
-        <item name="android:layout_marginRight">@dimen/margin</item>
+        <item name="android:layout_marginLeft">@dimen/margin_s</item>
+        <item name="android:layout_marginRight">@dimen/margin_s</item>
         <item name="android:textColor">@color/txt_gray_input</item>
         <item name="android:textColorHint">@color/txt_hint_gray_input</item>
         <item name="android:singleLine">true</item>
@@ -115,6 +116,10 @@
 
     <style name="myCommonTitle">
         <item name="common_title">@string/app_name</item>
+    </style>
+
+    <style name="myBEditText">
+        <item name="bTextMode">text</item>
     </style>
 
 </resources>

@@ -28,7 +28,7 @@ public class BProgressBar extends ProgressBar {
 		// this.setIndeterminateDrawable(this.getResources().getDrawable(R.drawable.progress_image));
 		this.setIndeterminate(false);
 		this.setBackgroundResource(R.drawable.sharp_round_black);
-		int padding = (int) this.getResources().getDimension(R.dimen.padding);
+		int padding = (int) this.getResources().getDimension(R.dimen.margin_s);
 		this.setPadding(padding, padding, padding, padding);
 	}
 }

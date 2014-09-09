@@ -11,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.Header;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -94,7 +93,7 @@ public class BUtilities {
 		preferencesEditor.commit();
 	}
 
-	public final static boolean checkEmail(String email) {
+	public final static boolean isEmail(String email) {
 		Pattern pattern = Pattern.compile("^\\w+([-.]\\w+)*@\\w+([-]\\w+)*\\.(\\w+([-]\\w+)*\\.)*[a-z]{2,3}$");
 		Matcher matcher = pattern.matcher(email);
 		if (matcher.matches()) {
@@ -166,15 +165,14 @@ public class BUtilities {
 		return sdfShort.format(date);
 	}
 
-	public final static boolean checkJSONResult(JSONObject json, boolean toast) {
-		return false;
-	}
-
 	public final static String toUpperCaseFirstOne(String s) {
-		if (Character.isUpperCase(s.charAt(0)))
+		if (TextUtils.isEmpty(s) || Character.isUpperCase(s.charAt(0))) {
 			return s;
-		else
-			return (new StringBuilder()).append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).toString();
+		} else {
+			char[] chars = s.toCharArray();
+			chars[0] = Character.toUpperCase(chars[0]);
+			return new String(chars);
+		}
 	}
 
 	public static final String getAuthorityFromPermission(Context context, String permission) {
@@ -272,12 +270,14 @@ public class BUtilities {
 	}
 
 	public static final RunningAppProcessInfo getCurProcess(Context context) {
-		int pid = android.os.Process.myPid();
-		ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		final int pid = android.os.Process.myPid();
+		final ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		final List<RunningAppProcessInfo> runningAppProcesses = mActivityManager.getRunningAppProcesses();
 		RunningAppProcessInfo result = null;
-		for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager.getRunningAppProcesses()) {
+		for (ActivityManager.RunningAppProcessInfo appProcess : runningAppProcesses) {
 			if (appProcess.pid == pid) {
 				result = appProcess;
+				break;
 			}
 		}
 		return result;

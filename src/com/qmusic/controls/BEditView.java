@@ -24,7 +24,7 @@ public class BEditView extends EditText {
 	void init() {
 		this.setTextColor(getResources().getColor(R.color.gray_dark_text));
 		this.setHintTextColor(getResources().getColor(R.color.gray_light_text));
-		this.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.padding_drawable));
+		this.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.margin_m));
 	}
 
 	public void setFontStyle(Typeface typeface, int type) {

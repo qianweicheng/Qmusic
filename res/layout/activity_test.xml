@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/com.qmusic"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:divider="@drawable/devider"
@@ -18,6 +19,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible" />
+
+    <com.qmusic.controls.BEditView2
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_h"
+        app:bText="@string/app_name"
+        app:bTextHint="abcedft"
+        app:bTextSize="@dimen/font_size_small_x" >
+    </com.qmusic.controls.BEditView2>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_h"
+        android:gravity="center_vertical"
+        android:padding="3dp"
+        android:text="@string/app_name"
+        android:textSize="@dimen/font_size_small_x" />
 
     <Button
         android:id="@+id/activity_test1_button1"

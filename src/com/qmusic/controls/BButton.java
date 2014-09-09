@@ -7,9 +7,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.androidquery.util.AQUtility;
+import com.qmusic.R;
 
 public class BButton extends Button implements OnClickListener, Runnable {
-	OnClickListener onClickListener;
 	int coldTime = 1000;
 	boolean cold;
 
@@ -24,12 +24,7 @@ public class BButton extends Button implements OnClickListener, Runnable {
 	}
 
 	void init() {
-		setOnClickListener(this);
-	}
-
-	@Override
-	public void setOnClickListener(OnClickListener l) {
-		this.onClickListener = l;
+		setBackgroundResource(R.drawable.b_button);
 	}
 
 	public void setColdTime(int coldTime) {
@@ -40,11 +35,10 @@ public class BButton extends Button implements OnClickListener, Runnable {
 	public void onClick(View v) {
 		if (cold) {
 			return;
-		} else if (onClickListener != null) {
-			cold = true;
-			onClickListener.onClick(v);
-			AQUtility.postDelayed(this, coldTime);
 		}
+		cold = true;
+		AQUtility.postDelayed(this, coldTime);
+		performClick();
 	}
 
 	@Override

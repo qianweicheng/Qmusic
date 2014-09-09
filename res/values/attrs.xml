@@ -3,6 +3,7 @@
 
     <declare-styleable name="myCommonTitle1">
         <attr name="myCommonTitleStyle" format="reference" />
+        <attr name="myBEditTextStyle" format="reference" />
     </declare-styleable>
     <declare-styleable name="CommonTitle">
         <attr name="common_title" format="string" />
@@ -29,6 +30,18 @@
     <declare-styleable name="RoundImage">
         <attr name="roundradius" format="dimension" />
         <attr name="blackwhite" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="BEditText">
+        <attr name="bTextMode">
+            <enum name="text" value="0" />
+            <enum name="edit" value="1" />
+        </attr>
+        <attr name="bText" format="reference"></attr>
+        <attr name="bTextHint" format="reference|string"></attr>
+        <attr name="bTextSize" format="reference|dimension"></attr>
+        <attr name="bTextColor" format="reference|color"></attr>
+        <attr name="bTextColorHint" format="reference|color"></attr>
+        <attr name="bEditable" format="boolean"></attr>
     </declare-styleable>
 
 </resources>
