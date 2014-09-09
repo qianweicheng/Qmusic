@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <declare-styleable name="myCommonTitle1">
+        <attr name="myCommonTitleStyle" format="reference" />
+    </declare-styleable>
     <declare-styleable name="CommonTitle">
         <attr name="common_title" format="string" />
         <attr name="right_text" format="string" />

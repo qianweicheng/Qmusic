@@ -2,15 +2,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:divider="@drawable/devider"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="10dp"
+    android:showDividers="middle|beginning|end" >
 
-    <EditText
+    <com.qmusic.controls.CommonTitle
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_h" >
+    </com.qmusic.controls.CommonTitle>
+
+    <com.qmusic.test.EditText
         android:id="@+id/activity_test1_input_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible" />
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/activity_test1_button1"
@@ -23,7 +30,7 @@
         android:id="@+id/activity_test1_button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_item_footer_button"
+        android:background="@drawable/round_item_middle_button"
         android:text="Go Home" />
 
     <Button
@@ -31,16 +38,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_middle_button"
-        android:text="Test"
-        android:visibility="gone" />
+        android:text="Test" />
 
     <Button
         android:id="@+id/activity_test1_button4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_footer_button"
-        android:text="Test"
-        android:visibility="gone" />
+        android:text="Test" />
 
     <com.qmusic.controls.BPulldownView
         android:id="@+id/activity_test1_pull"

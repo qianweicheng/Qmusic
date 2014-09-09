@@ -34,13 +34,16 @@ public class CommonTitle extends RelativeLayout implements OnClickListener {
 	Drawable leftDrawable, rightDrawable;
 
 	public CommonTitle(Context context) {
-		super(context);
-		init(context);
+		this(context, null);
 	}
 
 	public CommonTitle(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		TypedArray styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.CommonTitle);
+		this(context, attrs, R.attr.myCommonTitleStyle);
+	}
+
+	public CommonTitle(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		TypedArray styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.CommonTitle, defStyle, 0);
 		title = styledAttrs.getString(R.styleable.CommonTitle_common_title);
 		rightText = styledAttrs.getString(R.styleable.CommonTitle_right_text);
 		leftText = styledAttrs.getString(R.styleable.CommonTitle_left_text);

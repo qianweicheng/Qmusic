@@ -30,8 +30,8 @@
         <item name="vpiUnderlinePageIndicatorStyle">@style/CustomUnderlinePageIndicator</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:buttonStyle">@style/b_button_style</item>
-        <item name="android:button">@style/b_button_style</item>
         <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+        <item name="myCommonTitleStyle">@style/myCommonTitle</item>
     </style>
 
     <style name="AppTheme.NoTitleBar">
@@ -59,8 +59,8 @@
         <item name="android:background">#ffffffff</item>
         <item name="android:layout_width">@dimen/button_w</item>
         <item name="android:layout_height">@dimen/button_h</item>
-        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
-        <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/primary_text_light</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
     </style>
 
     <style name="b_icon_button" parent="base_button_style">
@@ -111,6 +111,10 @@
         <item name="android:activityOpenExitAnimation">@anim/slide_out_to_top</item>
         <item name="android:activityCloseEnterAnimation">@anim/slide_in_from_top</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_out_to_bottom</item>
+    </style>
+
+    <style name="myCommonTitle">
+        <item name="common_title">@string/app_name</item>
     </style>
 
 </resources>
