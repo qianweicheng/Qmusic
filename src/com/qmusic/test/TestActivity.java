@@ -1,19 +1,18 @@
 package com.qmusic.test;
 
-import java.io.File;
-
 import android.app.DownloadManager;
 import android.app.DownloadManager.Query;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.androidquery.util.AQUtility;
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
+import com.qmusic.controls.dialogs.LoadingDialogFragment;
 import com.qmusic.uitls.BAppHelper;
 import com.qmusic.uitls.BLog;
 
@@ -23,12 +22,32 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		BLog.d(TAG, "savedInstanceState:" + savedInstanceState);
 		setContentView(R.layout.activity_test);
 		findViewById(R.id.activity_test1_button1).setOnClickListener(this);
 		findViewById(R.id.activity_test1_button2).setOnClickListener(this);
 		findViewById(R.id.activity_test1_button3).setOnClickListener(this);
 		findViewById(R.id.activity_test1_button4).setOnClickListener(this);
 		// edit = (EditText) findViewById(R.id.activity_test1_input_edit);
+		BLog.e(TAG, "onCreate");
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		BLog.e(TAG, "onResume");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		BLog.e(TAG, "onPause");
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		BLog.e(TAG, "onDestroy");
 	}
 
 	@Override
@@ -57,12 +76,15 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 		// String phoneNum = Uri.encode("10086 w 1");
 		// phoneIntent.setData(Uri.parse("tel:10086 w 1"));
 		// startActivity(phoneIntent);
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		File file = new File("/sdcard/Download/12.pdf");
-		file.setReadable(true, false);
-		intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(intent);
+		final LoadingDialogFragment dialog = LoadingDialogFragment.getInstance("Loading", true);
+		dialog.show(getSupportFragmentManager());
+		AQUtility.postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				dialog.dismiss();
+			}
+		}, 10000);
 	}
 
 	public void onBtn2(final View view) {
@@ -72,7 +94,8 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 		// String phoneNum = Uri.encode("10086 ; 1");
 		// phoneIntent.setData(Uri.parse("tel:10086 ; 1"));
 		// startActivity(phoneIntent);
-
+		final LoadingDialogFragment dialog = LoadingDialogFragment.getInstance("Loading", true);
+		dialog.show(getSupportFragmentManager());
 	}
 
 	public void onBtn3(final View view) {
@@ -111,7 +134,7 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 
 	}
 
-	private void goHome() {
+	void goHome() {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 		intent.addCategory(Intent.CATEGORY_HOME);

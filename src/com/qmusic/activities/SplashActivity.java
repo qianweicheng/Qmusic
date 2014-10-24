@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.androidquery.util.AQUtility;
 import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.common.BEnvironment;
@@ -32,7 +33,15 @@ public class SplashActivity extends BaseActivity {
 		if (newIntent == null) {
 			newIntent = getIntent();
 		}
-		process();
+		// Note: after 4.4, can't call start activity from
+		// onCreate,onStart,onResume
+		AQUtility.post(new Runnable() {
+
+			@Override
+			public void run() {
+				process();
+			}
+		});
 		newIntent = null;
 	}
 
@@ -41,7 +50,13 @@ public class SplashActivity extends BaseActivity {
 		super.onResume();
 		// 在部分tablet上面会延迟调用onStop,导致onStart不会被调用
 		if (newIntent != null) {
-			process();
+			AQUtility.post(new Runnable() {
+
+				@Override
+				public void run() {
+					process();
+				}
+			});
 		}
 	}
 

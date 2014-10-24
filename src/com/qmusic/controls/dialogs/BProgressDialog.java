@@ -3,8 +3,11 @@ package com.qmusic.controls.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qmusic.R;
@@ -21,8 +24,7 @@ public class BProgressDialog extends Dialog {
 	private OnBackPressedListener onBackPressedListener = null;
 
 	public BProgressDialog(Context context) {
-		super(context, R.style.b_empty_dialog);
-		init(context);
+		this(context, null);
 	}
 
 	public BProgressDialog(Context context, String msg) {
@@ -40,9 +42,9 @@ public class BProgressDialog extends Dialog {
 		TextView txtLoading = (TextView) this.findViewById(R.id.dialog_text);
 		if (!TextUtils.isEmpty(msg)) {
 			txtLoading.setText(msg);
-			BLog.w(TAG, "Hiding message:" + msg);
+		} else {
+			txtLoading.setVisibility(View.GONE);
 		}
-		txtLoading.setVisibility(View.GONE);
 	}
 
 	public interface OnBackPressedListener {
@@ -65,11 +67,16 @@ public class BProgressDialog extends Dialog {
 	@Override
 	public void show() {
 		try {
+			ImageView imgLoading = (ImageView) findViewById(R.id.dialog_image);
+			Drawable drawable = imgLoading.getDrawable();
+			if (drawable instanceof Animatable) {
+				Animatable animatable = (Animatable) drawable;
+				animatable.start();
+			}
 			super.show();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 	}
 
 	@Override

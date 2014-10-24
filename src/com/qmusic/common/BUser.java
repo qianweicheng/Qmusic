@@ -54,7 +54,7 @@ public final class BUser {
 	public String getUsername() {
 		String username = getString(FIELD_USERNAME);
 		if (TextUtils.isEmpty(username)) {
-			return AQUtility.getContext().getString(R.string.default_username);
+			return "";
 		} else {
 			return username;
 		}
@@ -75,9 +75,8 @@ public final class BUser {
 			String userInfoStr = BUtilities.getPref(BConstants.PRE_KEY_USER_INFO);
 			if (!TextUtils.isEmpty(userInfoStr)) {
 				JsonNode jnode = objectMapper.readTree(userInfoStr);
-				user.userInfo = BUtilities.jsonMapper().convertValue(jnode,
-						new TypeReference<HashMap<String, Object>>() {
-						});
+				user.userInfo = BUtilities.jsonMapper().convertValue(jnode, new TypeReference<HashMap<String, Object>>() {
+				});
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -104,9 +103,8 @@ public final class BUser {
 			ObjectMapper objectMapper = BUtilities.jsonMapper();
 			if (!TextUtils.isEmpty(userInfo)) {
 				JsonNode jnode = objectMapper.readTree(userInfo);
-				user.userInfo = BUtilities.jsonMapper().convertValue(jnode,
-						new TypeReference<HashMap<String, Object>>() {
-						});
+				user.userInfo = BUtilities.jsonMapper().convertValue(jnode, new TypeReference<HashMap<String, Object>>() {
+				});
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

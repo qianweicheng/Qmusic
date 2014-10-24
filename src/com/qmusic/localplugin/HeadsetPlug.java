@@ -6,14 +6,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 
 import com.qmusic.common.BConstants;
 import com.qmusic.common.IAsyncDataCallback;
-import com.qmusic.uitls.BLog;
 
 public class HeadsetPlug extends BasePlug {
-	public static final String TAG = HeadsetPlug.class.getSimpleName();
 	Context ctx;
 	IntentFilter intentFilter;
 	HeadsetPlugReceiver headsetPlugReceiver;
@@ -57,7 +54,7 @@ public class HeadsetPlug extends BasePlug {
 	public void setEnabled(boolean isEnabled) {
 		this.isEnabled = isEnabled;
 		if (isEnabled && state == 1) {
-			new ReadBloodTask().execute();
+			// TODO
 		}
 	}
 
@@ -73,7 +70,7 @@ public class HeadsetPlug extends BasePlug {
 				state = intent.getIntExtra("state", 0);
 				if (isEnabled) {
 					if (state == 1) {
-						new ReadBloodTask().execute();
+						// TODO
 					}
 					if (callbacks != null) {
 						for (IAsyncDataCallback cal : callbacks.keySet()) {
@@ -85,23 +82,4 @@ public class HeadsetPlug extends BasePlug {
 		}
 	}
 
-	class ReadBloodTask extends AsyncTask<Void, Void, Void> {
-		@Override
-		protected void onPreExecute() {
-			BLog.i(TAG, "reading data from device");
-		}
-
-		@Override
-		protected Void doInBackground(Void... arg0) {
-			return null;
-		}
-
-		protected void onPostExecute(Void result) {
-			if (callbacks != null) {
-				for (IAsyncDataCallback cal : callbacks.keySet()) {
-					cal.callback(BConstants.OP_RESULT_REFRESH, state);
-				}
-			}
-		}
-	};
 }

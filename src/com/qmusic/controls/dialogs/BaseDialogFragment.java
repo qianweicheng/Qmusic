@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 
+import com.qmusic.uitls.BLog;
+
 public abstract class BaseDialogFragment extends DialogFragment {
 	String TAG = "BaseDialogFragment";
 	IFragmentDialogCallback callback;
@@ -25,9 +27,28 @@ public abstract class BaseDialogFragment extends DialogFragment {
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		BLog.e(TAG, "onResume");
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		BLog.e(TAG, "onPause");
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		BLog.e(TAG, "onDestroy");
+	}
+
+	@Override
 	public void onDetach() {
 		super.onDetach();
 		callback = null;
+		BLog.e(TAG, "onDetach");
 	}
 
 	@Override
@@ -37,11 +58,18 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
 	@Override
 	public void dismiss() {
-		super.dismiss();
+		BLog.e(TAG, "dismiss");
+		try {
+			dismissAllowingStateLoss();
+			// super.dismiss();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
 	public void onDismiss(DialogInterface dialog) {
+		BLog.e(TAG, "onDismiss");
 		super.onDismiss(dialog);
 		if (callback != null) {
 			callback.dismiss();

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Elocker</string>
+    <string name="app_name">QMuisc</string>
     <string name="action_settings">Settings</string>
-    <string name="press_back_to_exit">再按一次返回退出</string>
-    <string name="local">本地</string>
-    <string name="loading">正在加载中&#8230;</string>
-    <string name="login">登陆</string>
-    <string name="default_username">未登陆</string>
-    <string name="error_server">服务器错误,请稍后再试!</string>
-    <string name="error_network">网络错误，请稍后再试!</string>
+    <string name="press_back_to_exit">Press again to exit QMusic</string>
+    <string name="local">Local</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="login">Login</string>
+    <string name="error_server">Server error, please retry again later!</string>
+    <string name="error_network">Network error, please retry again later!</string>
+    <string name="has_no_email_client">This device is unable to send emails at this time.</string>
+    <string name="has_no_map_client">You have not installed a map app client!</string>
+    <string name="has_no_browser_client">You have not installed a browser!</string>
+    <string name="has_no_phone_call_client">You can not make a call on this device!</string>
+    <string name="has_no_sms_client">You can not send SMS on this device!</string>
+    <string name="has_no_calendar_client">Can not open the native calendar app!</string>
 
 </resources>

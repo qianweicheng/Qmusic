@@ -40,8 +40,7 @@ public class AlertDialogFragment extends BaseDialogFragment {
 		return fragment;
 	}
 
-	public static AlertDialogFragment getInstance(final String title, final String msg, final int positive,
-			final int nagative) {
+	public static AlertDialogFragment getInstance(final String title, final String msg, final int positive, final int nagative) {
 		Context ctx = AQUtility.getContext();
 		return getInstance(title, msg, ctx.getString(positive), ctx.getString(nagative));
 	}
@@ -52,8 +51,7 @@ public class AlertDialogFragment extends BaseDialogFragment {
 	 * @param title
 	 * @return
 	 */
-	public static AlertDialogFragment getInstance(final String title, final String msg, final String positiveStr,
-			final String nagativeStr) {
+	public static AlertDialogFragment getInstance(final String title, final String msg, final String positiveStr, final String nagativeStr) {
 		AlertDialogFragment fragment = new AlertDialogFragment();
 		Bundle bundle = new Bundle();
 		bundle.putString("title", title);
@@ -74,8 +72,8 @@ public class AlertDialogFragment extends BaseDialogFragment {
 	 * @param neutralStr
 	 * @return
 	 */
-	public static AlertDialogFragment getInstance(final String title, final String msg, final String positiveStr,
-			final String nagativeStr, final String neutralStr) {
+	public static AlertDialogFragment getInstance(final String title, final String msg, final String positiveStr, final String nagativeStr,
+			final String neutralStr) {
 		AlertDialogFragment fragment = new AlertDialogFragment();
 		Bundle bundle = new Bundle();
 		bundle.putString("title", title);
@@ -102,6 +100,7 @@ public class AlertDialogFragment extends BaseDialogFragment {
 			positiveStr = arguments.getString("positiveStr");
 			negativeStr = arguments.getString("negativeStr");
 			neutralStr = arguments.getString("neutralStr");
+			icon = arguments.getInt("icon");
 		}
 	}
 
@@ -113,6 +112,7 @@ public class AlertDialogFragment extends BaseDialogFragment {
 		arg0.putString("positiveStr", positiveStr);
 		arg0.putString("negativeStr", negativeStr);
 		arg0.putString("neutralStr", neutralStr);
+		arg0.putInt("icon", icon);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.qmusic.uitls;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
+import android.os.Environment;
 import android.provider.Settings.Secure;
 import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
@@ -281,5 +283,24 @@ public class BUtilities {
 			}
 		}
 		return result;
+	}
+
+	public final static File getHTMLFolder() {
+		String status = Environment.getExternalStorageState();
+		if (status.equals(Environment.MEDIA_MOUNTED)) {
+			File cacheDir = new File(AQUtility.getContext().getExternalCacheDir(), "htmls");
+			if (!cacheDir.exists()) {
+				boolean result = cacheDir.mkdirs();
+				if (!result) {
+					return null;
+				}
+			}
+			return cacheDir;
+		}
+		// cacheDir = new File(AQUtility.getContext().getCacheDir(),
+		// "htmls");
+		BLog.w(TAG, "has no sd card");
+		// EdoReporting.logEvent("has no sd card");
+		return null;
 	}
 }

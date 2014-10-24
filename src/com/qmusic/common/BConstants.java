@@ -5,11 +5,12 @@ public final class BConstants {
 	public static final int MSG_OK = 0;
 	public static final int MSG_CANCELED = 1;
 	public static final int MSG_HEADSET_PLUG = 2;
+	public static final int MSG_PAGE_START_LOADING = 3;
+	public static final int MSG_PAGE_FINISH_LOADING = 4;
 	// =======================================
 	public static final int OP_RESULT_OK = 0;
 	public static final int OP_RESULT_FAILED = 1;
 	public static final int OP_RESULT_CANCELED = 2;
-	public static final int OP_RESULT_REFRESH = 3;
 	// =======================================
 	public static final String DEFAULT_DATE_FORMAT = "MM/dd/yyyy HH:mm:ss z";
 	public static final String SHORT_DATE_FORMAT = "MM/dd HH:mm";
