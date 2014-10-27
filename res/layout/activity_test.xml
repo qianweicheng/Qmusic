@@ -6,13 +6,7 @@
     android:divider="@drawable/devider"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:showDividers="middle|beginning|end" >
-
-    <com.qmusic.controls.CommonTitle
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/button_h" >
-    </com.qmusic.controls.CommonTitle>
+    android:padding="10dp" >
 
     <com.qmusic.test.EditText
         android:id="@+id/activity_test1_input_edit"
@@ -41,28 +35,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_head_button"
-        android:text="LockScreen" />
+        android:text="Start Activity 1" />
 
     <Button
         android:id="@+id/activity_test1_button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_middle_button"
-        android:text="Go Home" />
+        android:text="Start Activity 2" />
 
     <Button
         android:id="@+id/activity_test1_button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_middle_button"
-        android:text="Test" />
+        android:text="Start Activity 3" />
 
     <Button
         android:id="@+id/activity_test1_button4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/round_item_footer_button"
-        android:text="Test" />
+        android:text="Start Activity 4" />
 
     <com.qmusic.controls.BPulldownView
         android:id="@+id/activity_test1_pull"

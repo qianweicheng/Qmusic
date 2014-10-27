@@ -8,6 +8,7 @@ import android.content.Context;
 import android.view.ViewGroup;
 
 import com.androidquery.util.AQUtility;
+import com.qmusic.activities.LoginActivity;
 import com.qmusic.uitls.BUtilities;
 
 public class BWebdoEngine {
@@ -74,4 +75,5 @@ public class BWebdoEngine {
 		return webview;
 
 	}
+
 }

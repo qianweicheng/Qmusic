@@ -14,6 +14,7 @@ import com.qmusic.R;
 import com.qmusic.common.BConstants;
 import com.qmusic.controls.CommonTitle;
 import com.qmusic.webdoengine.BJSInterface;
+import com.qmusic.webdoengine.BRoutingHelper;
 import com.qmusic.webdoengine.BWebHost;
 import com.qmusic.webdoengine.BWebView;
 import com.qmusic.webdoengine.BWebdoEngine;
@@ -118,11 +119,11 @@ public class BCommonWebActivity extends BaseActivity {
 			} else if (what == BConstants.MSG_JUMP_TO_ACTIVITY) {
 				params = (JSONObject) obj;
 				final String activityInfo = params.optString("page");
-				final Class<?> classInfo = BJSInterface.getActivityInfo(activityInfo);
+				final Class<?> classInfo = BRoutingHelper.getActivityInfo(activityInfo);
 				final Intent intent = new Intent(BCommonWebActivity.this, classInfo);
 				BCommonWebActivity.this.startActivityForResult(intent, 100);
 			} else {
-				return super.handleMessage(what, arg1, obj);
+				return super.sendMessage(what, arg1, obj);
 			}
 			return null;
 		}

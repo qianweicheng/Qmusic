@@ -75,8 +75,8 @@ public class BWebView extends WebView {
 			((ViewGroup) oldParent).removeView(this);
 			parent.addView(this);
 		}
-		if (!isLoading && !TextUtils.isEmpty(getUrl()) && webHost != null) {
-			webHost.handleMessage(BConstants.MSG_PAGE_FINISH_LOADING, 0, null);
+		if (!isLoading && !TextUtils.isEmpty(getUrl())) {
+			webHost.sendMessage(BConstants.MSG_PAGE_FINISH_LOADING, 0, null);
 		}
 	}
 
@@ -201,7 +201,7 @@ public class BWebView extends WebView {
 			super.onPageStarted(view, url, favicon);
 			isLoading = true;
 			if (webHost != null) {
-				webHost.handleMessage(BConstants.MSG_PAGE_START_LOADING, 0, null);
+				webHost.sendMessage(BConstants.MSG_PAGE_START_LOADING, 0, null);
 			}
 		}
 
@@ -210,7 +210,7 @@ public class BWebView extends WebView {
 			BLog.d(TAG, "onPageFinished:" + url);
 			isLoading = false;
 			if (webHost != null) {
-				webHost.handleMessage(BConstants.MSG_PAGE_FINISH_LOADING, 0, null);
+				webHost.sendMessage(BConstants.MSG_PAGE_FINISH_LOADING, 0, null);
 			}
 		}
 
@@ -219,7 +219,7 @@ public class BWebView extends WebView {
 			BLog.i(TAG, url);
 			View parent = (View) view.getParent();
 			if (parent != null && parent.getContext() instanceof FragmentActivity) {
-				BSchemeHelper.process((FragmentActivity) parent.getContext(), url);
+				BRoutingHelper.process((FragmentActivity) parent.getContext(), url);
 				return true;
 			} else {
 				return super.shouldOverrideUrlLoading(view, url);

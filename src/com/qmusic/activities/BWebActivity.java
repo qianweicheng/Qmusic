@@ -115,7 +115,7 @@ public class BWebActivity extends BaseActivity {
 			} else if (arg0 == BConstants.MSG_PAGE_START_LOADING) {
 				progressBar.setVisibility(View.VISIBLE);
 			} else {
-				return super.handleMessage(arg0, arg1, obj);
+				return super.sendMessage(arg0, arg1, obj);
 			}
 			return null;
 		}

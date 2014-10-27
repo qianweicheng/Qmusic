@@ -14,7 +14,6 @@ import android.text.TextUtils;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 import com.androidquery.util.AQUtility;
-import com.qmusic.activities.LoginActivity;
 import com.qmusic.common.BConstants;
 import com.qmusic.controls.dialogs.AlertDialogFragment;
 import com.qmusic.controls.dialogs.LoadingDialogFragment;
@@ -84,13 +83,13 @@ public class BJSInterface {
 			String callback = json.optString("callback");
 			if (TextUtils.isEmpty(callback)) {
 				// Start the activity here if need no callback
-				Class<?> classInfo = getActivityInfo(callback);
+				Class<?> classInfo = BRoutingHelper.getActivityInfo(callback);
 				Intent intent = new Intent(activity, classInfo);
 				activity.startActivity(intent);
 			} else {
 				// if it is start activity for result, then handle it in
 				// activity
-				webHost.handleMessage(BConstants.MSG_JUMP_TO_ACTIVITY, 0, json);
+				webHost.sendMessage(BConstants.MSG_JUMP_TO_ACTIVITY, 0, json);
 			}
 		}
 	}
@@ -154,10 +153,4 @@ public class BJSInterface {
 		}
 	}
 
-	public static final Class<?> getActivityInfo(String activity) {
-		if ("login".equalsIgnoreCase(activity)) {
-			return LoginActivity.class;
-		}
-		return null;
-	}
 }

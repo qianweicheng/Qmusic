@@ -11,11 +11,12 @@ import android.support.v4.app.FragmentActivity;
 
 import com.qmusic.R;
 import com.qmusic.activities.BWebActivity;
+import com.qmusic.activities.LoginActivity;
 import com.qmusic.activities.SplashActivity;
 import com.qmusic.common.BLocationManager;
 import com.qmusic.controls.dialogs.BToast;
 
-public final class BSchemeHelper {
+public final class BRoutingHelper {
 	static final String SCHEME_CALL = "easilydo://call";
 	static final String SCHEME_DIRECTION_TO = "easilydo://directionTo";
 	static final String SCHEME_MAP = "easilydo://map";
@@ -177,5 +178,12 @@ public final class BSchemeHelper {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		ctx.startActivity(intent);
 		return true;
+	}
+
+	public static final Class<?> getActivityInfo(String activity) {
+		if ("login".equalsIgnoreCase(activity)) {
+			return LoginActivity.class;
+		}
+		return null;
 	}
 }
