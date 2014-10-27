@@ -1,7 +1,9 @@
 package com.qmusic.activities;
 
+import org.json.JSONObject;
+
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +13,19 @@ import com.androidquery.util.AQUtility;
 import com.qmusic.R;
 import com.qmusic.common.BConstants;
 import com.qmusic.controls.CommonTitle;
-import com.qmusic.uitls.BLog;
 import com.qmusic.webdoengine.BJSInterface;
 import com.qmusic.webdoengine.BWebHost;
 import com.qmusic.webdoengine.BWebView;
+import com.qmusic.webdoengine.BWebdoEngine;
 
-public class BWebActivity extends BaseActivity {
-	public static final String TITLE = "title";
-	public static final String URL = "url";
-	public static final String HTML_DATA = "htmlData";
+public class BCommonWebActivity extends BaseActivity {
 	public static final String SHOW_PROGRESS_BAR = "showProgressBar";
+	public static final String TITLE = "title";
 	ProgressBar progressBar;
 	ViewGroup webViewContainer;
 	BWebView webView;
 	MyWebHost webHost;
+	int mode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class BWebActivity extends BaseActivity {
 		webViewContainer = (ViewGroup) findViewById(R.id.activity_web_webview_container);
 		webHost = new MyWebHost(this);
 		Bundle bundle = getIntent().getExtras();
-		if (bundle != null && (bundle.containsKey(URL) || bundle.containsKey(HTML_DATA))) {
+		if (bundle != null) {
 			String title = bundle.getString(TITLE);
 			if (TextUtils.isEmpty(title)) {
 				title = "";// getString(R.string.app_name);
@@ -47,19 +48,12 @@ public class BWebActivity extends BaseActivity {
 			} else {
 				progressBar.setVisibility(View.GONE);
 			}
-			webView = new BWebView(this);
-			webView.attachWebview(webHost, webViewContainer);
-			String url = bundle.getString(URL);
-			String htmlData = bundle.getString(HTML_DATA);
-			if (htmlData != null) {
-				BLog.v(TAG, "htmlData:" + htmlData);
-				webView.loadDataWithBaseURL(url, htmlData, "text/html", "utf-8", null);
-			} else {
-				webView.loadUrl(url);
-			}
+			mode = bundle.getInt("mode");
+		}
+		if (mode == 2) {
+			webView = BWebdoEngine.attachWebview2(webHost, webViewContainer);
 		} else {
-			finish();
-			BLog.e(TAG, "url is null");
+			webView = BWebdoEngine.attachWebview(webHost, webViewContainer);
 		}
 	}
 
@@ -96,6 +90,11 @@ public class BWebActivity extends BaseActivity {
 	}
 
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		webHost.onActivityResult(requestCode, resultCode, intent);
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		webHost.onDestory();
@@ -103,21 +102,41 @@ public class BWebActivity extends BaseActivity {
 	}
 
 	class MyWebHost extends BWebHost {
-		public MyWebHost(FragmentActivity activity) {
+		JSONObject params;
+
+		public MyWebHost(BCommonWebActivity activity) {
 			super(activity);
 			setJSInterface(new BJSInterface(this));
 		}
 
 		@Override
-		public Object handleMessage(int arg0, int arg1, Object obj) {
-			if (arg0 == BConstants.MSG_PAGE_FINISH_LOADING) {
+		public Object handleMessage(int what, int arg1, Object obj) {
+			if (what == BConstants.MSG_PAGE_FINISH_LOADING) {
 				progressBar.setVisibility(View.GONE);
-			} else if (arg0 == BConstants.MSG_PAGE_START_LOADING) {
+			} else if (what == BConstants.MSG_PAGE_START_LOADING) {
 				progressBar.setVisibility(View.VISIBLE);
+			} else if (what == BConstants.MSG_JUMP_TO_ACTIVITY) {
+				params = (JSONObject) obj;
+				final String activityInfo = params.optString("page");
+				final Class<?> classInfo = BJSInterface.getActivityInfo(activityInfo);
+				final Intent intent = new Intent(BCommonWebActivity.this, classInfo);
+				BCommonWebActivity.this.startActivityForResult(intent, 100);
 			} else {
-				return super.handleMessage(arg0, arg1, obj);
+				return super.handleMessage(what, arg1, obj);
 			}
 			return null;
+		}
+
+		@Override
+		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+			if (requestCode == 100) {
+				final String callback = params.optString("callback");
+				if (resultCode == RESULT_OK) {
+					webView.sendJavascript(String.format("%s('%s');", callback, "OK"));
+				} else {
+					webView.sendJavascript(String.format("%s('%s');", callback, "Cancel"));
+				}
+			}
 		}
 	}
 }

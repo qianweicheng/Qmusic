@@ -27,6 +27,14 @@ public class BAppHelper {
 	static final String TAG = BAppHelper.class.getSimpleName();
 	static int exiting;
 
+	public final static void goHome(Activity ctx) {
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		ctx.startActivity(intent);
+		ctx.overridePendingTransition(0, 0);
+	}
+
 	@SuppressLint("InlinedApi")
 	public final static boolean exit(Activity activity, boolean force) {
 		if (exiting == 1 || force) {

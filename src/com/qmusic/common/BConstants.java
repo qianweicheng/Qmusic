@@ -7,6 +7,10 @@ public final class BConstants {
 	public static final int MSG_HEADSET_PLUG = 2;
 	public static final int MSG_PAGE_START_LOADING = 3;
 	public static final int MSG_PAGE_FINISH_LOADING = 4;
+	public static final int MSG_PAGE_ON_RESUME = 5;
+	public static final int MSG_PAGE_ON_PAUSE = 6;
+	public static final int MSG_PAGE_ON_STOP = 7;
+	public static final int MSG_JUMP_TO_ACTIVITY = 8;
 	// =======================================
 	public static final int OP_RESULT_OK = 0;
 	public static final int OP_RESULT_FAILED = 1;

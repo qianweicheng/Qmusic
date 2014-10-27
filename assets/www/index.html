@@ -1,13 +1,44 @@
 <!doctype html>
 <html ng-app>
     <head>
-    		<link rel="stylesheet" href="bootstrap.min.css">
-        <script src="angular.js"></script>
+    	<link rel="stylesheet" href="bootstrap.min.css">
+    	<script type="text/javascript">
+    		function onStart(){
+    			var myDiv=document.getElementById("myDiv");
+    			myDiv.innerHTML=myDiv.innerHTML+"<br/>onStart";
+    		}
+    		function onResume(){
+    			var myDiv=document.getElementById("myDiv");
+    			myDiv.innerHTML=myDiv.innerHTML+"<br/>onResume";
+    		}
+    		function onPause(){
+    			var myDiv=document.getElementById("myDiv");
+    			myDiv.innerHTML=myDiv.innerHTML+"<br/>onPause";
+    		}
+    		function onStop(){
+    			var myDiv=document.getElementById("myDiv");
+    			myDiv.innerHTML=myDiv.innerHTML+"<br/>onStop";
+    		}
+    		function clickMe(){
+				GAJavaScript.performSelector("longTimeCallback","callback");    		
+    		}
+    		function jumpTo(){
+				GAJavaScript.performSelector("jumpTo","{page:'login',callback:'callback'}");    		
+    		}
+    		function callback(result){
+    			var myDiv=document.getElementById("myDiv");
+    			myDiv.innerHTML="result:"+result;
+    		}
+    	</script>
     </head>
     <body>
         Hello {{'World'}}!<hr>
            Your name: <input type="text" ng-model="yourname" placeholder="World111">
         <hr>
+        <div><button onclick="clickMe();">Click Me</button></div>
+         <div><button onclick="jumpTo();">Jump To</button></div>
+        <div id="myDiv"></div>
         Hello {{yourname+" my" || 'World21'}}!
+        <script src="angular.js"></script>
     </body>
 </html>

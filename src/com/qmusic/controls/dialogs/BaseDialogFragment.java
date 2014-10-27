@@ -29,26 +29,26 @@ public abstract class BaseDialogFragment extends DialogFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		BLog.e(TAG, "onResume");
+		BLog.d(TAG, "onResume");
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		BLog.e(TAG, "onPause");
+		BLog.d(TAG, "onPause");
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		BLog.e(TAG, "onDestroy");
+		BLog.d(TAG, "onDestroy");
 	}
 
 	@Override
 	public void onDetach() {
 		super.onDetach();
 		callback = null;
-		BLog.e(TAG, "onDetach");
+		BLog.d(TAG, "onDetach");
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
 	@Override
 	public void dismiss() {
-		BLog.e(TAG, "dismiss");
+		BLog.d(TAG, "dismiss");
 		try {
 			dismissAllowingStateLoss();
 			// super.dismiss();
@@ -69,7 +69,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		BLog.e(TAG, "onDismiss");
+		BLog.d(TAG, "onDismiss");
 		super.onDismiss(dialog);
 		if (callback != null) {
 			callback.dismiss();

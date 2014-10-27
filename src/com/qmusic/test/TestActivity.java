@@ -1,18 +1,14 @@
 package com.qmusic.test;
 
-import android.app.DownloadManager;
-import android.app.DownloadManager.Query;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.androidquery.util.AQUtility;
 import com.qmusic.R;
+import com.qmusic.activities.BCommonWebActivity;
+import com.qmusic.activities.BWebActivity;
 import com.qmusic.activities.BaseActivity;
-import com.qmusic.controls.dialogs.LoadingDialogFragment;
 import com.qmusic.uitls.BAppHelper;
 import com.qmusic.uitls.BLog;
 
@@ -72,73 +68,32 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	public void onBtn1(final View view) {
 		// LockScreenPlug.lockS();
 		// goHome();
-		// Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
-		// String phoneNum = Uri.encode("10086 w 1");
-		// phoneIntent.setData(Uri.parse("tel:10086 w 1"));
-		// startActivity(phoneIntent);
-		final LoadingDialogFragment dialog = LoadingDialogFragment.getInstance("Loading", true);
-		dialog.show(getSupportFragmentManager());
-		AQUtility.postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-				dialog.dismiss();
-			}
-		}, 10000);
+		Intent intent = new Intent(this, BWebActivity.class);
+		intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
+		intent.putExtra("url", "file:///android_asset/www/index.html");
+		startActivity(intent);
 	}
 
 	public void onBtn2(final View view) {
-		// goHome();
-		// Uri.encode("10086,1");
-		// Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
-		// String phoneNum = Uri.encode("10086 ; 1");
-		// phoneIntent.setData(Uri.parse("tel:10086 ; 1"));
-		// startActivity(phoneIntent);
-		final LoadingDialogFragment dialog = LoadingDialogFragment.getInstance("Loading", true);
-		dialog.show(getSupportFragmentManager());
+		Intent intent = new Intent(this, BWebActivity.class);
+		intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
+		intent.putExtra("url", "file:///android_asset/www/index2.html");
+		startActivity(intent);
 	}
 
 	public void onBtn3(final View view) {
-		// Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
-		// String phoneNum = Uri.encode("10086 p 1");
-		// phoneIntent.setData(Uri.parse("tel:10086 p 1"));
-		// startActivity(phoneIntent);
-		// "Fri, 18 Jul 2014 06:42:51 GMT"
-		// Fri, 18 Jul 2014 11:03:55 GMT
-
+		Intent intent = new Intent(this, BCommonWebActivity.class);
+		intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
+		intent.putExtra("url", "file:///android_asset/www/index.html");
+		startActivity(intent);
 	}
 
 	public void onBtn4(final View view) {
-		DownloadManager manger = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-		Query query = new Query();
-		// query.setFilterById(68);
-		// query.setFilterByStatus(DownloadManager.STATUS_SUCCESSFUL);
-		Cursor cursor = manger.query(query);
-		// int count = cursor.getColumnCount();
-		final int index1 = cursor.getColumnIndex(DownloadManager.COLUMN_URI);
-		final int index2 = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
-		int STATUS = DownloadManager.STATUS_PENDING | DownloadManager.STATUS_RUNNING;
-		BLog.e(TAG, "index1:" + index1);
-		BLog.e(TAG, "index2:" + index2);
-		while (cursor.moveToNext()) {
-			// ContentValues cv = new ContentValues();
-			// for (int i = 0; i < count; i++) {
-			// cv.put(cursor.getColumnName(i), cursor.getString(i));
-			// }
-			// BLog.e(TAG, cv.toString());
-
-			BLog.e(TAG, cursor.getString(index1));
-			int s = cursor.getInt(index2);
-			BLog.e(TAG, "Status:" + s + ";checked:" + (STATUS & s));
-		}
-
-	}
-
-	void goHome() {
-		Intent intent = new Intent(Intent.ACTION_MAIN);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-		intent.addCategory(Intent.CATEGORY_HOME);
+		Intent intent = new Intent(this, BCommonWebActivity.class);
+		intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
+		intent.putExtra("mode", 2);
+		intent.putExtra("url", "file:///android_asset/www/index2.html");
 		startActivity(intent);
-		overridePendingTransition(0, 0);
 	}
+
 }

@@ -35,11 +35,12 @@ public class SplashActivity extends BaseActivity {
 		}
 		// Note: after 4.4, can't call start activity from
 		// onCreate,onStart,onResume
+		final Intent intent = newIntent;
 		AQUtility.post(new Runnable() {
 
 			@Override
 			public void run() {
-				process();
+				process(intent);
 			}
 		});
 		newIntent = null;
@@ -50,11 +51,12 @@ public class SplashActivity extends BaseActivity {
 		super.onResume();
 		// 在部分tablet上面会延迟调用onStop,导致onStart不会被调用
 		if (newIntent != null) {
+			final Intent intent = newIntent;
 			AQUtility.post(new Runnable() {
 
 				@Override
 				public void run() {
-					process();
+					process(intent);
 				}
 			});
 		}
@@ -73,7 +75,7 @@ public class SplashActivity extends BaseActivity {
 		MyApplication.shutdown();
 	}
 
-	private void process() {
+	private void process(Intent newIntent) {
 		Bundle bundle = newIntent.getExtras();
 		if (bundle != null && bundle.size() > 0) {
 			if (bundle.getBoolean(SHUTDOWN, false)) {

@@ -168,6 +168,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.qmusic.activities.BCommonWebActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.google.zxing.CaptureActivity"
             android:screenOrientation="portrait" >
         </activity>
