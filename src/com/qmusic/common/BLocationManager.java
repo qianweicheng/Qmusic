@@ -77,13 +77,13 @@ public class BLocationManager implements LocationListener {
 
 				@Override
 				public void run() {
-					callback.callback(BConstants.OP_RESULT_OK, location);
+					callback.callback(BConstants.MSG_RESULT_OK, location);
 				}
 			});
 		} else {
 			bestProvider = getBestProvider();
 			if (TextUtils.isEmpty(bestProvider)) {
-				checkCallback(BConstants.OP_RESULT_FAILED);
+				checkCallback(BConstants.MSG_RESULT_FAILED);
 				return;
 			}
 			callbackList.put(callback, "");
@@ -131,9 +131,9 @@ public class BLocationManager implements LocationListener {
 			@Override
 			protected void onPostExecute(String result[]) {
 				if (result != null && result.length > 0) {
-					callback.callback(BConstants.OP_RESULT_OK, result);
+					callback.callback(BConstants.MSG_RESULT_OK, result);
 				} else {
-					callback.callback(BConstants.OP_RESULT_FAILED, null);
+					callback.callback(BConstants.MSG_RESULT_FAILED, null);
 				}
 			}
 		};
@@ -141,10 +141,10 @@ public class BLocationManager implements LocationListener {
 			updateLocation(new IAsyncDataCallback() {
 				@Override
 				public void callback(int result, Object data) {
-					if (result == BConstants.OP_RESULT_OK) {
+					if (result == BConstants.MSG_RESULT_OK) {
 						asyncTask.execute();
 					} else {
-						callback.callback(BConstants.OP_RESULT_FAILED, null);
+						callback.callback(BConstants.MSG_RESULT_FAILED, null);
 					}
 				}
 			}, 0);
@@ -170,7 +170,7 @@ public class BLocationManager implements LocationListener {
 			if (mState == STATUS_DOING) {
 				mState = STATUS_FAILED;
 				BLog.i(TAG, "onLocationChanged: location failed");
-				checkCallback(BConstants.OP_RESULT_FAILED);
+				checkCallback(BConstants.MSG_RESULT_FAILED);
 			}
 		}
 	};
@@ -197,13 +197,13 @@ public class BLocationManager implements LocationListener {
 		if (arg0 == null) {
 			mState = STATUS_FAILED;
 			BLog.i(TAG, "onLocationChanged: location failed");
-			checkCallback(BConstants.OP_RESULT_FAILED);
+			checkCallback(BConstants.MSG_RESULT_FAILED);
 		} else {
 			mState = STATUS_DONE;
 			location = arg0;
 			lastupdateTime = System.currentTimeMillis();
 			BLog.i(TAG, "onLocationChanged:" + arg0.toString());
-			checkCallback(BConstants.OP_RESULT_OK);
+			checkCallback(BConstants.MSG_RESULT_OK);
 		}
 		stop();
 	}
@@ -214,7 +214,7 @@ public class BLocationManager implements LocationListener {
 		if (provider.equals(bestProvider)) {
 			// location = null;
 			mState = STATUS_FAILED;
-			checkCallback(BConstants.OP_RESULT_FAILED);
+			checkCallback(BConstants.MSG_RESULT_FAILED);
 			stop();
 		}
 	}
@@ -231,7 +231,7 @@ public class BLocationManager implements LocationListener {
 			BLog.v(TAG, "Provider: " + bestProvider + " become unavailable.");
 			// location = null;
 			mState = STATUS_FAILED;
-			checkCallback(BConstants.OP_RESULT_FAILED);
+			checkCallback(BConstants.MSG_RESULT_FAILED);
 			stop();
 		}
 	}

@@ -165,15 +165,15 @@ public final class BDateTimePickerFragment extends BaseDialogFragment implements
 					timePicker.getCurrentHour(), timePicker.getCurrentMinute());
 			if (calendar.getTimeInMillis() >= minimumDate) {
 				Date dateReturn = calendar.getTime();
-				callback.callback(BConstants.OP_RESULT_OK, dateReturn);
+				callback.callback(BConstants.MSG_RESULT_OK, dateReturn);
 			} else {
-				callback.callback(BConstants.OP_RESULT_CANCELED, null);
+				callback.callback(BConstants.MSG_RESULT_CANCELED, null);
 				if (sdf != null) {
 					BToast.toast("Please select a date later than " + sdf.format(new Date(minimumDate)));
 				}
 			}
 		} else if (which == DialogInterface.BUTTON_NEGATIVE) {
-			callback.callback(BConstants.OP_RESULT_CANCELED, null);
+			callback.callback(BConstants.MSG_RESULT_CANCELED, null);
 		}
 	}
 

@@ -25,6 +25,7 @@ public class BWebActivity extends BaseActivity {
 	ViewGroup webViewContainer;
 	BWebView webView;
 	MyWebHost webHost;
+	boolean showProgressBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class BWebActivity extends BaseActivity {
 			}
 			CommonTitle commonTitle = (CommonTitle) findViewById(R.id.activity_web_title);
 			commonTitle.setTitle(title);
-			boolean showProgressBar = bundle.getBoolean(SHOW_PROGRESS_BAR, true);
+			showProgressBar = bundle.getBoolean(SHOW_PROGRESS_BAR, false);
 			progressBar = (ProgressBar) findViewById(R.id.activity_web_progressbar);
 			if (showProgressBar) {
 				progressBar.setVisibility(View.VISIBLE);
@@ -49,6 +50,7 @@ public class BWebActivity extends BaseActivity {
 			}
 			webView = new BWebView(this);
 			webView.attachWebview(webHost, webViewContainer);
+			webHost.onCreate();
 			String url = bundle.getString(URL);
 			String htmlData = bundle.getString(HTML_DATA);
 			if (htmlData != null) {
@@ -110,12 +112,16 @@ public class BWebActivity extends BaseActivity {
 
 		@Override
 		public Object handleMessage(int arg0, int arg1, Object obj) {
-			if (arg0 == BConstants.MSG_PAGE_FINISH_LOADING) {
-				progressBar.setVisibility(View.GONE);
-			} else if (arg0 == BConstants.MSG_PAGE_START_LOADING) {
-				progressBar.setVisibility(View.VISIBLE);
+			if (arg0 == BConstants.MSG_PAGE_START_LOADING) {
+				if (showProgressBar) {
+					progressBar.setVisibility(View.VISIBLE);
+				}
+			} else if (arg0 == BConstants.MSG_PAGE_FINISH_LOADING) {
+				if (showProgressBar) {
+					progressBar.setVisibility(View.GONE);
+				}
 			} else {
-				return super.sendMessage(arg0, arg1, obj);
+				return super.handleMessage(arg0, arg1, obj);
 			}
 			return null;
 		}

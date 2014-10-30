@@ -65,7 +65,7 @@ public class BAccountSelectionFragment extends BaseDialogFragment {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							if (dataCallback != null) {
-								dataCallback.callback(BConstants.OP_RESULT_CANCELED, null);
+								dataCallback.callback(BConstants.MSG_RESULT_CANCELED, null);
 							}
 						}
 					}).setSingleChoiceItems(accountsList, -1, new OnClickListener() {
@@ -73,9 +73,9 @@ public class BAccountSelectionFragment extends BaseDialogFragment {
 						public void onClick(DialogInterface dialog, int which) {
 							if (dataCallback != null) {
 								if (which == 0) {
-									dataCallback.callback(BConstants.OP_RESULT_OK, null);
+									dataCallback.callback(BConstants.MSG_RESULT_OK, null);
 								} else {
-									dataCallback.callback(BConstants.OP_RESULT_OK, accounts[which - 1]);
+									dataCallback.callback(BConstants.MSG_RESULT_OK, accounts[which - 1]);
 								}
 							}
 							dismiss();

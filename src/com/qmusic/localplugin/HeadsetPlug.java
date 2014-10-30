@@ -74,7 +74,7 @@ public class HeadsetPlug extends BasePlug {
 					}
 					if (callbacks != null) {
 						for (IAsyncDataCallback cal : callbacks.keySet()) {
-							cal.callback(BConstants.OP_RESULT_OK, state);
+							cal.callback(BConstants.MSG_RESULT_OK, state);
 						}
 					}
 				}

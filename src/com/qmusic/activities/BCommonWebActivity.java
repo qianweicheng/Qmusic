@@ -1,7 +1,5 @@
 package com.qmusic.activities;
 
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,7 +12,6 @@ import com.qmusic.R;
 import com.qmusic.common.BConstants;
 import com.qmusic.controls.CommonTitle;
 import com.qmusic.webdoengine.BJSInterface;
-import com.qmusic.webdoengine.BRoutingHelper;
 import com.qmusic.webdoengine.BWebHost;
 import com.qmusic.webdoengine.BWebView;
 import com.qmusic.webdoengine.BWebdoEngine;
@@ -23,6 +20,7 @@ public class BCommonWebActivity extends BaseActivity {
 	public static final String SHOW_PROGRESS_BAR = "showProgressBar";
 	public static final String TITLE = "title";
 	ProgressBar progressBar;
+	boolean showProgressBar;
 	ViewGroup webViewContainer;
 	BWebView webView;
 	MyWebHost webHost;
@@ -42,7 +40,7 @@ public class BCommonWebActivity extends BaseActivity {
 			}
 			CommonTitle commonTitle = (CommonTitle) findViewById(R.id.activity_web_title);
 			commonTitle.setTitle(title);
-			boolean showProgressBar = bundle.getBoolean(SHOW_PROGRESS_BAR, true);
+			showProgressBar = bundle.getBoolean(SHOW_PROGRESS_BAR, false);
 			progressBar = (ProgressBar) findViewById(R.id.activity_web_progressbar);
 			if (showProgressBar) {
 				progressBar.setVisibility(View.VISIBLE);
@@ -53,9 +51,11 @@ public class BCommonWebActivity extends BaseActivity {
 		}
 		if (mode == 2) {
 			webView = BWebdoEngine.attachWebview2(webHost, webViewContainer);
+			webHost.setAnimateWebView(false);
 		} else {
 			webView = BWebdoEngine.attachWebview(webHost, webViewContainer);
 		}
+		webHost.onCreate();
 	}
 
 	@Override
@@ -103,7 +103,6 @@ public class BCommonWebActivity extends BaseActivity {
 	}
 
 	class MyWebHost extends BWebHost {
-		JSONObject params;
 
 		public MyWebHost(BCommonWebActivity activity) {
 			super(activity);
@@ -112,32 +111,19 @@ public class BCommonWebActivity extends BaseActivity {
 
 		@Override
 		public Object handleMessage(int what, int arg1, Object obj) {
-			if (what == BConstants.MSG_PAGE_FINISH_LOADING) {
-				progressBar.setVisibility(View.GONE);
-			} else if (what == BConstants.MSG_PAGE_START_LOADING) {
-				progressBar.setVisibility(View.VISIBLE);
-			} else if (what == BConstants.MSG_JUMP_TO_ACTIVITY) {
-				params = (JSONObject) obj;
-				final String activityInfo = params.optString("page");
-				final Class<?> classInfo = BRoutingHelper.getActivityInfo(activityInfo);
-				final Intent intent = new Intent(BCommonWebActivity.this, classInfo);
-				BCommonWebActivity.this.startActivityForResult(intent, 100);
+			if (what == BConstants.MSG_PAGE_START_LOADING) {
+				if (showProgressBar) {
+					progressBar.setVisibility(View.VISIBLE);
+				}
+			} else if (what == BConstants.MSG_PAGE_FINISH_LOADING) {
+				if (showProgressBar) {
+					progressBar.setVisibility(View.GONE);
+				}
 			} else {
-				return super.sendMessage(what, arg1, obj);
+				return super.handleMessage(what, arg1, obj);
 			}
 			return null;
 		}
 
-		@Override
-		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-			if (requestCode == 100) {
-				final String callback = params.optString("callback");
-				if (resultCode == RESULT_OK) {
-					webView.sendJavascript(String.format("%s('%s');", callback, "OK"));
-				} else {
-					webView.sendJavascript(String.format("%s('%s');", callback, "Cancel"));
-				}
-			}
-		}
 	}
 }

@@ -32,6 +32,7 @@ import com.qmusic.uitls.BLog;
  * 
  */
 public class BEditView2 extends FrameLayout implements OnClickListener, OnEditorActionListener, TextWatcher, OnFocusChangeListener, Runnable {
+	static final String TAG = "BEditView2";
 	Typeface typeface = Typeface.SANS_SERIF;
 	TextView txtTextView;
 	EditText editText;
@@ -202,6 +203,12 @@ public class BEditView2 extends FrameLayout implements OnClickListener, OnEditor
 		// imm.showSoftInputFromInputMethod(getWindowToken(),
 		// InputMethodManager.SHOW_FORCED);
 		imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+	}
+
+	@Override
+	public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+		BLog.d(TAG, "keyCode:" + keyCode + ";KeyEvent:" + event);
+		return super.onKeyPreIme(keyCode, event);
 	}
 
 	@Override

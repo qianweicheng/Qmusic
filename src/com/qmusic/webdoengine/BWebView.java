@@ -1,21 +1,16 @@
 package com.qmusic.webdoengine;
 
 import java.lang.reflect.Method;
+import java.util.LinkedList;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.qmusic.MyApplication;
 import com.qmusic.common.BConstants;
@@ -23,10 +18,11 @@ import com.qmusic.uitls.BLog;
 
 @SuppressLint("NewApi")
 public class BWebView extends WebView {
-	static final String TAG = BWebView.class.getSimpleName();
-	BWebHost webHost;
-	boolean isLoading;
-	BNativeToJsMessageQueue queue;
+	private static final String TAG = BWebView.class.getSimpleName();
+	private BWebHost webHost;
+	private boolean isReady;
+	private BNativeToJsMessageQueue queue;
+	private LinkedList<String> cachedJavascript;
 	// ==============================
 	static {
 		if (MyApplication.DEBUG && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
@@ -49,15 +45,20 @@ public class BWebView extends WebView {
 		init();
 	}
 
+	@SuppressWarnings("deprecation")
 	@SuppressLint("SetJavaScriptEnabled")
 	private void init() {
 		setHorizontalScrollBarEnabled(false);
 		setScrollbarFadingEnabled(true);
-		getSettings().setJavaScriptEnabled(true);
-		setWebChromeClient(new BWebChromeClient());
-		setWebViewClient(new BWebViewClient());
+		final WebSettings settings = getSettings();
+		setWebChromeClient(new BWebChromeClient(this));
+		setWebViewClient(new BWebViewClient(this));
 		setVerticalScrollBarEnabled(false);// disable scrollbar so it won't
 											// show in horizontal swipe
+		settings.setJavaScriptEnabled(true);
+		settings.setSaveFormData(false);
+		settings.setSavePassword(false);
+		settings.setDatabaseEnabled(true);
 		// use GAJavaScript name space to be compatible with iOS version
 		queue = new BNativeToJsMessageQueue(this);
 		addJavascriptInterface(this, "GAJavaScript");
@@ -75,8 +76,9 @@ public class BWebView extends WebView {
 			((ViewGroup) oldParent).removeView(this);
 			parent.addView(this);
 		}
-		if (!isLoading && !TextUtils.isEmpty(getUrl())) {
-			webHost.sendMessage(BConstants.MSG_PAGE_FINISH_LOADING, 0, null);
+		webHost.postMessage(BConstants.MSG_PAGE_START_LOADING, 0, null);
+		if (isReady) {
+			webHost.postMessage(BConstants.MSG_PAGE_FINISH_LOADING, 0, null);
 		}
 	}
 
@@ -86,8 +88,6 @@ public class BWebView extends WebView {
 			// Check if it is the right parent
 			if (parent == parent1) {
 				this.webHost = null;
-				// sendJavascript("EDO.webdo.ui.clear();");
-				// clearView();
 				((ViewGroup) parent1).removeView(this);
 			} else {
 				BLog.w(TAG, "parent is not the webview's parent");
@@ -95,35 +95,34 @@ public class BWebView extends WebView {
 		}
 	}
 
-	public void loadURL(String url) {
-		BLog.w(TAG, "Loading webdo url =" + url);
-		String currentURL = getUrl();
-		if (currentURL != null && currentURL.startsWith(url)) {
-			BLog.i(TAG, "no need reload url");
-			invalidate();
-		} else {
-			loadUrl(url);
-		}
-	}
-
 	public void sendJavascript(String statement) {
-		if (isLoading) {
-			BLog.e(TAG, "execute js before page loaded:" + statement);
-		} else {
+		if (isReady) {
 			queue.addJavaScript(statement);
+		} else {
+			if (cachedJavascript == null) {
+				cachedJavascript = new LinkedList<String>();
+			}
+			cachedJavascript.add(statement);
+			BLog.w(TAG, "execute js before page loaded:" + statement);
 		}
 	}
 
-	public void setWebHost(BWebHost webHost) {
-		this.webHost = webHost;
-	}
+	// public void setWebHost(BWebHost webHost) {
+	// this.webHost = webHost;
+	// }
 
 	public BWebHost getWebHost() {
 		return webHost;
 	}
 
-	public FragmentActivity getActivity() {
-		return webHost.getHost();
+	public void setState(boolean isReady) {
+		this.isReady = isReady;
+		if (isReady && cachedJavascript != null && cachedJavascript.size() > 0) {
+			for (String statement : cachedJavascript) {
+				queue.addJavaScript(statement);
+			}
+			cachedJavascript.clear();
+		}
 	}
 
 	// ===========================================================
@@ -137,22 +136,14 @@ public class BWebView extends WebView {
 		this.invokeJavaMethod(method, arg);
 	}
 
-	/**
-	 * A bridget that connects webdo javascrit and Java implementations webdo JS
-	 * will call GAJavaScript.performSelector(method, parameters) the Java
-	 * function, "performSelector", will find and invoke the function that
-	 * defined by "method"
-	 * 
-	 * @param method
-	 *            name of the Java function to invoke
-	 * @param arg1
-	 *            1st argument for the Java function
-	 * @param arg2
-	 *            2nd argument for the Java function
-	 */
 	@JavascriptInterface
 	public void performSelector(String method, String arg1, String arg2) {
 		this.invokeJavaMethod(method, arg1, arg2);
+	}
+
+	@JavascriptInterface
+	public void performSelector(String method, String arg1, String arg2, String arg3) {
+		this.invokeJavaMethod(method, arg1, arg2, arg3);
 	}
 
 	/** JS bridge */
@@ -174,7 +165,6 @@ public class BWebView extends WebView {
 				for (int i = 0; i < numberOfArgs - 1; i++) {
 					argClasses[i] = String.class;
 				}
-				BLog.v(TAG, "args[0]=" + args[0]);
 			}
 
 			// originally the method name is for Objective C, on Android, the
@@ -192,54 +182,4 @@ public class BWebView extends WebView {
 		}
 	}
 
-	// ===========================================================
-	class BWebViewClient extends WebViewClient {
-
-		@Override
-		public void onPageStarted(WebView view, String url, Bitmap favicon) {
-			BLog.d(TAG, "onPageStart:" + url);
-			super.onPageStarted(view, url, favicon);
-			isLoading = true;
-			if (webHost != null) {
-				webHost.sendMessage(BConstants.MSG_PAGE_START_LOADING, 0, null);
-			}
-		}
-
-		@Override
-		public void onPageFinished(WebView view, String url) {
-			BLog.d(TAG, "onPageFinished:" + url);
-			isLoading = false;
-			if (webHost != null) {
-				webHost.sendMessage(BConstants.MSG_PAGE_FINISH_LOADING, 0, null);
-			}
-		}
-
-		@Override
-		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			BLog.i(TAG, url);
-			View parent = (View) view.getParent();
-			if (parent != null && parent.getContext() instanceof FragmentActivity) {
-				BRoutingHelper.process((FragmentActivity) parent.getContext(), url);
-				return true;
-			} else {
-				return super.shouldOverrideUrlLoading(view, url);
-			}
-		}
-	}
-
-	static class BWebChromeClient extends WebChromeClient {
-
-		@Override
-		public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-			BLog.i(TAG, consoleMessage.sourceId() + "(" + consoleMessage.lineNumber() + "):" + consoleMessage.message());
-			return true;
-			// if open this, there will another log with the same output, one of
-			// which is from onConsoleMessage
-			// return super.onConsoleMessage(consoleMessage);
-		}
-
-		public void onConsoleMessage(String message, int lineNumber, String sourceID) {
-			BLog.d(TAG, String.format("2-%s(%d):%s", sourceID, lineNumber, message));
-		}
-	}
 }

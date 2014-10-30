@@ -30,7 +30,7 @@
         <item name="vpiUnderlinePageIndicatorStyle">@style/CustomUnderlinePageIndicator</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:buttonStyle">@style/b_button_style</item>
-        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+        <!-- <item name="android:windowAnimationStyle">@style/AnimationActivity</item> -->
         <item name="myCommonTitleStyle">@style/myCommonTitle</item>
         <item name="myBEditTextStyle">@style/myBEditText</item>
     </style>

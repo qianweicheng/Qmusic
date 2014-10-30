@@ -1,22 +1,27 @@
 package com.qmusic.webdoengine;
 
 import java.net.URLDecoder;
+import java.util.Iterator;
 import java.util.List;
+
+import org.json.JSONObject;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 
 import com.qmusic.R;
 import com.qmusic.activities.BWebActivity;
-import com.qmusic.activities.LoginActivity;
 import com.qmusic.activities.SplashActivity;
 import com.qmusic.common.BLocationManager;
 import com.qmusic.controls.dialogs.BToast;
+import com.qmusic.uitls.BLog;
 
 public final class BRoutingHelper {
+	static final String TAG = "BRoutingHelper";
 	static final String SCHEME_CALL = "easilydo://call";
 	static final String SCHEME_DIRECTION_TO = "easilydo://directionTo";
 	static final String SCHEME_MAP = "easilydo://map";
@@ -180,10 +185,30 @@ public final class BRoutingHelper {
 		return true;
 	}
 
-	public static final Class<?> getActivityInfo(String activity) {
-		if ("login".equalsIgnoreCase(activity)) {
-			return LoginActivity.class;
+	public static void putExtra(final Intent intent, final JSONObject params) {
+		Iterator<String> keys = params.keys();
+		while (keys.hasNext()) {
+			final String key = keys.next();
+			if ("callback".equals(key) || "page".equals(key)) {
+				continue;
+			} else {
+				Object value = params.opt(key);
+				if (value instanceof String) {
+					intent.putExtra(key, (String) value);
+				} else if (value instanceof Integer) {
+					intent.putExtra(key, (Integer) value);
+				} else if (value instanceof Double) {
+					intent.putExtra(key, (Double) value);
+				} else if (value instanceof Long) {
+					intent.putExtra(key, (Long) value);
+				} else if (value instanceof Boolean) {
+					intent.putExtra(key, (Boolean) value);
+				} else if (value instanceof Parcelable) {
+					intent.putExtra(key, (Parcelable) value);
+				} else {
+					BLog.e(TAG, "Unsupport type:" + value.getClass().getSimpleName() + ";value:" + value);
+				}
+			}
 		}
-		return null;
 	}
 }

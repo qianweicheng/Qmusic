@@ -14,7 +14,8 @@ import android.text.TextUtils;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 import com.androidquery.util.AQUtility;
-import com.qmusic.common.BConstants;
+import com.qmusic.activities.LoginActivity;
+import com.qmusic.common.IAsyncDataCallback;
 import com.qmusic.controls.dialogs.AlertDialogFragment;
 import com.qmusic.controls.dialogs.LoadingDialogFragment;
 import com.qmusic.controls.dialogs.SimpleFragmentDialogCallback;
@@ -80,16 +81,30 @@ public class BJSInterface {
 				e.printStackTrace();
 				return;
 			}
-			String callback = json.optString("callback");
-			if (TextUtils.isEmpty(callback)) {
-				// Start the activity here if need no callback
-				Class<?> classInfo = BRoutingHelper.getActivityInfo(callback);
-				Intent intent = new Intent(activity, classInfo);
+			final String jsCallback = json.optString("callback");
+			final String page = json.optString("page");
+			Class<?> classInfo = null;
+			if ("login".equalsIgnoreCase(page)) {
+				classInfo = LoginActivity.class;
+			}
+			if (classInfo == null) {
+				BLog.e(TAG, "Can't open page:" + page);
+				return;
+			}
+			Intent intent = new Intent(activity, classInfo);
+			BRoutingHelper.putExtra(intent, json);
+			if (TextUtils.isEmpty(jsCallback)) {
 				activity.startActivity(intent);
 			} else {
-				// if it is start activity for result, then handle it in
-				// activity
-				webHost.sendMessage(BConstants.MSG_JUMP_TO_ACTIVITY, 0, json);
+				final IAsyncDataCallback<Intent> callback = new IAsyncDataCallback<Intent>() {
+					@Override
+					public void callback(final int result, final Intent data) {
+						final BWebView webView = webHost.getWebView();
+						// Note: handler the Intent case by case
+						webView.sendJavascript(String.format("%s(%d,%s)", jsCallback, result, ""));
+					}
+				};
+				webHost.startActivityForResult(intent, callback);
 			}
 		}
 	}
@@ -117,18 +132,15 @@ public class BJSInterface {
 
 				@Override
 				protected void onPostExecute(Object result) {
-					final BWebView webView2 = webHost.getWebView();
 					fragment.dismissAllowingStateLoss();
-					if (webView2 != null) {
-						webView2.sendJavascript(String.format("%s('%s');", callback, result));
-					}
+					webView.sendJavascript(String.format("%s('%s');", callback, result));
 				}
 			};
 			asyncTask.execute();
 		}
 	}
 
-	public void loadImagecallback(final String url, final String jsCallback) {
+	public void loadImage(final String url, final String jsCallback, final String tag) {
 		final String ASSERT_PREFEX = "file:///android_asset/";
 		final BWebView webView = webHost.getWebView();
 		if (webView == null) {
@@ -136,7 +148,7 @@ public class BJSInterface {
 			return;
 		}
 		if (url.startsWith(ASSERT_PREFEX)) {
-			webView.sendJavascript(String.format("%s('%s','%s');", jsCallback, url, url));
+			webView.sendJavascript(String.format("%s('%s','%s');", jsCallback, url, tag));
 		} else {
 			AjaxCallback<File> callback = new AjaxCallback<File>() {
 				@Override
@@ -145,7 +157,7 @@ public class BJSInterface {
 					if (object != null) {
 						imageUrl = AQUtility.getCacheFile(AQUtility.getCacheDir(AQUtility.getContext()), url).getAbsolutePath();
 					}
-					webView.sendJavascript(String.format("%s('%s','%s');", jsCallback, imageUrl, url));
+					webView.sendJavascript(String.format("%s('%s','%s');", jsCallback, imageUrl, tag));
 				}
 			};
 			callback.url(url).type(File.class).fileCache(true);

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
+import com.androidquery.callback.AjaxCallback;
 import com.androidquery.util.AQUtility;
 import com.qmusic.common.BLocationManager;
 import com.qmusic.common.BUser;
@@ -50,6 +51,8 @@ public class MyApplication extends Application {
 			DEBUG = true;
 		}
 		AQUtility.setContext(ctx);
+		String userAgent = System.getProperties().getProperty("http.agent");
+		AjaxCallback.setAgent(userAgent);
 		AQUtility.setDebug(DEBUG);
 		BLog.setLevel(BLog.ALL);
 		RunningAppProcessInfo appProcessInfo = BUtilities.getCurProcess(ctx);
