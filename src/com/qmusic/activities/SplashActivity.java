@@ -80,7 +80,7 @@ public class SplashActivity extends BaseActivity {
 		if (bundle != null && bundle.size() > 0) {
 			if (bundle.getBoolean(SHUTDOWN, false)) {
 				finish();
-				// MyApplication.shutdown();
+				MyApplication.shutdown();
 				return;
 			} else if (bundle.getBoolean(RE_LOGIN, false)) {
 				checkLogin();

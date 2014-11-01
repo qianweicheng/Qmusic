@@ -1,5 +1,11 @@
 package com.qmusic.uitls;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import android.os.Environment;
 import android.util.Log;
 
 public class BLog {
@@ -11,8 +17,43 @@ public class BLog {
 	public static final int ERROR = 1;
 	private static int DEBUG_LEVEL = 6;// set 0 to disable log
 
+	public static void logToFile() {
+		new Thread() {
+			@Override
+			public void run() {
+				final SimpleDateFormat formater = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
+				final String logFileName = String.format("%s/Qmusic_%s.log", Environment.getExternalStorageDirectory(), formater.format(new Date()));
+				CommandConsole commond = new CommandConsole();
+				// commond.sh().run("logcat -v threadtime ", new
+				// File(logFileName));
+				commond.sh().run("echo abc>a.log", new File(logFileName));
+			}
+		}.start();
+	}
+
+	public static void logToFile2() {
+		new Thread() {
+			@Override
+			public void run() {
+				final SimpleDateFormat formater = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
+				final String logFileName = String.format("%s/Qmusic3_%s.log", Environment.getExternalStorageDirectory(), formater.format(new Date()));
+				try {
+					CommandConsole commond = new CommandConsole();
+					Process process = commond.sh().run("logcat -v threadtime -f " + logFileName);
+					process.waitFor();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+
 	public static void setLevel(int level) {
 		DEBUG_LEVEL = level;
+		logToFile();
+		logToFile2();
 	}
 
 	public static int v(String tag, String msg) {
