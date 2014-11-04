@@ -133,8 +133,8 @@ public class BWebChromeClient extends WebChromeClient {
 		final BWebHost webHost = webView.getWebHost();
 		if (webHost != null) {
 			Pair<String, String> pair = new Pair<String, String>(message, defaultValue);
-			Object r = webHost.sendMessage(BConstants.MSG_PAGE_JS_CALL, 0, pair);
-			if (result != null) {
+			Object r = webHost.exec(BConstants.MSG_PAGE_JS_CALL, 0, pair);
+			if (r != null) {
 				result.confirm(r.toString());
 				return true;
 			}

@@ -155,6 +155,10 @@ public class BWebView extends WebView {
 				return;
 			}
 			Object jsInterface = webHost.getJSInterface();
+			if (jsInterface == null) {
+				BLog.e(TAG, "jsInterface is null");
+				return;
+			}
 			int numberOfArgs = args.length;
 			Class[] argClasses = null;
 			if (numberOfArgs < 1) {

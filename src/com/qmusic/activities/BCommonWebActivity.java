@@ -50,11 +50,12 @@ public class BCommonWebActivity extends BaseActivity {
 			mode = bundle.getInt("mode");
 		}
 		if (mode == 2) {
-			webView = BWebdoEngine.attachWebview2(webHost, webViewContainer);
+			webView = BWebdoEngine.getWebview(BWebdoEngine.URL_HTML2);
 			webHost.setAnimateWebView(false);
 		} else {
-			webView = BWebdoEngine.attachWebview(webHost, webViewContainer);
+			webView = BWebdoEngine.getWebview(BWebdoEngine.URL_HTML);
 		}
+		webView.attachWebview(webHost, webViewContainer);
 		webHost.onCreate();
 	}
 
@@ -110,7 +111,7 @@ public class BCommonWebActivity extends BaseActivity {
 		}
 
 		@Override
-		public Object handleMessage(int what, int arg1, Object obj) {
+		public Object onMessage(int what, int arg1, Object obj) {
 			if (what == BConstants.MSG_PAGE_START_LOADING) {
 				if (showProgressBar) {
 					progressBar.setVisibility(View.VISIBLE);
@@ -120,7 +121,7 @@ public class BCommonWebActivity extends BaseActivity {
 					progressBar.setVisibility(View.GONE);
 				}
 			} else {
-				return super.handleMessage(what, arg1, obj);
+				return super.onMessage(what, arg1, obj);
 			}
 			return null;
 		}

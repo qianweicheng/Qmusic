@@ -20,7 +20,7 @@ public class CommandConsole {
 	}
 
 	/**
-	 * 请异步调用此方法
+	 * Please call this function async
 	 * 
 	 * @return
 	 */
@@ -29,7 +29,7 @@ public class CommandConsole {
 	}
 
 	/**
-	 * 请异步调用此方法
+	 * Please call this function async
 	 * 
 	 * @return
 	 */
@@ -47,7 +47,7 @@ public class CommandConsole {
 	}
 
 	/**
-	 * 请异步调用此方法
+	 * Please call this function async
 	 * 
 	 * @return
 	 */

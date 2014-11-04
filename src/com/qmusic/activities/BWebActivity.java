@@ -111,7 +111,7 @@ public class BWebActivity extends BaseActivity {
 		}
 
 		@Override
-		public Object handleMessage(int arg0, int arg1, Object obj) {
+		public Object onMessage(int arg0, int arg1, Object obj) {
 			if (arg0 == BConstants.MSG_PAGE_START_LOADING) {
 				if (showProgressBar) {
 					progressBar.setVisibility(View.VISIBLE);
@@ -121,7 +121,7 @@ public class BWebActivity extends BaseActivity {
 					progressBar.setVisibility(View.GONE);
 				}
 			} else {
-				return super.handleMessage(arg0, arg1, obj);
+				return super.onMessage(arg0, arg1, obj);
 			}
 			return null;
 		}

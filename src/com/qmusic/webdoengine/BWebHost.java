@@ -109,9 +109,11 @@ public abstract class BWebHost {
 	}
 
 	public void startActivityForResult(final Intent intent, final IAsyncDataCallback<Intent> callback) {
-		activityResultCallbacks.put(activityRequestCode, callback);
-		activity.startActivityForResult(intent, activityRequestCode);
-		activityRequestCode++;
+		if (activity != null) {
+			activityResultCallbacks.put(activityRequestCode, callback);
+			activity.startActivityForResult(intent, activityRequestCode);
+			activityRequestCode++;
+		}
 	}
 
 	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
@@ -130,9 +132,9 @@ public abstract class BWebHost {
 	 * @param obj
 	 * @return
 	 */
-	public final Object sendMessage(int what, int arg1, Object obj) {
-		Object result = handleMessage(what, arg1, obj);
-		return result;
+	public final Object exec(int what, int arg1, Object obj) {
+		BLog.e(TAG, "should override exec");
+		return null;
 	}
 
 	/**
@@ -151,7 +153,7 @@ public abstract class BWebHost {
 						webView.setVisibility(View.INVISIBLE);
 					}
 				}
-				handleMessage(what, arg1, obj);
+				onMessage(what, arg1, obj);
 			}
 		});
 	}
@@ -164,7 +166,7 @@ public abstract class BWebHost {
 	 * @param obj
 	 * @return
 	 */
-	protected Object handleMessage(int what, int arg1, Object obj) {
+	protected Object onMessage(int what, int arg1, Object obj) {
 		BLog.w(TAG, String.format("arg0:%d,arg1:%d,obj:%s", what, arg1, obj));
 		return null;
 	}
