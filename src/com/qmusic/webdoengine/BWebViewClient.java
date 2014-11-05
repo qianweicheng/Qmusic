@@ -2,7 +2,6 @@ package com.qmusic.webdoengine;
 
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -41,12 +40,16 @@ public class BWebViewClient extends WebViewClient {
 	@Override
 	public boolean shouldOverrideUrlLoading(WebView view, String url) {
 		BLog.i(TAG, url);
-		View parent = (View) view.getParent();
-		if (parent != null && parent.getContext() instanceof FragmentActivity) {
-			BRoutingHelper.process((FragmentActivity) parent.getContext(), url);
-			return true;
-		} else {
-			return super.shouldOverrideUrlLoading(view, url);
+		final BWebHost webHost = webView.getWebHost();
+		if (webHost != null) {
+			final FragmentActivity activity = webHost.getHost();
+			if (activity != null) {
+				boolean processed = BRoutingHelper.process(activity, url);
+				if (processed) {
+					return true;
+				}
+			}
 		}
+		return super.shouldOverrideUrlLoading(view, url);
 	}
 }

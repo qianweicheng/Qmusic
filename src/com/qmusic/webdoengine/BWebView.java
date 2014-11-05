@@ -88,7 +88,7 @@ public class BWebView extends WebView {
 			// Check if it is the right parent
 			if (parent == parent1) {
 				this.webHost = null;
-				((ViewGroup) parent1).removeView(this);
+				parent.removeView(this);
 			} else {
 				BLog.w(TAG, "parent is not the webview's parent");
 			}
@@ -107,9 +107,14 @@ public class BWebView extends WebView {
 		}
 	}
 
-	// public void setWebHost(BWebHost webHost) {
-	// this.webHost = webHost;
-	// }
+	public void setWebHost(BWebHost webHost) {
+		this.webHost = webHost;
+		this.webHost.setWebView(this);
+		webHost.postMessage(BConstants.MSG_PAGE_START_LOADING, 0, null);
+		if (isReady) {
+			webHost.postMessage(BConstants.MSG_PAGE_FINISH_LOADING, 0, null);
+		}
+	}
 
 	public BWebHost getWebHost() {
 		return webHost;
