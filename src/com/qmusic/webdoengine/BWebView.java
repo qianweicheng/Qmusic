@@ -120,6 +120,10 @@ public class BWebView extends WebView {
 		return webHost;
 	}
 
+	public boolean getState() {
+		return isReady;
+	}
+
 	public void setState(boolean isReady) {
 		this.isReady = isReady;
 		if (isReady && cachedJavascript != null && cachedJavascript.size() > 0) {

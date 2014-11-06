@@ -112,6 +112,7 @@ public class BCommonWebActivity extends BaseActivity {
 
 		@Override
 		public Object onMessage(int what, int arg1, Object obj) {
+			super.onMessage(what, arg1, obj);
 			if (what == BConstants.MSG_PAGE_START_LOADING) {
 				if (showProgressBar) {
 					progressBar.setVisibility(View.VISIBLE);

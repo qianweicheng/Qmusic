@@ -15,7 +15,7 @@ import com.qmusic.common.BConstants;
 import com.qmusic.common.IAsyncDataCallback;
 import com.qmusic.uitls.BLog;
 
-public abstract class BWebHost {
+public class BWebHost {
 	static final String TAG = "BWebHost";
 	private FragmentActivity activity;
 	private Object jsInterface;
@@ -23,6 +23,7 @@ public abstract class BWebHost {
 	private SparseArray<IAsyncDataCallback<Intent>> activityResultCallbacks;
 	private int activityRequestCode = 1000;// increase by one every time
 	private boolean animateWebView = true;
+	private boolean onDrawReady, animated;
 
 	public BWebHost(FragmentActivity activity) {
 		this.activity = activity;
@@ -62,16 +63,7 @@ public abstract class BWebHost {
 						webView.postDelayed(new Runnable() {
 							@Override
 							public void run() {
-								webView.setVisibility(View.VISIBLE);
-								AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
-								alphaAnimation.setDuration(500);
-								ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_PARENT, 0.5f,
-										Animation.RELATIVE_TO_PARENT, 0.5f);
-								scaleAnimation.setDuration(500);
-								AnimationSet animationSet = new AnimationSet(true);
-								animationSet.addAnimation(alphaAnimation);
-								animationSet.addAnimation(scaleAnimation);
-								webView.startAnimation(animationSet);
+								showAnimate();
 							}
 						}, 50);
 					}
@@ -124,6 +116,22 @@ public abstract class BWebHost {
 		}
 	}
 
+	public void showAnimate() {
+		if (webView == null || animated || !webView.getState() || !onDrawReady) {
+			return;
+		}
+		animated = true;
+		webView.setVisibility(View.VISIBLE);
+		AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+		alphaAnimation.setDuration(500);
+		ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_PARENT, 0.5f, Animation.RELATIVE_TO_PARENT, 0.5f);
+		scaleAnimation.setDuration(500);
+		AnimationSet animationSet = new AnimationSet(true);
+		animationSet.addAnimation(alphaAnimation);
+		animationSet.addAnimation(scaleAnimation);
+		webView.startAnimation(animationSet);
+	}
+
 	/**
 	 * call directly
 	 * 
@@ -148,11 +156,6 @@ public abstract class BWebHost {
 		AQUtility.post(new Runnable() {
 			@Override
 			public void run() {
-				if (animateWebView) {
-					if (what == BConstants.MSG_PAGE_START_LOADING) {
-						webView.setVisibility(View.INVISIBLE);
-					}
-				}
 				onMessage(what, arg1, obj);
 			}
 		});
@@ -167,7 +170,20 @@ public abstract class BWebHost {
 	 * @return
 	 */
 	protected Object onMessage(int what, int arg1, Object obj) {
-		BLog.w(TAG, String.format("arg0:%d,arg1:%d,obj:%s", what, arg1, obj));
+		switch (what) {
+		case BConstants.MSG_PAGE_START_LOADING: {
+			if (animateWebView) {
+				webView.setVisibility(View.INVISIBLE);
+			}
+			break;
+		}
+		case BConstants.MSG_PAGE_FINISH_LOADING: {
+			if (animateWebView) {
+				showAnimate();
+			}
+			break;
+		}
+		}
 		return null;
 	}
 }
