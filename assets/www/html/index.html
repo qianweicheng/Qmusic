@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<link rel="stylesheet" href="../css/bootstrap.min.css">
+    	<script type="text/javascript" src="../js/angular.js"></script>
+    	<script type="text/javascript">
+    			angular.module('myApp',[])
+					.controller('MyCtrl',['$scope',function($scope){
+					    	$scope.clickMe=function(){				
+										var picDiv=document.getElementById("picDiv");
+										var innerHTML= "";
+										for(var i=0;i<7;i++){
+											innerHTML=innerHTML+'<img width="100" height="100" id="img1" src="'+pics[i]+'"></img><br/>';
+										}
+										picDiv.innerHTML=innerHTML; 
+								};
+								$scope.clickMe2=function(){
+										var picDiv=document.getElementById("picDiv");
+										picDiv.innerHTML=picDiv.innerHTML+'<br/>click'; 
+										GAJavaScript.performSelector("loadImage","http://img0.bdstatic.com/img/image/cd9e399f3aa075d48358ea4d19e758711414636895.jpg","callback","");
+									//var img1=document.getElementById("img1");
+									//img1.src="http://img0.bdstatic.com/img/image/shouye/hjxnz-11723371136.jpg"
+									//var myDiv=document.getElementById("myDiv");
+									//myDiv.innerHTML=img1.src;
+								};
+  
+					}]);
+						var pics=["http://g.hiphotos.baidu.com/image/w%3D310/sign=21bf4125af345982c58ae3933cf5310b/f11f3a292df5e0fe2f475c505e6034a85edf7200.jpg",
+								  "http://g.hiphotos.baidu.com/image/w%3D310/sign=c8e79be89c510fb378197196e933c893/377adab44aed2e73a5fe537d8501a18b87d6fa48.jpg",
+								  "http://g.hiphotos.baidu.com/image/w%3D310/sign=132e6e01e7dde711e7d245f797efcef4/838ba61ea8d3fd1f87787c3e324e251f95ca5f45.jpg",
+								  "http://h.hiphotos.baidu.com/image/w%3D310/sign=152abdeebc096b63811958513c328733/ac345982b2b7d0a213987e5cc9ef76094a369a99.jpg",
+								  "http://c.hiphotos.baidu.com/image/w%3D310/sign=78565a256863f6241c5d3f02b744eb32/5882b2b7d0a20cf4bbe42fc375094b36acaf99b2.jpg",
+								  "http://g.hiphotos.baidu.com/image/w%3D310/sign=713d21038026cffc692ab9b389004a7d/562c11dfa9ec8a13a55f007af503918fa1ecc0e7.jpg",
+								  "http://h.hiphotos.baidu.com/image/w%3D310/sign=a65b281cd2a20cf44690f8de46084b0c/e1fe9925bc315c60cb71c4748fb1cb1348547741.jpg"];	
+    	</script>
+    </head>
+    <body  ng-app='myApp'  ng-controller='MyCtrl'>
+        Hello {{'World'}}! {{yourname}}<hr>
+           Your name: <input type="text" ng-model="yourname" placeholder="World">
+        <hr>
+        <div><button ng-click="clickMe();" style="width:120px;height:40px;">Click Me</button></div><br/>
+        <div><button ng-click="clickMe2();"   style="width:120px;height:40px;">Image 4</button></div>
+        <img width="100" height="100" id="img1"></img><br/>
+        <div id="myDiv"></div>
+        <div id="picDiv"></div>
+      
+    </body>
+</html>
+

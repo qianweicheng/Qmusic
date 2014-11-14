@@ -48,16 +48,15 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	public void onBtn1(final View view) {
 		Intent intent = new Intent(this, BWebActivity.class);
 		// intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
-		intent.putExtra("url", "file:///android_asset/www/index.html");
+		intent.putExtra("url", "file:///android_asset/www/html/index_spa.html");
 		startActivity(intent);
 	}
 
 	public void onBtn2(final View view) {
 		Intent intent = new Intent(this, BWebActivity.class);
 		intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
-		intent.putExtra("url", "file:///android_asset/www/index2.html");
+		intent.putExtra("url", "file:///android_asset/www/html/index.html");
 		startActivity(intent);
-		BWebdoEngine.sendJavascript(BWebdoEngine.URL_HTML, "clickMe();");
 	}
 
 	public void onBtn3(final View view) {

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.androidquery.util.AQUtility;
 import com.qmusic.R;
 import com.qmusic.common.BConstants;
 import com.qmusic.controls.CommonTitle;
@@ -50,10 +49,10 @@ public class BCommonWebActivity extends BaseActivity {
 			mode = bundle.getInt("mode");
 		}
 		if (mode == 2) {
-			webView = BWebdoEngine.getWebview(BWebdoEngine.URL_HTML2);
+			webView = BWebdoEngine.getWebview(BWebdoEngine.URL_HTML);
 			webHost.setAnimateWebView(false);
 		} else {
-			webView = BWebdoEngine.getWebview(BWebdoEngine.URL_HTML);
+			webView = BWebdoEngine.getWebview(BWebdoEngine.URL_HTML_SPA);
 		}
 		webView.attachWebview(webHost, webViewContainer);
 		webHost.onCreate();
@@ -69,14 +68,6 @@ public class BCommonWebActivity extends BaseActivity {
 	protected void onResume() {
 		super.onResume();
 		webHost.onResume();
-		AQUtility.postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-				webView.dispatchWindowVisibilityChanged(View.VISIBLE);
-				webView.invalidate();
-			}
-		}, 1000);
 	}
 
 	@Override

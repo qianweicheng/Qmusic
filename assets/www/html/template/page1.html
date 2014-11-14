@@ -1,0 +1,13 @@
+<div ng-controller="Page1Ctrl">
+	{{"This page is "+userInfo.username+';'+userInfo.word}}
+	<form name='test_form' test1>
+      <input ng-model="userInfo.username" type="email" required/>
+      <button ng-click="do()">Button</button>
+      <span>{{test_form.$valid}}</span>
+  	</form>
+  <hello><span>Qweic</sapn></hello>
+	<br/><a href="#/page1">Page1</a>
+	<br/><a href="#/page2">Page2</a>
+	<br/><a href="#/page3/3">Page3</a>
+	<br/><a href='#' myImg>Link</a>
+</div>

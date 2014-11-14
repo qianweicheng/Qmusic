@@ -12,16 +12,16 @@ import com.qmusic.uitls.BUtilities;
 
 public class BWebdoEngine {
 	static HashMap<String, BWebView> cachedWebView;
-	public static final String URL_HTML = "index.html";
-	public static final String URL_HTML2 = "index2.html";
+	public static final String URL_HTML_SPA = "html/index_spa.html";
+	public static final String URL_HTML = "html/index.html";
 
 	@SuppressLint("NewApi")
 	public static final void init(Context context) {
 		cachedWebView = new HashMap<String, BWebView>();
 		// final Context ctx = AQUtility.getContext();
 		// =============cache for task detail=============
+		cachedWebView.put(URL_HTML_SPA, getWebview(URL_HTML_SPA));
 		cachedWebView.put(URL_HTML, getWebview(URL_HTML));
-		cachedWebView.put(URL_HTML2, getWebview(URL_HTML2));
 		// ==========================================
 	}
 

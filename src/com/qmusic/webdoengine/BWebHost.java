@@ -59,6 +59,7 @@ public class BWebHost {
 			final View decorView = activity.getWindow().getDecorView();
 			decorView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
 				public boolean onPreDraw() {
+					onDrawReady = true;
 					if (webView != null) {
 						webView.postDelayed(new Runnable() {
 							@Override
@@ -75,24 +76,32 @@ public class BWebHost {
 	}
 
 	public void onStart() {
-		webView.sendJavascript("onStart();");
+		webView.sendJavascript("Qm.onStart();");
 	}
 
 	public void onResume() {
-		webView.sendJavascript("onResume();");
+		webView.sendJavascript("Qm.onResume();");
+		AQUtility.postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				webView.dispatchWindowVisibilityChanged(View.VISIBLE);
+				webView.invalidate();
+			}
+		}, 1000);
 	}
 
 	public void onPause() {
-		webView.sendJavascript("onPause();");
+		webView.sendJavascript("Qm.onPause();");
 	}
 
 	public void onStop() {
-		webView.sendJavascript("onStop();");
+		webView.sendJavascript("Qm.onStop();");
 	}
 
 	public void onDestory() {
 		// =========
-		webView.sendJavascript("onDestory();");
+		webView.sendJavascript("Qm.onDestory();");
 		// webView.clearView();
 		// webView.reload();
 		// =========

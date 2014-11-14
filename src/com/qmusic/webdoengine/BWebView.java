@@ -32,29 +32,36 @@ public class BWebView extends WebView {
 
 	public BWebView(Context context) {
 		super(context);
-		init();
+		init(context);
 	}
 
 	public BWebView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
+		init(context);
 	}
 
 	public BWebView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		init();
+		init(context);
 	}
 
 	@SuppressWarnings("deprecation")
 	@SuppressLint("SetJavaScriptEnabled")
-	private void init() {
+	private void init(Context context) {
 		setHorizontalScrollBarEnabled(false);
+		setVerticalScrollBarEnabled(false);
 		setScrollbarFadingEnabled(true);
-		final WebSettings settings = getSettings();
 		setWebChromeClient(new BWebChromeClient(this));
 		setWebViewClient(new BWebViewClient(this));
-		setVerticalScrollBarEnabled(false);// disable scrollbar so it won't
-											// show in horizontal swipe
+		final WebSettings settings = getSettings();
+		settings.setAllowContentAccess(true);
+		settings.setAllowFileAccessFromFileURLs(true);
+		settings.setAllowUniversalAccessFromFileURLs(true);
+		settings.setAppCacheEnabled(true);
+		settings.setDatabaseEnabled(true);
+		settings.setDomStorageEnabled(true);
+		settings.setAppCachePath(context.getDir("appcache", 0).getPath());
+		settings.setGeolocationDatabasePath(context.getDir("geolocation", 0).getPath());
 		settings.setJavaScriptEnabled(true);
 		settings.setSaveFormData(false);
 		settings.setSavePassword(false);
