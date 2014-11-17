@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
+import com.qmusic.common.BAppHelper;
 import com.qmusic.controls.CommonTitle;
-import com.qmusic.uitls.BAppHelper;
 import com.qmusic.uitls.BLog;
 
 public class Test2Activity extends BaseActivity implements OnClickListener {

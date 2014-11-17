@@ -2,7 +2,6 @@ package com.qmusic.common;
 
 public final class BConstants {
 	// =======================================
-	// =======================================
 	public static final int MSG_RESULT_OK = 0;
 	public static final int MSG_RESULT_FAILED = 1;
 	public static final int MSG_RESULT_CANCELED = 2;
@@ -27,7 +26,8 @@ public final class BConstants {
 	public static final String PRE_KEY_SHOW_RATING = "show_rating";
 	public static final String PRE_KEY_RUN_COUNT = "run_count";
 	public static final String PRE_KEY_USER_INFO = "user_info";
-	public static final String PREFS_DEVICE_ID = "device_id";
+	public static final String PRE_KEY_DEVICE_ID = "device_id";
+	public static final String PRE_KEY_LAST_MODIFIED_HTML = "last_modified_html";
 	public static final String APP_KEY = "";
 	public static final String APP_SEC = "";
 	public static final String APP_NAME = "qmusic";

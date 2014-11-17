@@ -1,10 +1,7 @@
 package com.qmusic.uitls;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.EOFException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,39 +14,28 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
-
-import com.androidquery.util.AQUtility;
 
 public final class BIOUtilities {
 	static final String TAG = BIOUtilities.class.getSimpleName();
 
-	public final static void copyAssertToSDcardAsync(final Context ctx, final String assertPath, final File disPath) {
-		AsyncTask<Void, Void, Void> fileCopyer = new AsyncTask<Void, Void, Void>() {
-			@Override
-			protected Void doInBackground(Void... params) {
-				copyAssertToSDCard(ctx, assertPath, disPath);
-				return null;
-			}
-
-			@Override
-			protected void onPostExecute(Void result) {
-
-			}
-		};
-		fileCopyer.execute();
-	}
-
 	public final static void copyAssertToSDCard(final Context ctx, final String assertPath, final File disPath) {
+		if (disPath == null || !disPath.isDirectory()) {
+			return;
+		}
 		try {
 			String[] files = ctx.getAssets().list(assertPath);
-			if (files.length == 0) {
-				copyFile(ctx, assertPath, disPath, true);
-			} else {
+			if (files.length == 0) {// is file
+				copyAssetFile(ctx, assertPath, disPath);
+			} else {// is folder
 				BLog.i(TAG, "copy folder from " + assertPath + " to " + disPath);
-				for (int i = 0; i < files.length; i++) {
-					copyAssertToSDCard(ctx, assertPath + File.separator + files[i], disPath);
+				String[] fileSeg = assertPath.split(File.separator);
+				String newFilePath = fileSeg[fileSeg.length - 1];
+				File subFolder = new File(disPath, newFilePath);
+				if (!subFolder.exists()) {
+					subFolder.mkdir();
+				}
+				for (String file : files) {
+					copyAssertToSDCard(ctx, String.format("%s%s%s", assertPath, File.separator, file), subFolder);
 				}
 			}
 		} catch (IOException e) {
@@ -57,57 +43,24 @@ public final class BIOUtilities {
 		}
 	}
 
-	public static final void copyFile(Context ctx, File src, File dst) {
+	/**
+	 * 
+	 * @param ctx
+	 * @param srcFileName
+	 * @param dst
+	 */
+	public static final void copyAssetFile(Context ctx, String srcFileName, File dst) {
 		InputStream is = null;
 		OutputStream os = null;
 		try {
-			is = new FileInputStream(src);
-			os = new FileOutputStream(dst);
-			byte[] b = new byte[1024];
-			int len;
-			while ((len = is.read(b)) != -1) {
-				os.write(b, 0, len);
+			if (!dst.exists()) {
+				boolean result = dst.mkdirs();
+				BLog.i(TAG, "make dir " + dst.getAbsolutePath() + "; result:" + result);
 			}
-			os.flush();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			if (os != null) {
-				try {
-					os.close();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-	}
-
-	public static final void copyFile(Context ctx, String src, File dst, boolean createIntermediateFolders) {
-		InputStream is = null;
-		OutputStream os = null;
-		try {
-			is = ctx.getAssets().open(src);
-			String[] filePath = src.split(File.separator);
+			is = ctx.getAssets().open(srcFileName);
+			String[] filePath = srcFileName.split(File.separator);
 			String fileName = filePath[filePath.length - 1];
-			File subDir = dst;
-			if (createIntermediateFolders) {
-				String subFolder = src.substring(0, src.length() - fileName.length() - 1);
-				subDir = new File(dst, subFolder);
-				if (!subDir.exists()) {
-					boolean result = subDir.mkdirs();
-					BLog.i(TAG, "make dir " + subDir.getAbsolutePath() + "; result:" + result);
-				}
-			}
-			// EdoLog.i(TAG, "copy from " + src + " to " + subDir +
-			// File.separator + fileName);
-			os = new FileOutputStream(new File(subDir, fileName));
+			os = new FileOutputStream(new File(dst, fileName));
 			byte[] b = new byte[1024];
 			int len;
 			while ((len = is.read(b)) != -1) {
@@ -189,69 +142,6 @@ public final class BIOUtilities {
 		}
 	}
 
-	public final static String readStream(InputStream in) {
-		if (in == null)
-			return null;
-		byte[] bytes = new byte[1024];
-		StringBuffer sb = new StringBuffer();
-		String str = null;
-		int count;
-		try {
-			do {
-				count = in.read(bytes, 0, 1024);
-				if (count > 0) {
-					str = new String(bytes, 0, count, "UTF-8");
-					sb.append(str);
-				}
-			} while (count > 0);
-		} catch (EOFException ex) {
-			ex.printStackTrace();
-		} catch (IOException ioe) {
-			str = null;
-			ioe.printStackTrace();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return sb.toString();
-	}
-
-	public final static String readTextFile(String filename) {
-		String ret = null;
-		Log.d(TAG, "read from file:" + filename);
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		FileInputStream inputStream = null;
-		try {
-			File file = AQUtility.getContext().getFileStreamPath(filename);
-			if (!file.exists()) {
-				Log.w(TAG, "file " + filename + " doesn't exist");
-				return null;
-			}
-
-			inputStream = AQUtility.getContext().openFileInput(filename);
-			byte buf[] = new byte[1024];
-			int len;
-
-			while ((len = inputStream.read(buf)) != -1) {
-				outputStream.write(buf, 0, len);
-			}
-			ret = outputStream.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (outputStream != null)
-					outputStream.close();
-
-				if (inputStream != null)
-					inputStream.close();
-			} catch (IOException ie) {
-				ie.printStackTrace();
-			}
-		}
-
-		return ret;
-	}
-
 	public static final String getCpuType() {
 		String cpu = "";
 		BufferedReader localBufferedReader = null;
@@ -287,24 +177,4 @@ public final class BIOUtilities {
 		return cpu;
 	}
 
-	public final static boolean writeToFile(String filename, String data) {
-		Log.d(TAG, "write to file:" + filename);
-		boolean ret = false;
-		FileOutputStream outputStream = null;
-		try {
-			outputStream = AQUtility.getContext().openFileOutput(filename, Context.MODE_PRIVATE);
-			outputStream.write(data.getBytes());
-			ret = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (outputStream != null)
-					outputStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return ret;
-	}
 }

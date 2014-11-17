@@ -221,7 +221,7 @@ public class BUtilities {
 	public final static String getDeviceId() {
 		Context ctx = AQUtility.getContext();
 		if (uuid == null) {
-			final String id = getPref(BConstants.PREFS_DEVICE_ID);
+			final String id = getPref(BConstants.PRE_KEY_DEVICE_ID);
 			if (!TextUtils.isEmpty(id)) {
 				// Use the ids previously computed and stored in the prefs file
 				uuid = UUID.fromString(id);
@@ -244,7 +244,7 @@ public class BUtilities {
 					throw new RuntimeException(e);
 				}
 				// Write the value out to the prefs file
-				setPref(BConstants.PREFS_DEVICE_ID, uuid.toString());
+				setPref(BConstants.PRE_KEY_DEVICE_ID, uuid.toString());
 			}
 		}
 		return uuid.toString();
@@ -288,7 +288,7 @@ public class BUtilities {
 	public final static File getHTMLFolder() {
 		String status = Environment.getExternalStorageState();
 		if (status.equals(Environment.MEDIA_MOUNTED)) {
-			File cacheDir = new File(AQUtility.getContext().getExternalCacheDir(), "htmls");
+			File cacheDir = new File(AQUtility.getContext().getExternalCacheDir(), "www");
 			if (!cacheDir.exists()) {
 				boolean result = cacheDir.mkdirs();
 				if (!result) {

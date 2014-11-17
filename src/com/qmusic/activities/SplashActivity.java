@@ -7,9 +7,12 @@ import android.os.Bundle;
 import com.androidquery.util.AQUtility;
 import com.qmusic.MyApplication;
 import com.qmusic.R;
+import com.qmusic.common.BAppHelper;
 import com.qmusic.common.BEnvironment;
+import com.qmusic.controls.dialogs.BToast;
 import com.qmusic.test.TestActivity;
 import com.qmusic.uitls.BLog;
+import com.qmusic.webdoengine.BWebdoEngine;
 
 public class SplashActivity extends BaseActivity {
 	static final int WAITING_TIME = 500;
@@ -83,7 +86,7 @@ public class SplashActivity extends BaseActivity {
 				MyApplication.shutdown();
 				return;
 			} else if (bundle.getBoolean(RE_LOGIN, false)) {
-				checkLogin();
+				getInActivity();
 				return;
 			} else if (bundle.getBoolean(ROUTE, false)) {
 				try {
@@ -91,33 +94,33 @@ public class SplashActivity extends BaseActivity {
 					startActivity(originIntent);
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					checkLogin();
+					getInActivity();
 				}
 				return;
 			} else {
 				BLog.i(TAG, "bundle does not match any key. " + bundle.toString());
 			}
 		}
-		if (BEnvironment.UI_TEST) {
-			Intent intent = new Intent(SplashActivity.this, TestActivity.class);
-			startActivity(intent);
-		} else {
-			new MyAsyncTask().execute();
-		}
+		new MyAsyncTask().execute();
 	}
 
-	class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+	class MyAsyncTask extends AsyncTask<Void, Void, Boolean> {
+		boolean hasUpdatedResource;
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
 		}
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected Boolean doInBackground(Void... params) {
+			boolean result = true;
 			try {
 				long startTime = System.nanoTime();
-				while (MyApplication.STARTED_TIME == 0) {
-					Thread.sleep(20);
+				// Do some time-consuming task here
+				if (!hasUpdatedResource) {
+					result = BAppHelper.updateResource(getApplicationContext());
+					hasUpdatedResource = true;
 				}
 				long endTime = System.nanoTime();
 				long waitTime = WAITING_TIME - (endTime - startTime) / 1000000;
@@ -128,22 +131,34 @@ public class SplashActivity extends BaseActivity {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			return null;
+			return result;
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
-			checkLogin();
+		protected void onPostExecute(Boolean result) {
+			if (result) {
+				getInActivity();
+			} else {
+				BToast.toast("Initialize data failed.");
+				finish();
+				MyApplication.shutdown();
+			}
 		}
 	}
 
-	void checkLogin() {
-		Intent intent = new Intent(this, MainActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		Bundle bundle = getIntent().getExtras();
-		if (bundle != null) {
-			intent.putExtras(bundle);
+	void getInActivity() {
+		BWebdoEngine.init();
+		if (BEnvironment.UI_TEST) {
+			Intent intent = new Intent(SplashActivity.this, TestActivity.class);
+			startActivity(intent);
+		} else {
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			Bundle bundle = getIntent().getExtras();
+			if (bundle != null) {
+				intent.putExtras(bundle);
+			}
+			startActivity(intent);
 		}
-		startActivity(intent);
 	}
 }

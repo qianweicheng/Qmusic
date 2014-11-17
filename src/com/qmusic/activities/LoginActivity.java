@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.qmusic.R;
+import com.qmusic.common.BAppHelper;
 import com.qmusic.common.BUser;
-import com.qmusic.uitls.BAppHelper;
 
 public class LoginActivity extends BaseActivity implements OnClickListener {
 	public static final String EXIT_WHEN_BACK = "exit_when_back";

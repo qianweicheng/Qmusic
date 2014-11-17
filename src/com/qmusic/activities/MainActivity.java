@@ -13,8 +13,8 @@ import android.view.View.OnClickListener;
 import cn.jpush.android.api.JPushInterface;
 
 import com.qmusic.R;
+import com.qmusic.common.BAppHelper;
 import com.qmusic.controls.BTabFragment;
-import com.qmusic.uitls.BAppHelper;
 import com.qmusic.uitls.BLog;
 import com.umeng.analytics.MobclickAgent;
 

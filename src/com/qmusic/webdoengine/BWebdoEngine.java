@@ -16,9 +16,8 @@ public class BWebdoEngine {
 	public static final String URL_HTML = "html/index.html";
 
 	@SuppressLint("NewApi")
-	public static final void init(Context context) {
+	public static final void init() {
 		cachedWebView = new HashMap<String, BWebView>();
-		// final Context ctx = AQUtility.getContext();
 		// =============cache for task detail=============
 		cachedWebView.put(URL_HTML_SPA, getWebview(URL_HTML_SPA));
 		cachedWebView.put(URL_HTML, getWebview(URL_HTML));

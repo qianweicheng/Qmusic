@@ -11,22 +11,21 @@ import android.util.Log;
 
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.util.AQUtility;
+import com.qmusic.common.BAppHelper;
 import com.qmusic.common.BLocationManager;
 import com.qmusic.common.BUser;
 import com.qmusic.dal.BDatabaseHelper;
 import com.qmusic.localplugin.PluginManager;
 import com.qmusic.notification.BNotification;
 import com.qmusic.service.BDataService;
-import com.qmusic.uitls.BAppHelper;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
-import com.qmusic.webdoengine.BWebdoEngine;
 import com.umeng.analytics.MobclickAgent;
 
 public class MyApplication extends Application {
 	public static final String TAG = MyApplication.class.getSimpleName();
 	public static boolean DEBUG;
-	public static volatile long STARTED_TIME;
+	public static long STARTED_TIME;
 	static Stack<String> foreground;
 
 	@Override
@@ -37,9 +36,15 @@ public class MyApplication extends Application {
 	}
 
 	@Override
+	public void onTrimMemory(int level) {
+		super.onTrimMemory(level);
+		Log.w(TAG, "onTrimMemory:" + level);
+	}
+
+	@Override
 	public void onLowMemory() {
-		Log.w(TAG, "low memory");
 		super.onLowMemory();
+		Log.w(TAG, "low memory");
 	}
 
 	public static void init(Application ctx) {
@@ -68,7 +73,6 @@ public class MyApplication extends Application {
 				ctx.startService(new Intent(ctx, BDataService.class));
 				PluginManager.init(ctx);
 				BLocationManager.init(ctx);
-				BWebdoEngine.init(ctx);
 				MobclickAgent.setDebugMode(DEBUG);
 				MobclickAgent.updateOnlineConfig(ctx);
 				MobclickAgent.setSessionContinueMillis(60 * 1000);

@@ -1,5 +1,6 @@
 package com.qmusic.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
@@ -13,6 +14,16 @@ public abstract class BaseActivity extends FragmentActivity {
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		TAG = this.getClass().getSimpleName();
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
 	}
 
 	@Override
