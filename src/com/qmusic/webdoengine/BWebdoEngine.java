@@ -11,6 +11,7 @@ import com.androidquery.util.AQUtility;
 import com.qmusic.uitls.BUtilities;
 
 public class BWebdoEngine {
+	static boolean USE_ASSET = true;
 	static HashMap<String, BWebView> cachedWebView;
 	public static final String URL_HTML_SPA = "html/index_spa.html";
 	public static final String URL_HTML = "html/index.html";
@@ -59,7 +60,7 @@ public class BWebdoEngine {
 			webView = new BWebView(context);
 			String url;
 			File htmlCache = BUtilities.getHTMLFolder();
-			if (htmlCache == null || !new File(htmlCache, relativeUrl).exists()) {
+			if (USE_ASSET || htmlCache == null || !new File(htmlCache, relativeUrl).exists()) {
 				url = "file:///android_asset/www/" + relativeUrl;
 			} else {
 				url = String.format("file://%s/%s", BUtilities.getHTMLFolder().getAbsolutePath(), relativeUrl);

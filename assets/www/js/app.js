@@ -13,7 +13,11 @@ qmApp.config([
             templateUrl: '../html/template/page2.html',
             controller: 'Page2Ctrl'
         })
-        .when('/page3/:id', {
+        .when('/page3/123', {
+            templateUrl: '../html/template/page-other.html',
+            controller: 'PageOtherCtrl'
+        })
+         .when('/page3/:id', {
             templateUrl: '../html/template/page3.html',
             controller: 'Page3Ctrl'
         })

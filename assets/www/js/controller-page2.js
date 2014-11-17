@@ -1,6 +1,7 @@
-qmApp.controller("Page2Ctrl",['$scope', 'time',function($scope,time){
+qmApp.controller("Page2Ctrl",['$scope', 'time','$routeParams',function($scope,time,$routeParams){
 $scope.yourname="qweic1";	
 $scope.time = time;
+$scope.id =$routeParams.id;
 Page2Ctrl.scrop=$scope;
 $scope.Page2Ctrl=Page2Ctrl;
 }]);
