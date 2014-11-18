@@ -4,17 +4,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import com.androidquery.util.AQUtility;
 import com.qmusic.MyApplication;
 import com.qmusic.R;
-import com.qmusic.common.BAppHelper;
 import com.qmusic.common.BEnvironment;
-import com.qmusic.controls.dialogs.BToast;
 import com.qmusic.test.TestActivity;
 import com.qmusic.uitls.BLog;
 import com.qmusic.webdoengine.BWebdoEngine;
 
 public class SplashActivity extends BaseActivity {
+	static final String TAG = SplashActivity.class.getSimpleName();
 	static final int WAITING_TIME = 500;
 	public static final String SHUTDOWN = "shutdown";
 	public static final String RE_LOGIN = "re_login";
@@ -26,42 +24,24 @@ public class SplashActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-		// BLog.i(TAG, "onCreate");
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		// BLog.i(TAG, "onStart");
 		if (newIntent == null) {
 			newIntent = getIntent();
 		}
-		// Note: after 4.4, can't call start activity from
-		// onCreate,onStart,onResume
-		final Intent intent = newIntent;
-		AQUtility.post(new Runnable() {
-
-			@Override
-			public void run() {
-				process(intent);
-			}
-		});
+		process(newIntent);
 		newIntent = null;
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// 在部分tablet上面会延迟调用onStop,导致onStart不会被调用
+		// Fix: in some device it will not call onStart before onResume
 		if (newIntent != null) {
-			final Intent intent = newIntent;
-			AQUtility.post(new Runnable() {
-
-				@Override
-				public void run() {
-					process(intent);
-				}
-			});
+			process(newIntent);
 		}
 	}
 
@@ -85,80 +65,90 @@ public class SplashActivity extends BaseActivity {
 				finish();
 				MyApplication.shutdown();
 				return;
-			} else if (bundle.getBoolean(RE_LOGIN, false)) {
-				getInActivity();
-				return;
-			} else if (bundle.getBoolean(ROUTE, false)) {
-				try {
-					Intent originIntent = bundle.getParcelable(ORIGININTENT);
-					startActivity(originIntent);
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					getInActivity();
-				}
-				return;
 			} else {
-				BLog.i(TAG, "bundle does not match any key. " + bundle.toString());
+				new MyAsyncTask(this, bundle).execute();
 			}
+		} else {
+			new MyAsyncTask(this, bundle).execute();
 		}
-		new MyAsyncTask().execute();
 	}
 
-	class MyAsyncTask extends AsyncTask<Void, Void, Boolean> {
-		boolean hasUpdatedResource;
+	static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+		SplashActivity context;
+		Bundle bundle;
+		String type;
+		boolean needWait;
 
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
+		public MyAsyncTask(final SplashActivity context, final Bundle bundle) {
+			this.context = context;
+			this.bundle = bundle;
+			if (bundle == null) {
+				needWait = true;
+			} else if (bundle.getBoolean(RE_LOGIN, false)) {
+				needWait = false;
+				type = RE_LOGIN;
+			} else if (bundle.getBoolean(ROUTE, false)) {
+				needWait = false;
+				type = ROUTE;
+			} else {
+				BLog.w(TAG, "unknow key");
+				needWait = true;
+			}
 		}
 
 		@Override
-		protected Boolean doInBackground(Void... params) {
-			boolean result = true;
+		protected Void doInBackground(Void... params) {
 			try {
 				long startTime = System.nanoTime();
-				// Do some time-consuming task here
-				if (!hasUpdatedResource) {
-					result = BAppHelper.updateResource(getApplicationContext());
-					hasUpdatedResource = true;
+				// wait for BWebdoEngine ready
+				while (!BWebdoEngine.isWebdoEngineReady()) {
+					Thread.sleep(20);
 				}
 				long endTime = System.nanoTime();
-				long waitTime = WAITING_TIME - (endTime - startTime) / 1000000;
-				if (waitTime > 0) {
-					BLog.i(TAG, "wait time:" + waitTime + " ms");
-					Thread.sleep(waitTime);
+				long timeCost = (endTime - startTime) / 1000000;
+				if (needWait) {
+					long waitTime = WAITING_TIME - timeCost;
+					if (waitTime > 0) {
+						BLog.i(TAG, "wait time:" + waitTime + " ms");
+						Thread.sleep(waitTime);
+					}
+				} else {
+					BLog.i(TAG, "time cost:" + timeCost);
 				}
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return result;
+			return null;
 		}
 
 		@Override
-		protected void onPostExecute(Boolean result) {
-			if (result) {
-				getInActivity();
+		protected void onPostExecute(Void result) {
+			if (RE_LOGIN.equals(type)) {
+				Intent intent = new Intent(context, LoginActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				context.startActivity(intent);
+				return;
+			} else if (ROUTE.equals(type)) {
+				try {
+					Intent originIntent = bundle.getParcelable(ORIGININTENT);
+					originIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					context.startActivity(originIntent);
+					return;
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+
+			if (BEnvironment.UI_TEST) {
+				Intent intent = new Intent(context, TestActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				context.startActivity(intent);
 			} else {
-				BToast.toast("Initialize data failed.");
-				finish();
-				MyApplication.shutdown();
+				Intent intent = new Intent(context, MainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				context.startActivity(intent);
 			}
 		}
 	}
 
-	void getInActivity() {
-		BWebdoEngine.init();
-		if (BEnvironment.UI_TEST) {
-			Intent intent = new Intent(SplashActivity.this, TestActivity.class);
-			startActivity(intent);
-		} else {
-			Intent intent = new Intent(this, MainActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			Bundle bundle = getIntent().getExtras();
-			if (bundle != null) {
-				intent.putExtras(bundle);
-			}
-			startActivity(intent);
-		}
-	}
 }

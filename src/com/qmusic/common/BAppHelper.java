@@ -1,8 +1,5 @@
 package com.qmusic.common;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.HashMap;
 
 import android.annotation.SuppressLint;
@@ -20,19 +17,16 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
 import com.androidquery.util.AQUtility;
 import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.activities.SplashActivity;
-import com.qmusic.uitls.BIOUtilities;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
 
 public class BAppHelper {
 	static final String TAG = BAppHelper.class.getSimpleName();
-	static int exiting;
+	private static int exiting;
 
 	public final static void goHome(Activity ctx) {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -127,81 +121,6 @@ public class BAppHelper {
 			// watchMem();
 			BLog.i(TAG, BUtilities.objToJsonString(ctx.getApplicationInfo()));
 		}
-	}
-
-	/**
-	 * This could take some time to finish, please don't call this function in
-	 * UI thread
-	 * 
-	 * @param ctx
-	 */
-	public static final boolean updateResource(final Context ctx) {
-		// Step 1: check if there are html in sdcard
-		// Step 2: check if there are download htmls.zip
-		// Step 3: check if there are updates from server
-		final File htmlFolder = BUtilities.getHTMLFolder();
-		if (htmlFolder == null || !htmlFolder.isDirectory()) {
-			return false;
-		}
-		if (htmlFolder.list().length == 0) {
-			// then copy assert to sdcard
-			try {
-				final String root = "www";
-				final String[] files = ctx.getAssets().list(root);
-				for (String file : files) {
-					BIOUtilities.copyAssertToSDCard(ctx, String.format("%s%s%s", root, File.separator, file), htmlFolder);
-				}
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		} else {
-			File zipFile = new File(AQUtility.getTempDir(), "htmls.zip");
-			if (zipFile.exists()) {
-				InputStream is = null;
-				try {
-					is = new FileInputStream(zipFile);
-					BIOUtilities.unZipFolder(is, htmlFolder.getAbsolutePath());
-					BLog.i(TAG, "htmls.zip unziped sucessfully");
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				} finally {
-					if (is != null) {
-						try {
-							is.close();
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-					}
-				}
-				zipFile.delete();
-			} else {
-				// get zip from server async
-				final String url = "http://192.168.1.105/htmls.zip";
-				BLog.i(TAG, "downloading htmls.zip from " + url);
-				AjaxCallback<File> callback = new AjaxCallback<File>() {
-					@Override
-					public void callback(String url, File object, AjaxStatus status) {
-						if (object != null) {
-							// object.setReadable(true, true);
-							BLog.i(TAG, "htmls.zip download sucessfully");
-							String lastModified = status.getHeader("Last-Modified");
-							BUtilities.setPref(BConstants.PRE_KEY_LAST_MODIFIED_HTML, lastModified);
-						} else if (status.getCode() == 304) {
-							BLog.i(TAG, "htmls.zip is already up to date");
-						} else {
-							BLog.e(TAG, "htmls.zip download failed");
-						}
-					}
-				};
-				callback.url(url).type(File.class).uiCallback(false).targetFile(zipFile);
-				String lastModifiedStr = BUtilities.getPref(BConstants.PRE_KEY_LAST_MODIFIED_HTML);
-				if (!TextUtils.isEmpty(lastModifiedStr)) {
-					callback.header("If-Modified-Since", lastModifiedStr);
-				}
-				callback.async(ctx);
-			}
-		}
-		return true;
 	}
 
 	public static final void watchMem() {

@@ -10,7 +10,6 @@ import com.qmusic.activities.BCommonWebActivity;
 import com.qmusic.activities.BWebActivity;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.common.BAppHelper;
-import com.qmusic.webdoengine.BWebdoEngine;
 
 public class TestActivity extends BaseActivity implements View.OnClickListener {
 	EditText edit;
@@ -51,7 +50,6 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 		// intent.putExtra("url",
 		// "file:///android_asset/www/html/index_spa.html");
 		// startActivity(intent);
-		BAppHelper.updateResource(getApplicationContext());
 	}
 
 	public void onBtn2(final View view) {

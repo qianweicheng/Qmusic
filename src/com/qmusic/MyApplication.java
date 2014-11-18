@@ -20,6 +20,7 @@ import com.qmusic.notification.BNotification;
 import com.qmusic.service.BDataService;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
+import com.qmusic.webdoengine.BWebdoEngine;
 import com.umeng.analytics.MobclickAgent;
 
 public class MyApplication extends Application {
@@ -73,6 +74,7 @@ public class MyApplication extends Application {
 				ctx.startService(new Intent(ctx, BDataService.class));
 				PluginManager.init(ctx);
 				BLocationManager.init(ctx);
+				BWebdoEngine.init(ctx);
 				MobclickAgent.setDebugMode(DEBUG);
 				MobclickAgent.updateOnlineConfig(ctx);
 				MobclickAgent.setSessionContinueMillis(60 * 1000);
