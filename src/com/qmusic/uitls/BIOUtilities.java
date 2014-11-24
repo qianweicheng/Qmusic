@@ -113,7 +113,7 @@ public final class BIOUtilities {
 					int len;
 					byte[] buffer = new byte[1024];
 					// read (len) bytes into buffer
-					while ((len = inZip.read(buffer)) != -1) {
+					while ((len = inZip.read(buffer)) > 0) {
 						// write (len) byte from buffer at the position 0
 						out.write(buffer, 0, len);
 						out.flush();

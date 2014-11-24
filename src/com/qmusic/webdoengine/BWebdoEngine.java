@@ -132,7 +132,7 @@ public final class BWebdoEngine {
 				ex.printStackTrace();
 			}
 		} else {
-			File zipFile = new File(AQUtility.getTempDir(), "htmls.zip");
+			final File zipFile = new File(AQUtility.getTempDir(), "htmls.zip");
 			if (zipFile.exists()) {
 				InputStream is = null;
 				try {
@@ -159,7 +159,7 @@ public final class BWebdoEngine {
 					@Override
 					public void callback(String url, File object, AjaxStatus status) {
 						if (object != null) {
-							// object.setReadable(true, true);
+							object.renameTo(zipFile);
 							BLog.i(TAG, "htmls.zip download sucessfully");
 							String lastModified = status.getHeader("Last-Modified");
 							BUtilities.setPref(BConstants.PRE_KEY_LAST_MODIFIED_HTML, lastModified);
@@ -170,7 +170,7 @@ public final class BWebdoEngine {
 						}
 					}
 				};
-				callback.url(url).type(File.class).uiCallback(false).targetFile(zipFile);
+				callback.url(url).type(File.class).uiCallback(false);// .targetFile(zipFile);
 				String lastModifiedStr = BUtilities.getPref(BConstants.PRE_KEY_LAST_MODIFIED_HTML);
 				if (!TextUtils.isEmpty(lastModifiedStr)) {
 					callback.header("If-Modified-Since", lastModifiedStr);

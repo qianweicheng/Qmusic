@@ -112,17 +112,19 @@ public final class BRoutingHelper {
 					intent.setDataAndType(Uri.parse(url), "video/*");
 					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 					ctx.startActivity(intent);
+					return true;
 				} else {
-					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					ctx.startActivity(intent);
+					// Intent intent = new Intent(Intent.ACTION_VIEW,
+					// Uri.parse(url));
+					// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+					// Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					// ctx.startActivity(intent);
 				}
 			} catch (ActivityNotFoundException ex) {
 				BToast.toast(R.string.has_no_browser_client);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			return true;
 		} else if (url.startsWith(SCHEME_MAILTO)) {
 			try {
 				Intent intent = new Intent(Intent.ACTION_SENDTO);

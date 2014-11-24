@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="myCommonTitle1">
+    <declare-styleable name="AppAttrs">
         <attr name="myCommonTitleStyle" format="reference" />
         <attr name="myBEditTextStyle" format="reference" />
     </declare-styleable>
