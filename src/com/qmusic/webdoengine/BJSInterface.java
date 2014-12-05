@@ -1,7 +1,5 @@
 package com.qmusic.webdoengine;
 
-import java.io.File;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,9 +9,6 @@ import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
-import com.androidquery.util.AQUtility;
 import com.qmusic.activities.LoginActivity;
 import com.qmusic.common.IAsyncDataCallback;
 import com.qmusic.controls.dialogs.AlertDialogFragment;
@@ -150,18 +145,8 @@ public class BJSInterface {
 		if (url.startsWith(ASSERT_PREFEX)) {
 			webView.sendJavascript(String.format("%s('%s','%s');", jsCallback, url, tag));
 		} else {
-			AjaxCallback<File> callback = new AjaxCallback<File>() {
-				@Override
-				public void callback(String url, File object, AjaxStatus status) {
-					String imageUrl = "";
-					if (object != null) {
-						imageUrl = AQUtility.getCacheFile(AQUtility.getCacheDir(AQUtility.getContext()), url).getAbsolutePath();
-					}
-					webView.sendJavascript(String.format("%s('%s','%s');", jsCallback, imageUrl, tag));
-				}
-			};
-			callback.url(url).type(File.class).fileCache(true);
-			callback.async(AQUtility.getContext());
+			// TODO:
+			webView.sendJavascript(String.format("%s('%s','%s');", jsCallback, "", tag));
 		}
 	}
 

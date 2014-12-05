@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
-import com.androidquery.util.AQUtility;
 import com.qmusic.R;
 import com.qmusic.localplugin.LockScreenPlug;
 import com.qmusic.uitls.BLog;
@@ -31,7 +30,7 @@ public class LockScreenView extends LinearLayout implements OnClickListener {
 		btnSMS.setOnClickListener(this);
 		btnUnlock.setOnClickListener(this);
 		setBackgroundColor(0xff000000);
-		abs = AQUtility.dip2pixel(context, 100);
+		abs = 200;
 	}
 
 	@Override

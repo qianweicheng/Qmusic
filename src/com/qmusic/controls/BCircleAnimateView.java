@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import com.androidquery.util.AQUtility;
+import com.qmusic.MyApplication;
 
 public class BCircleAnimateView extends ImageView implements Runnable {
 	int width, height;
@@ -23,19 +23,19 @@ public class BCircleAnimateView extends ImageView implements Runnable {
 	@Override
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
-		AQUtility.post(this);
+		MyApplication.post(this);
 	}
 
 	@Override
 	protected void onDetachedFromWindow() {
 		super.onDetachedFromWindow();
-		AQUtility.removePost(this);
+		MyApplication.removePost(this);
 	}
 
 	@Override
 	public void run() {
 		invalidate();
-		AQUtility.postDelayed(this, 10);
+		MyApplication.postDelayed(this, 10);
 	}
 
 	@Override
@@ -62,11 +62,11 @@ public class BCircleAnimateView extends ImageView implements Runnable {
 	}
 
 	public void start() {
-		AQUtility.post(this);
+		MyApplication.post(this);
 	}
 
 	public void stop() {
-		AQUtility.removePost(this);
+		MyApplication.removePost(this);
 	}
 
 	public void setSpeed(int speed) {

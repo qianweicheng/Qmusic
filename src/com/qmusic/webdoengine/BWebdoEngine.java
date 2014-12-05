@@ -10,10 +10,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
-import com.androidquery.util.AQUtility;
-import com.qmusic.common.BConstants;
+import com.qmusic.MyApplication;
 import com.qmusic.uitls.BIOUtilities;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
@@ -87,7 +84,7 @@ public final class BWebdoEngine {
 	public static final BWebView getWebview(String relativeUrl) {
 		BWebView webView = cachedWebView.get(relativeUrl);
 		if (webView == null) {
-			final Context context = AQUtility.getContext();
+			final Context context = MyApplication.getContext();
 			webView = new BWebView(context);
 			String url;
 			final File htmlCache = BUtilities.getHTMLFolder();
@@ -132,7 +129,7 @@ public final class BWebdoEngine {
 				ex.printStackTrace();
 			}
 		} else {
-			final File zipFile = new File(AQUtility.getTempDir(), "htmls.zip");
+			final File zipFile = new File(ctx.getExternalCacheDir(), "htmls.zip");
 			if (zipFile.exists()) {
 				InputStream is = null;
 				try {
@@ -155,27 +152,31 @@ public final class BWebdoEngine {
 				// get zip from server async
 				final String url = "http://192.168.1.105/htmls.zip";
 				BLog.i(TAG, "downloading htmls.zip from " + url);
-				AjaxCallback<File> callback = new AjaxCallback<File>() {
-					@Override
-					public void callback(String url, File object, AjaxStatus status) {
-						if (object != null) {
-							object.renameTo(zipFile);
-							BLog.i(TAG, "htmls.zip download sucessfully");
-							String lastModified = status.getHeader("Last-Modified");
-							BUtilities.setPref(BConstants.PRE_KEY_LAST_MODIFIED_HTML, lastModified);
-						} else if (status.getCode() == 304) {
-							BLog.i(TAG, "htmls.zip is already up to date");
-						} else {
-							BLog.e(TAG, "htmls.zip download failed");
-						}
-					}
-				};
-				callback.url(url).type(File.class).uiCallback(false);// .targetFile(zipFile);
-				String lastModifiedStr = BUtilities.getPref(BConstants.PRE_KEY_LAST_MODIFIED_HTML);
-				if (!TextUtils.isEmpty(lastModifiedStr)) {
-					callback.header("If-Modified-Since", lastModifiedStr);
-				}
-				callback.async(ctx);
+				// AjaxCallback<File> callback = new AjaxCallback<File>() {
+				// @Override
+				// public void callback(String url, File object, AjaxStatus
+				// status) {
+				// if (object != null) {
+				// object.renameTo(zipFile);
+				// BLog.i(TAG, "htmls.zip download sucessfully");
+				// String lastModified = status.getHeader("Last-Modified");
+				// BUtilities.setPref(BConstants.PRE_KEY_LAST_MODIFIED_HTML,
+				// lastModified);
+				// } else if (status.getCode() == 304) {
+				// BLog.i(TAG, "htmls.zip is already up to date");
+				// } else {
+				// BLog.e(TAG, "htmls.zip download failed");
+				// }
+				// }
+				// };
+				// callback.url(url).type(File.class).uiCallback(false);//
+				// .targetFile(zipFile);
+				// String lastModifiedStr =
+				// BUtilities.getPref(BConstants.PRE_KEY_LAST_MODIFIED_HTML);
+				// if (!TextUtils.isEmpty(lastModifiedStr)) {
+				// callback.header("If-Modified-Since", lastModifiedStr);
+				// }
+				// callback.async(ctx);
 			}
 		}
 		return true;

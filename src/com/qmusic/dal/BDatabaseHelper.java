@@ -7,7 +7,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.androidquery.util.AQUtility;
+import com.qmusic.MyApplication;
 import com.qmusic.common.BConstants;
 import com.qmusic.uitls.BLog;
 
@@ -25,7 +25,7 @@ public class BDatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public static final BDatabaseHelper createInstance() {
-		return new BDatabaseHelper(AQUtility.getContext());
+		return new BDatabaseHelper(MyApplication.getContext());
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class BDatabaseHelper extends SQLiteOpenHelper {
 	 */
 	public synchronized static final SQLiteDatabase getDatabase() {
 		if (instance == null) {
-			instance = new BDatabaseHelper(AQUtility.getContext());
+			instance = new BDatabaseHelper(MyApplication.getContext());
 		}
 		return instance.getWritableDatabase();
 	}

@@ -10,16 +10,16 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.androidquery.util.AQUtility;
+import com.qmusic.MyApplication;
 import com.qmusic.R;
 
 public final class BToast {
 	public static final void toast(String msg) {
-		Toast.makeText(AQUtility.getContext(), msg, Toast.LENGTH_SHORT).show();
+		Toast.makeText(MyApplication.getContext(), msg, Toast.LENGTH_SHORT).show();
 	}
 
 	public static final void toast(int msg) {
-		Toast.makeText(AQUtility.getContext(), msg, Toast.LENGTH_SHORT).show();
+		Toast.makeText(MyApplication.getContext(), msg, Toast.LENGTH_SHORT).show();
 	}
 
 	public static final void toast(View view, String msg) {
@@ -45,12 +45,10 @@ public final class BToast {
 		if (alignType == RelativeLayout.ALIGN_TOP) {
 			// TODO: how to get toast height
 			DisplayMetrics displayMetrics = view.getContext().getResources().getDisplayMetrics();
-			toast.setGravity(Gravity.LEFT | Gravity.TOP, location[0], location[1] + rect.top - view.getHeight()
-					- (int) (48 * displayMetrics.density));
+			toast.setGravity(Gravity.LEFT | Gravity.TOP, location[0], location[1] + rect.top - view.getHeight() - (int) (48 * displayMetrics.density));
 		} else if (alignType == RelativeLayout.ALIGN_BOTTOM) {
 			DisplayMetrics displayMetrics = view.getContext().getResources().getDisplayMetrics();
-			toast.setGravity(Gravity.LEFT | Gravity.TOP, location[0], location[1] + rect.top
-					- (int) (10 * displayMetrics.density));
+			toast.setGravity(Gravity.LEFT | Gravity.TOP, location[0], location[1] + rect.top - (int) (10 * displayMetrics.density));
 		}
 		toast.show();
 	}

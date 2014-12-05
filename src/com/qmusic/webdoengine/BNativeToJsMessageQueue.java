@@ -24,7 +24,7 @@ import android.annotation.SuppressLint;
 import android.os.Looper;
 import android.webkit.WebView;
 
-import com.androidquery.util.AQUtility;
+import com.qmusic.MyApplication;
 import com.qmusic.uitls.BLog;
 
 public class BNativeToJsMessageQueue {
@@ -96,7 +96,7 @@ public class BNativeToJsMessageQueue {
 			if (Looper.myLooper() == Looper.getMainLooper()) {
 				runnable.run();
 			} else {
-				AQUtility.post(runnable);
+				MyApplication.post(runnable);
 			}
 		}
 	}

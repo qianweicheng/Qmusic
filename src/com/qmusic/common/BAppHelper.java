@@ -17,7 +17,6 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
-import com.androidquery.util.AQUtility;
 import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.activities.SplashActivity;
@@ -126,7 +125,7 @@ public class BAppHelper {
 	public static final void watchMem() {
 		final Debug.MemoryInfo outInfo = new Debug.MemoryInfo();
 		final ActivityManager.MemoryInfo outInfo1 = new ActivityManager.MemoryInfo();
-		final ActivityManager am = (ActivityManager) AQUtility.getContext().getSystemService(Context.ACTIVITY_SERVICE);
+		final ActivityManager am = (ActivityManager) MyApplication.getContext().getSystemService(Context.ACTIVITY_SERVICE);
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

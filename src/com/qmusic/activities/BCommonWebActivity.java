@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 
 import com.qmusic.R;
 import com.qmusic.common.BConstants;
-import com.qmusic.controls.CommonTitle;
 import com.qmusic.webdoengine.BJSInterface;
 import com.qmusic.webdoengine.BWebHost;
 import com.qmusic.webdoengine.BWebView;
@@ -37,8 +36,9 @@ public class BCommonWebActivity extends BaseActivity {
 			if (TextUtils.isEmpty(title)) {
 				title = "";// getString(R.string.app_name);
 			}
-			CommonTitle commonTitle = (CommonTitle) findViewById(R.id.activity_web_title);
-			commonTitle.setTitle(title);
+			// CommonTitle commonTitle = (CommonTitle)
+			// findViewById(R.id.activity_web_title);
+			// commonTitle.setTitle(title);
 			showProgressBar = bundle.getBoolean(SHOW_PROGRESS_BAR, false);
 			progressBar = (ProgressBar) findViewById(R.id.activity_web_progressbar);
 			if (showProgressBar) {

@@ -6,7 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.androidquery.util.AQUtility;
+import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.uitls.BLog;
 
@@ -21,7 +21,7 @@ public class AlertDialogFragment extends BaseDialogFragment {
 	 * @return
 	 */
 	public static AlertDialogFragment getInstance(final String title, final String msg, final int positive) {
-		return getInstance(title, msg, AQUtility.getContext().getString(positive));
+		return getInstance(title, msg, MyApplication.getContext().getString(positive));
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class AlertDialogFragment extends BaseDialogFragment {
 	}
 
 	public static AlertDialogFragment getInstance(final String title, final String msg, final int positive, final int nagative) {
-		Context ctx = AQUtility.getContext();
+		Context ctx = MyApplication.getContext();
 		return getInstance(title, msg, ctx.getString(positive), ctx.getString(nagative));
 	}
 

@@ -7,10 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.androidquery.util.AQUtility;
+import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.common.BConstants;
-import com.qmusic.controls.CommonTitle;
 import com.qmusic.uitls.BLog;
 import com.qmusic.webdoengine.BJSInterface;
 import com.qmusic.webdoengine.BWebHost;
@@ -39,8 +38,9 @@ public class BWebActivity extends BaseActivity {
 			if (TextUtils.isEmpty(title)) {
 				title = "";// getString(R.string.app_name);
 			}
-			CommonTitle commonTitle = (CommonTitle) findViewById(R.id.activity_web_title);
-			commonTitle.setTitle(title);
+			// CommonTitle commonTitle = (CommonTitle)
+			// findViewById(R.id.activity_web_title);
+			// commonTitle.setTitle(title);
 			showProgressBar = bundle.getBoolean(SHOW_PROGRESS_BAR, false);
 			progressBar = (ProgressBar) findViewById(R.id.activity_web_progressbar);
 			if (showProgressBar) {
@@ -75,7 +75,7 @@ public class BWebActivity extends BaseActivity {
 	protected void onResume() {
 		super.onResume();
 		webHost.onResume();
-		AQUtility.postDelayed(new Runnable() {
+		MyApplication.postDelayed(new Runnable() {
 
 			@Override
 			public void run() {

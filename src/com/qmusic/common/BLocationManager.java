@@ -16,7 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.androidquery.util.AQUtility;
+import com.qmusic.MyApplication;
 import com.qmusic.uitls.BLog;
 
 public class BLocationManager implements LocationListener {
@@ -73,7 +73,7 @@ public class BLocationManager implements LocationListener {
 	 */
 	public void updateLocation(final IAsyncDataCallback callback, final long millis) {
 		if (System.currentTimeMillis() - lastupdateTime <= millis && location != null) {
-			AQUtility.post(new Runnable() {
+			MyApplication.post(new Runnable() {
 
 				@Override
 				public void run() {
@@ -92,7 +92,7 @@ public class BLocationManager implements LocationListener {
 			}
 			BLog.i(TAG, "updateLocation BEST Provider : " + bestProvider);
 			mState = STATUS_DOING;
-			AQUtility.postDelayed(timeCheck, 10000);
+			MyApplication.postDelayed(timeCheck, 10000);
 			BLog.i(TAG, "requestLocationUpdates. bestProvider = " + bestProvider);
 			locationManager.requestLocationUpdates(bestProvider, 2000, 500, this);
 		}

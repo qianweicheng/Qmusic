@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.common.BAppHelper;
-import com.qmusic.controls.CommonTitle;
 import com.qmusic.uitls.BLog;
 
 public class Test2Activity extends BaseActivity implements OnClickListener {
@@ -26,8 +25,6 @@ public class Test2Activity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test2);
-		CommonTitle commonTitle = (CommonTitle) findViewById(R.id.activity_test2_title);
-		commonTitle.setRightImgCallback(this);
 		listView = (ListView) findViewById(R.id.activity_test2_list);
 		data = new ArrayList<Integer>();
 		for (int i = 0; i < 10; i++) {

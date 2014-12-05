@@ -10,7 +10,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 
-import com.androidquery.util.AQUtility;
 import com.qmusic.common.BConstants;
 import com.qmusic.common.IAsyncDataCallback;
 import com.qmusic.uitls.BLog;
@@ -81,7 +80,7 @@ public class BWebHost {
 
 	public void onResume() {
 		webView.sendJavascript("Qm.onResume();");
-		AQUtility.postDelayed(new Runnable() {
+		webView.postDelayed(new Runnable() {
 
 			@Override
 			public void run() {
@@ -162,7 +161,7 @@ public class BWebHost {
 	 * @param obj
 	 */
 	public final void postMessage(final int what, final int arg1, final Object obj) {
-		AQUtility.post(new Runnable() {
+		webView.post(new Runnable() {
 			@Override
 			public void run() {
 				onMessage(what, arg1, obj);

@@ -7,10 +7,9 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.os.Handler;
 import android.util.Log;
 
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.util.AQUtility;
 import com.qmusic.common.BAppHelper;
 import com.qmusic.common.BLocationManager;
 import com.qmusic.common.BUser;
@@ -28,6 +27,8 @@ public class MyApplication extends Application {
 	public static boolean DEBUG;
 	public static long STARTED_TIME;
 	static Stack<String> foreground;
+	static MyApplication instance;
+	static Handler handler;
 
 	@Override
 	public void onCreate() {
@@ -48,7 +49,7 @@ public class MyApplication extends Application {
 		Log.w(TAG, "low memory");
 	}
 
-	public static void init(Application ctx) {
+	public static void init(MyApplication ctx) {
 		STARTED_TIME = System.currentTimeMillis();
 		ApplicationInfo appInfo = ctx.getApplicationInfo();
 		if ((appInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0) {
@@ -56,10 +57,9 @@ public class MyApplication extends Application {
 		} else {
 			DEBUG = true;
 		}
-		AQUtility.setContext(ctx);
-		String userAgent = System.getProperties().getProperty("http.agent");
-		AjaxCallback.setAgent(userAgent);
-		AQUtility.setDebug(DEBUG);
+		instance = ctx;
+		// String userAgent = System.getProperties().getProperty("http.agent");
+		// AjaxCallback.setAgent(userAgent);
 		BLog.setLevel(BLog.ALL);
 		RunningAppProcessInfo appProcessInfo = BUtilities.getCurProcess(ctx);
 		BLog.i(TAG, BUtilities.objToJsonString(appProcessInfo));
@@ -67,6 +67,7 @@ public class MyApplication extends Application {
 			BLog.i(TAG, "name:%s,pid:%d,uid:%d", appProcessInfo.processName, appProcessInfo.pid, appProcessInfo.uid);
 			if (appInfo.packageName.equals(appProcessInfo.processName)) {
 				// Note: UI component
+				handler = new Handler();
 				foreground = new Stack<String>();
 				foreground.setSize(2);
 				BAppHelper.init(ctx);
@@ -86,8 +87,24 @@ public class MyApplication extends Application {
 		}
 	}
 
+	public static final Context getContext() {
+		return instance;
+	}
+
+	public static final void post(Runnable runnable) {
+		handler.post(runnable);
+	}
+
+	public static final void removePost(Runnable runnable) {
+		handler.removeCallbacks(runnable);
+	}
+
+	public static final void postDelayed(Runnable runnable, long delayMillis) {
+		handler.postDelayed(runnable, delayMillis);
+	}
+
 	public static final void shutdown() {
-		final Context ctx = AQUtility.getContext();
+		final Context ctx = getContext();
 		try {
 			ctx.stopService(new Intent(ctx, BDataService.class));
 			BDatabaseHelper.closeDB();

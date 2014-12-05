@@ -4,11 +4,9 @@ import java.util.HashMap;
 
 import android.text.TextUtils;
 
-import com.androidquery.util.AQUtility;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qmusic.R;
 import com.qmusic.dal.BDatabaseHelper;
 import com.qmusic.uitls.BUtilities;
 

@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.androidquery.util.AQUtility;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.PropertyValuesHolder;
+import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.localplugin.LockScreenPlug;
 
@@ -42,7 +42,7 @@ public class AnimateScreenView extends LinearLayout implements Runnable {
 	@Override
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
-		AQUtility.postDelayed(this, DURATION);
+		MyApplication.postDelayed(this, DURATION);
 		animator.start();
 	}
 

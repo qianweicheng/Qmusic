@@ -32,11 +32,11 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
-import com.androidquery.util.AQUtility;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.qmusic.MyApplication;
 import com.qmusic.common.BConstants;
 import com.qmusic.controls.dialogs.BToast;
 
@@ -77,19 +77,19 @@ public class BUtilities {
 	}
 
 	public final static String getPref(String key) {
-		SharedPreferences myPrefs = AQUtility.getContext().getSharedPreferences("BPref", Context.MODE_PRIVATE);
+		SharedPreferences myPrefs = MyApplication.getContext().getSharedPreferences("BPref", Context.MODE_PRIVATE);
 		return myPrefs.getString(key, "");
 	}
 
 	public final static void setPref(String key, String value) {
-		SharedPreferences myPrefs = AQUtility.getContext().getSharedPreferences("BPref", Context.MODE_PRIVATE);
+		SharedPreferences myPrefs = MyApplication.getContext().getSharedPreferences("BPref", Context.MODE_PRIVATE);
 		SharedPreferences.Editor preferencesEditor = myPrefs.edit();
 		preferencesEditor.putString(key, value);
 		preferencesEditor.commit();
 	}
 
 	public final static void removePref(String key) {
-		SharedPreferences myPrefs = AQUtility.getContext().getSharedPreferences("BPref", Context.MODE_PRIVATE);
+		SharedPreferences myPrefs = MyApplication.getContext().getSharedPreferences("BPref", Context.MODE_PRIVATE);
 		SharedPreferences.Editor preferencesEditor = myPrefs.edit();
 		preferencesEditor.remove(key);
 		preferencesEditor.commit();
@@ -123,7 +123,7 @@ public class BUtilities {
 
 	public final static String getAppVersion() {
 		try {
-			Context ctx = AQUtility.getContext();
+			Context ctx = MyApplication.getContext();
 			PackageInfo pInfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
 			return String.format("%s (%s)", pInfo.versionName, pInfo.versionCode);
 		} catch (Exception e) {
@@ -219,7 +219,7 @@ public class BUtilities {
 
 	// Refer to http://blog.csdn.net/billpig/article/details/6728573
 	public final static String getDeviceId() {
-		Context ctx = AQUtility.getContext();
+		Context ctx = MyApplication.getContext();
 		if (uuid == null) {
 			final String id = getPref(BConstants.PRE_KEY_DEVICE_ID);
 			if (!TextUtils.isEmpty(id)) {
@@ -288,7 +288,7 @@ public class BUtilities {
 	public final static File getHTMLFolder() {
 		String status = Environment.getExternalStorageState();
 		if (status.equals(Environment.MEDIA_MOUNTED)) {
-			File cacheDir = new File(AQUtility.getContext().getExternalCacheDir(), "www");
+			File cacheDir = new File(MyApplication.getContext().getExternalCacheDir(), "www");
 			if (!cacheDir.exists()) {
 				boolean result = cacheDir.mkdirs();
 				if (!result) {
