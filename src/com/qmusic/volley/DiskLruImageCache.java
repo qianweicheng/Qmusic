@@ -26,12 +26,11 @@ public class DiskLruImageCache implements ImageCache {
 	private int mCompressQuality = 70;
 	private static final int APP_VERSION = 1;
 	private static final int VALUE_COUNT = 1;
-	private static final int MAX_FILE_COUNT = 200;
 
 	public DiskLruImageCache(Context context, String uniqueName, int diskCacheSize, CompressFormat compressFormat, int quality) {
 		try {
 			final File diskCacheDir = getDiskCacheDir(context, uniqueName);
-			mDiskCache = DiskLruCache.open(diskCacheDir, APP_VERSION, VALUE_COUNT, diskCacheSize, MAX_FILE_COUNT);
+			mDiskCache = DiskLruCache.open(diskCacheDir, APP_VERSION, VALUE_COUNT, diskCacheSize, Integer.MAX_VALUE);
 			mCompressFormat = compressFormat;
 			mCompressQuality = quality;
 		} catch (IOException e) {

@@ -22,36 +22,73 @@ import com.qmusic.uitls.BLog;
 
 public final class BRoutingHelper {
 	static final String TAG = "BRoutingHelper";
-	static final String SCHEME_CALL = "easilydo://call";
-	static final String SCHEME_DIRECTION_TO = "easilydo://directionTo";
-	static final String SCHEME_MAP = "easilydo://map";
-	static final String SCHEME_SMS = "easilydo://sms";
 	static final String SCHEME_HTTP = "http://";
 	static final String SCHEME_HTTPS = "https://";
 	static final String SCHEME_MAILTO = "mailto:";
 	static final String SCHEME_MARKET = "market://";
-	static final String SCHEME_EASILYDO = "easilydo://easilydo.com";
+	static final String SCHEME_QMUSIC = "qmusic://";
+	static final String SCHEME_QMUSIC_DIRECTION_TO = "qmusic://directionTo";
+	static final String SCHEME_QMUSIC_MAP = "qmusic://map";
+	static final String SCHEME_QMUSIC_SMS = "qmusic://sms";
 
 	public static final boolean process(final FragmentActivity ctx, final String url) {
 		if (url == null) {
 			return false;
 		}
-		if (url.startsWith(SCHEME_CALL)) {
+		if (url.startsWith(SCHEME_HTTP) || url.startsWith(SCHEME_HTTPS)) {
 			try {
-				String telNo = url.substring(SCHEME_CALL.length() + 1);
-				Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + telNo));
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				ctx.startActivity(intent);
-			} catch (ActivityNotFoundException ex) {
-				BToast.toast(R.string.has_no_phone_call_client);
+				final String[] SUPPORTED_VIDEO_FORMATS = new String[] { ".3gp", ".mp4", ".webm" };
+				for (String format : SUPPORTED_VIDEO_FORMATS) {
+					if (url.endsWith(format)) {
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+						intent.setDataAndType(Uri.parse(url), "video/*");
+						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						ctx.startActivity(intent);
+						return true;
+					}
+				}
+				final String[] SUPPORTED_AUDIO_FORMATS = new String[] { ".aac", ".mp3", ".flac", ".ogg", ".wav" };
+				for (String format : SUPPORTED_AUDIO_FORMATS) {
+					if (url.endsWith(format)) {
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+						intent.setDataAndType(Uri.parse(url), "audio/*");
+						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						ctx.startActivity(intent);
+						return true;
+					}
+				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
+		} else if (url.startsWith(SCHEME_MARKET)) {
+			try {
+				Intent goToMarket = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+				goToMarket.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				ctx.startActivity(goToMarket);
+			} catch (ActivityNotFoundException e) {
+				BToast.toast("Couldn't launch the market");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return true;
-		} else if (url.startsWith(SCHEME_MAP)) {
+		} else if (url.startsWith(SCHEME_MAILTO)) {
+			try {
+				Intent intent = new Intent(Intent.ACTION_SENDTO);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				intent.setData(Uri.parse(url));
+				intent.putExtra(Intent.EXTRA_SUBJECT, "");
+				intent.putExtra(Intent.EXTRA_TEXT, "");
+				ctx.startActivity(intent);
+			} catch (ActivityNotFoundException ex) {
+				BToast.toast(R.string.has_no_email_client);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return true;
+		} else if (url.startsWith(SCHEME_QMUSIC_MAP)) {
 			String geo = "";
 			try {
-				geo = url.substring(SCHEME_MAP.length() + 1);
+				geo = url.substring(SCHEME_QMUSIC_MAP.length() + 1);
 				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + geo));
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				ctx.startActivity(intent);
@@ -70,10 +107,10 @@ public final class BRoutingHelper {
 				ex.printStackTrace();
 			}
 			return true;
-		} else if (url.startsWith(SCHEME_DIRECTION_TO)) {
+		} else if (url.startsWith(SCHEME_QMUSIC_DIRECTION_TO)) {
 			try {
 				// the geo must be lat,lon. not the name of the address
-				String geo = url.substring(SCHEME_DIRECTION_TO.length() + 1);
+				String geo = url.substring(SCHEME_QMUSIC_DIRECTION_TO.length() + 1);
 				Location currentLocation = BLocationManager.getInstance().getLastKnowLocation();
 				String geoURL;
 				if (currentLocation != null) {
@@ -91,10 +128,10 @@ public final class BRoutingHelper {
 				ex.printStackTrace();
 			}
 			return true;
-		} else if (url.startsWith(SCHEME_SMS)) {
+		} else if (url.startsWith(SCHEME_QMUSIC_SMS)) {
 			try {
 				String urlDecoded = URLDecoder.decode(url, "UTF-8");
-				String[] sms = urlDecoded.substring(SCHEME_SMS.length() + 1).split(",");
+				String[] sms = urlDecoded.substring(SCHEME_QMUSIC_SMS.length() + 1).split(",");
 				Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + sms[0]));
 				intent.putExtra("sms_body", sms[1]);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -105,52 +142,7 @@ public final class BRoutingHelper {
 				ex.printStackTrace();
 			}
 			return true;
-		} else if (url.startsWith(SCHEME_HTTP) || url.startsWith(SCHEME_HTTPS)) {
-			try {
-				if (url.endsWith(".mp4") || url.endsWith(".3gp")) {
-					Intent intent = new Intent(Intent.ACTION_VIEW);
-					intent.setDataAndType(Uri.parse(url), "video/*");
-					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-					ctx.startActivity(intent);
-					return true;
-				} else {
-					// Intent intent = new Intent(Intent.ACTION_VIEW,
-					// Uri.parse(url));
-					// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-					// Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					// ctx.startActivity(intent);
-				}
-			} catch (ActivityNotFoundException ex) {
-				BToast.toast(R.string.has_no_browser_client);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		} else if (url.startsWith(SCHEME_MAILTO)) {
-			try {
-				Intent intent = new Intent(Intent.ACTION_SENDTO);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				intent.setData(Uri.parse(url));
-				intent.putExtra(Intent.EXTRA_SUBJECT, "");
-				intent.putExtra(Intent.EXTRA_TEXT, "");
-				ctx.startActivity(intent);
-			} catch (ActivityNotFoundException ex) {
-				BToast.toast(R.string.has_no_email_client);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return true;
-		} else if (url.startsWith(SCHEME_MARKET)) {
-			try {
-				Intent goToMarket = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-				goToMarket.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				ctx.startActivity(goToMarket);
-			} catch (ActivityNotFoundException e) {
-				BToast.toast("Couldn't launch the market");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return true;
-		} else if (url.startsWith(SCHEME_EASILYDO)) {
+		} else if (url.startsWith(SCHEME_QMUSIC)) {
 			final Uri data = Uri.parse(url);
 			return processEasilyDoPage(ctx, data);
 		}
@@ -160,15 +152,9 @@ public final class BRoutingHelper {
 	public static final boolean processEasilyDoPage(final FragmentActivity ctx, final Uri data) {
 		String page = null;
 		final List<String> segments = data.getPathSegments();
-		final String scheme = data.getScheme();
-		if (scheme.startsWith("easilydo")) {
-			if (segments.size() > 0) {
-				page = segments.get(0);
-			}
-		} else {
-			if (segments.size() > 1) {
-				page = segments.get(1);
-			}
+		// final String scheme = data.getScheme();
+		if (segments.size() > 0) {
+			page = segments.get(0);
 		}
 		Intent intent = null;
 		if ("web".equalsIgnoreCase(page)) {
@@ -197,14 +183,8 @@ public final class BRoutingHelper {
 				Object value = params.opt(key);
 				if (value instanceof String) {
 					intent.putExtra(key, (String) value);
-				} else if (value instanceof Integer) {
-					intent.putExtra(key, (Integer) value);
-				} else if (value instanceof Double) {
-					intent.putExtra(key, (Double) value);
-				} else if (value instanceof Long) {
-					intent.putExtra(key, (Long) value);
-				} else if (value instanceof Boolean) {
-					intent.putExtra(key, (Boolean) value);
+				} else if (value instanceof Number) {
+					intent.putExtra(key, (Number) value);
 				} else if (value instanceof Parcelable) {
 					intent.putExtra(key, (Parcelable) value);
 				} else {

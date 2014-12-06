@@ -12,13 +12,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.qmusic.R;
 import com.qmusic.activities.BCommonWebActivity;
 import com.qmusic.activities.BWebActivity;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.common.BAppHelper;
+import com.qmusic.uitls.BLog;
+import com.qmusic.volley.QMusicStringQuest;
 
 public class TestActivity extends BaseActivity implements View.OnClickListener {
 	EditText edit;
@@ -61,30 +62,25 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 		// startActivity(intent);\
 		RequestQueue queue = Volley.newRequestQueue(this);
 		String url = "http://www.google.com";
-		StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+		QMusicStringQuest stringRequest = new QMusicStringQuest(Request.Method.GET, url, new Response.Listener<String>() {
 
 			@Override
 			public void onResponse(String response) {
-				// TODO Auto-generated method stub
+				BLog.d(TAG, response);
 
 			}
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
 			}
-		}) {
-			@Override
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				return super.getHeaders();
-			}
-		};
+		});
 
 		// Add the request to the RequestQueue.
 		queue.add(stringRequest);
 	}
 
 	public void onBtn2(final View view) {
-		Intent intent = new Intent(this, BWebActivity.class);
+		Intent intent = new Intent(this, Test2Activity.class);
 		intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
 		intent.putExtra("url", "file:///android_asset/www/html/index.html");
 		startActivity(intent);

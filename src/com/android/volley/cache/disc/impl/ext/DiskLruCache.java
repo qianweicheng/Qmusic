@@ -678,10 +678,12 @@ public final class DiskLruCache implements Closeable {
 	}
 
 	private void validateKey(String key) {
-		Matcher matcher = LEGAL_KEY_PATTERN.matcher(key);
-		if (!matcher.matches()) {
-			throw new IllegalArgumentException("keys must match regex [a-z0-9_-]{1,64}: \"" + key + "\"");
-		}
+		// Matcher matcher = LEGAL_KEY_PATTERN.matcher(key);
+		// if (!matcher.matches()) {
+		// throw new
+		// IllegalArgumentException("keys must match regex [a-z0-9_-]{1,64}: \""
+		// + key + "\"");
+		// }
 	}
 
 	private static String inputStreamToString(InputStream in) throws IOException {

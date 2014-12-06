@@ -1,14 +1,12 @@
 package com.qmusic.volley;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.util.LruCache;
 
 import com.android.volley.toolbox.ImageLoader.ImageCache;
+import com.qmusic.uitls.BLog;
 
 public class BitmapLruImageCache extends LruCache<String, Bitmap> implements ImageCache {
-
-	private final String TAG = this.getClass().getSimpleName();
 
 	public BitmapLruImageCache(int maxSize) {
 		super(maxSize);
@@ -21,13 +19,18 @@ public class BitmapLruImageCache extends LruCache<String, Bitmap> implements Ima
 
 	@Override
 	public Bitmap getBitmap(String url) {
-		Log.v(TAG, "Retrieved item from Mem Cache");
-		return get(url);
+		Bitmap result = get(url);
+		if (result != null) {
+			BLog.d("L1", "L1 Hit:" + url);
+		} else {
+			BLog.d("L1", "L1 Missed:" + url);
+		}
+		return result;
 	}
 
 	@Override
 	public void putBitmap(String url, Bitmap bitmap) {
-		Log.v(TAG, "Added item to Mem Cache");
+		BLog.d("L1", "L1 add:" + url);
 		put(url, bitmap);
 	}
 }

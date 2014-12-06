@@ -8,20 +8,6 @@
     android:orientation="vertical"
     android:padding="10dp" >
 
-    <com.qmusic.test.EditText
-        android:id="@+id/activity_test1_input_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible" />
-
-    <com.qmusic.controls.BEditView2
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/button_h"
-        app:bText="@string/app_name"
-        app:bTextHint="abcedft"
-        app:bTextSize="@dimen/font_size_small_x" >
-    </com.qmusic.controls.BEditView2>
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_h"

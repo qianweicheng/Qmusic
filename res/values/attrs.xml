@@ -5,7 +5,7 @@
         <attr name="myCommonTitleStyle" format="reference" />
         <attr name="myBEditTextStyle" format="reference" />
     </declare-styleable>
-    <declare-styleable name="CommonTitle">
+    <declare-styleable name="BCommonTitle">
         <attr name="common_title" format="string" />
         <attr name="right_text" format="string" />
         <attr name="right_img" format="reference" />

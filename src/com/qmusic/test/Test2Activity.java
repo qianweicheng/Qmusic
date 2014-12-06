@@ -1,24 +1,24 @@
 package com.qmusic.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageLoader.ImageContainer;
+import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
-import com.qmusic.common.BAppHelper;
 import com.qmusic.uitls.BLog;
+import com.qmusic.volley.RequestImageManager;
 
 public class Test2Activity extends BaseActivity implements OnClickListener {
 	ListView listView;
-	List<Integer> data;
 	MyAdapter adapter;
 
 	@Override
@@ -26,34 +26,20 @@ public class Test2Activity extends BaseActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test2);
 		listView = (ListView) findViewById(R.id.activity_test2_list);
-		data = new ArrayList<Integer>();
-		for (int i = 0; i < 10; i++) {
-			data.add(i);
-		}
 		adapter = new MyAdapter();
 		listView.setAdapter(adapter);
 	}
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.common_title_right_img) {
-			if (data.size() > 0) {
-				data.remove(0);
-			}
-			adapter.notifyDataSetChanged();
-		}
-	}
 
-	@Override
-	public void onBackPressed() {
-		BAppHelper.exit(this, true);
 	}
 
 	class MyAdapter extends BaseAdapter {
 
 		@Override
 		public int getCount() {
-			return data == null ? 0 : data.size();
+			return Constants.IMAGES.length;
 		}
 
 		@Override
@@ -68,24 +54,38 @@ public class Test2Activity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			BLog.i(TAG, "Position:" + position);
-			TextView txtTitle;
+			// BLog.i(TAG, "Position:" + position);
 			if (convertView == null) {
-				convertView = getLayoutInflater().inflate(android.R.layout.simple_list_item_1, null);
+				convertView = getLayoutInflater().inflate(R.layout.item_simple_text_with_icon2, parent, false);
 			}
-			txtTitle = (TextView) convertView;
-			txtTitle.setText("Item " + data.get(position));
+			final RequestImageManager manager = RequestImageManager.getInstance();
+			final ImageLoader imageLoader = manager.getImageLoader();
+
+			final ImageView imgView = (ImageView) convertView.findViewById(R.id.item_icon);
+			if (imgView.getTag() != null) {
+				ImageContainer imageContainer = (ImageContainer) imgView.getTag();
+				imageContainer.cancelRequest();
+			}
+			final ImageContainer imageContainer = imageLoader.get(Constants.IMAGES[position], new ImageListener() {
+				@Override
+				public void onErrorResponse(VolleyError error) {
+					imgView.setImageResource(R.drawable.b_loader_1);
+				}
+
+				@Override
+				public void onResponse(ImageContainer response, boolean isImmediate) {
+					if (response.getBitmap() != null) {
+						imgView.setImageBitmap(response.getBitmap());
+						if (isImmediate) {
+							BLog.d(TAG, "From L1:" + response.getRequestUrl());
+						}
+					} else {
+						imgView.setImageResource(R.drawable.icon);
+					}
+				}
+			});
+			imgView.setTag(imageContainer);
 			return convertView;
-		}
-
-		@Override
-		public int getViewTypeCount() {
-			return 2;
-		}
-
-		@Override
-		public int getItemViewType(int position) {
-			return data.get(position) % 2;
 		}
 	}
 }
