@@ -8,8 +8,8 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
 
-public class QMusicStringQuest extends QmusicRequest<String> {
-	public QMusicStringQuest(int method, String url, Listener<String> listener, ErrorListener errorListener) {
+public class QMusicStringRequest extends QmusicRequest<String> {
+	public QMusicStringRequest(int method, String url, Listener<String> listener, ErrorListener errorListener) {
 		super(method, url, listener, errorListener);
 	}
 
@@ -21,6 +21,6 @@ public class QMusicStringQuest extends QmusicRequest<String> {
 		} catch (UnsupportedEncodingException e) {
 			parsed = new String(response.data);
 		}
-		return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
+		return Response.success(parsed, parseCacheHeaders(getUrl(), response));
 	}
 }

@@ -1,25 +1,22 @@
 package com.qmusic.test;
 
-import java.util.Map;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.StringRequest;
 import com.qmusic.R;
 import com.qmusic.activities.BCommonWebActivity;
 import com.qmusic.activities.BWebActivity;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.common.BAppHelper;
 import com.qmusic.uitls.BLog;
-import com.qmusic.volley.QMusicStringQuest;
+import com.qmusic.volley.QMusicRequestManager;
 
 public class TestActivity extends BaseActivity implements View.OnClickListener {
 	EditText edit;
@@ -55,14 +52,10 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void onBtn1(final View view) {
-		// Intent intent = new Intent(this, BWebActivity.class);
-		// intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
-		// intent.putExtra("url",
-		// "file:///android_asset/www/html/index_spa.html");
-		// startActivity(intent);\
-		RequestQueue queue = Volley.newRequestQueue(this);
-		String url = "http://www.google.com";
-		QMusicStringQuest stringRequest = new QMusicStringQuest(Request.Method.GET, url, new Response.Listener<String>() {
+		RequestQueue queue = QMusicRequestManager.getInstance().getRequestQueue();
+		String url = "https://example.org/";
+		// String url = "https://www.google.com";
+		StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
 			@Override
 			public void onResponse(String response) {
@@ -72,6 +65,11 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 		}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
+				if (error != null) {
+					BLog.e(TAG, "Error:" + error.getMessage());
+				} else {
+					BLog.e(TAG, "Error Happens");
+				}
 			}
 		});
 

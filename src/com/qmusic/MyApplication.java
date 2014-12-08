@@ -7,10 +7,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.qmusic.common.BAppHelper;
@@ -22,8 +19,7 @@ import com.qmusic.notification.BNotification;
 import com.qmusic.service.BDataService;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
-import com.qmusic.volley.QmusicRequest;
-import com.qmusic.volley.RequestImageManager;
+import com.qmusic.volley.QMusicRequestManager;
 import com.qmusic.webdoengine.BWebdoEngine;
 import com.umeng.analytics.MobclickAgent;
 
@@ -63,7 +59,7 @@ public class MyApplication extends Application {
 			DEBUG = true;
 		}
 		instance = ctx;
-		RequestImageManager.init(ctx);
+		QMusicRequestManager.init(ctx);
 		BLog.setLevel(BLog.ALL);
 		RunningAppProcessInfo appProcessInfo = BUtilities.getCurProcess(ctx);
 		BLog.i(TAG, BUtilities.objToJsonString(appProcessInfo));

@@ -30,11 +30,13 @@ import org.apache.http.message.BasicNameValuePair;
 import android.text.TextUtils;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Cache.Entry;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
+import com.android.volley.toolbox.HttpHeaderParser;
 
 /**
  * A request for retrieving a T type response body at a given URL that also
@@ -73,7 +75,7 @@ public abstract class QmusicRequest<T> extends Request<T> {
 	}
 
 	@Override
-	public byte[] getBody() {
+	public byte[] getBody() throws AuthFailureError {
 		try {
 			if (params != null) {
 				List<NameValuePair> pairs = new ArrayList<NameValuePair>();
@@ -106,11 +108,11 @@ public abstract class QmusicRequest<T> extends Request<T> {
 
 	@Override
 	public Map<String, String> getHeaders() throws AuthFailureError {
-		Map<String, String> headers = super.getHeaders();
-		if (!TextUtils.isEmpty(userAgent)) {
-			if (headers == null) {
-				headers = new HashMap<String, String>();
-			}
+		Map<String, String> headers;
+		if (TextUtils.isEmpty(userAgent)) {
+			headers = super.getHeaders();
+		} else {
+			headers = new HashMap<String, String>();
 			headers.put("User-Agent", userAgent);
 		}
 		return headers;
@@ -120,7 +122,17 @@ public abstract class QmusicRequest<T> extends Request<T> {
 		return userAgent;
 	}
 
-	public static final void setUserAgent(String userAgent) {
-		QmusicRequest.userAgent = userAgent;
+	public static final void setUserAgent(String agent) {
+		userAgent = agent;
+	}
+
+	public static Entry parseCacheHeaders(String url, NetworkResponse response) {
+		Entry entry = HttpHeaderParser.parseCacheHeaders(response);
+		// Note modify the cache policy here
+		if ("about:blank".equals(url)) {
+			entry.ttl = entry.ttl + 60 * 60 * 1000;// 60 mins
+			// entry.softTtl: get the cache if not expired, but will refresh
+		}
+		return entry;
 	}
 }

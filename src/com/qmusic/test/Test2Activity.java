@@ -15,7 +15,7 @@ import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.qmusic.R;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.uitls.BLog;
-import com.qmusic.volley.RequestImageManager;
+import com.qmusic.volley.QMusicRequestManager;
 
 public class Test2Activity extends BaseActivity implements OnClickListener {
 	ListView listView;
@@ -58,7 +58,7 @@ public class Test2Activity extends BaseActivity implements OnClickListener {
 			if (convertView == null) {
 				convertView = getLayoutInflater().inflate(R.layout.item_simple_text_with_icon2, parent, false);
 			}
-			final RequestImageManager manager = RequestImageManager.getInstance();
+			final QMusicRequestManager manager = QMusicRequestManager.getInstance();
 			final ImageLoader imageLoader = manager.getImageLoader();
 
 			final ImageView imgView = (ImageView) convertView.findViewById(R.id.item_icon);

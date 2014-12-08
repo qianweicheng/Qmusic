@@ -2,6 +2,23 @@ package com.qmusic.volley;
 
 import java.io.File;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.conn.params.ConnPerRouteBean;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -12,6 +29,7 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.android.volley.Cache;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Network;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.BasicNetwork;
@@ -22,13 +40,14 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
+import com.qmusic.common.BConstants;
 
-public class RequestImageManager {
+public class QMusicRequestManager {
 	public static int L1CacheType = 0;
 	public static int L2CacheType = 0;
 	private static final int DISK_SIZE = 100 * 1024 * 1024;
 	private static final int MEM_SIZE = 10 * 1024 * 1024;
-	private static RequestImageManager instance;
+	private static QMusicRequestManager instance;
 	private RequestQueue mRequestQueue;
 	private ImageLoader mImageLoader;
 	private ImageCache mCacheL1;
@@ -56,28 +75,24 @@ public class RequestImageManager {
 	 * @param quality
 	 * @param type
 	 */
-	private RequestImageManager(final Context context, final int diskCacheSize, final int memCacheSize) {
+	private QMusicRequestManager(final Context context, final int diskCacheSize, final int memCacheSize) {
 		// ============L2 Cache=============
-		HttpStack stack;
-		if (Build.VERSION.SDK_INT >= 9) {
-			stack = new HurlStack();
-		} else {
-			String userAgent = QmusicRequest.getUserAgent();
-			stack = new HttpClientStack(AndroidHttpClient.newInstance(userAgent));
-		}
+		HttpStack stack = getHttpStack(false);
 		Network network = new BasicNetwork(stack);
 		if (L2CacheType == 0) {
-			mCacheL2 = new VolleyDiskLruImageCache(new File(context.getCacheDir(), "L2-Cache"), diskCacheSize);
+			// TODO: this L2 cache implement ignores the HTTP cache headers
+			mCacheL2 = new VolleyL2DiskLruCache(new File(context.getCacheDir(), "L2-Cache"), diskCacheSize);
 		} else {
+			// The build-in L2 cache has no LRU
 			mCacheL2 = new DiskBasedCache(new File(context.getCacheDir(), "L2-Cache"), diskCacheSize);
 		}
 		mRequestQueue = new RequestQueue(mCacheL2, network);
 		mRequestQueue.start();
 		// ============L1 Cache=============
 		if (L1CacheType == 0) {
-			mCacheL1 = new BitmapLruImageCache(memCacheSize);
+			mCacheL1 = new VolleyL1MemoryLruImageCache(memCacheSize);
 		} else {
-			mCacheL1 = new DiskLruImageCache(context, "L1-Cache", diskCacheSize, CompressFormat.JPEG, 80);
+			mCacheL1 = new VolleyL1DiskLruImageCache(context, "L1-Cache", diskCacheSize, CompressFormat.JPEG, 80);
 		}
 		mImageLoader = new ImageLoader(mRequestQueue, mCacheL1);
 	}
@@ -95,10 +110,10 @@ public class RequestImageManager {
 			}
 		}
 		QmusicRequest.setUserAgent(userAgent);
-		instance = new RequestImageManager(ctx, DISK_SIZE, MEM_SIZE);
+		instance = new QMusicRequestManager(ctx, DISK_SIZE, MEM_SIZE);
 	}
 
-	public static final RequestImageManager getInstance() {
+	public static final QMusicRequestManager getInstance() {
 		if (instance != null) {
 			return instance;
 		} else {
@@ -161,8 +176,8 @@ public class RequestImageManager {
 		if (cacheType == CacheType.MEMORY) {
 			if (mCacheL1 instanceof DiskBasedCache) {
 				((DiskBasedCache) mCacheL1).clear();
-			} else if (mCacheL1 instanceof VolleyDiskLruImageCache) {
-				((VolleyDiskLruImageCache) mCacheL1).clear();
+			} else if (mCacheL1 instanceof VolleyL2DiskLruCache) {
+				((VolleyL2DiskLruCache) mCacheL1).clear();
 			}
 		} else {
 			mCacheL2.clear();
@@ -171,5 +186,46 @@ public class RequestImageManager {
 
 	private static final String createKey(String url) {
 		return new StringBuilder(url.length() + 12).append("#W").append(0).append("#H").append(0).append(url).toString();
+	}
+
+	private static final HttpStack getHttpStack(boolean trusted) {
+		// ============Support SSL==========
+		// if there are untrusted SSL, the use this.
+		HttpStack stack;
+		if (trusted) {
+			if (Build.VERSION.SDK_INT >= 9) {
+				stack = new HurlStack();
+			} else {
+				stack = new HttpClientStack(AndroidHttpClient.newInstance(BConstants.APP_NAME));
+			}
+		} else if (Build.VERSION.SDK_INT >= 9) {
+			SSLContext sslContext = QMusicHTTPSTrustManager.getSSLContext();
+			HostnameVerifier hostnameVerifier = QMusicHTTPSTrustManager.getHostnameVerifier();
+			SSLSocketFactory sf = sslContext.getSocketFactory();
+			HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
+			HttpsURLConnection.setDefaultSSLSocketFactory(sf);
+			stack = new HurlStack();
+		} else {
+			HttpParams httpParams = new BasicHttpParams();
+			// httpParams.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
+			// HttpVersion.HTTP_1_1);
+			HttpConnectionParams.setConnectionTimeout(httpParams, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS);
+			HttpConnectionParams.setSoTimeout(httpParams, DefaultRetryPolicy.DEFAULT_TIMEOUT_MS);
+			// ConnManagerParams.setMaxConnectionsPerRoute(httpParams, new
+			// ConnPerRouteBean(NETWORK_POOL));
+			ConnManagerParams.setMaxConnectionsPerRoute(httpParams, new ConnPerRouteBean(25));
+
+			// Added this line to avoid issue at:
+			// http://stackoverflow.com/questions/5358014/android-httpclient-oom-on-4g-lte-htc-thunderbolt
+			HttpConnectionParams.setSocketBufferSize(httpParams, 8192);
+			SchemeRegistry registry = new SchemeRegistry();
+			registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+			registry.register(new Scheme("https", QMusicSSLSocketFactory.createInstance(), 443));
+			ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager(httpParams, registry);
+			HttpClient client = new DefaultHttpClient(cm, httpParams);
+			// client = AndroidHttpClient.newInstance(BConstants.APP_NAME);
+			stack = new HttpClientStack(client);
+		}
+		return stack;
 	}
 }

@@ -18,7 +18,13 @@ import com.android.volley.cache.disc.impl.ext.DiskLruCache;
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 import com.qmusic.BuildConfig;
 
-public class DiskLruImageCache implements ImageCache {
+/**
+ * The Disk L1 cache
+ * 
+ * @author andy
+ *
+ */
+public class VolleyL1DiskLruImageCache implements ImageCache {
 
 	private DiskLruCache mDiskCache;
 	private CompressFormat mCompressFormat = CompressFormat.JPEG;
@@ -27,7 +33,7 @@ public class DiskLruImageCache implements ImageCache {
 	private static final int APP_VERSION = 1;
 	private static final int VALUE_COUNT = 1;
 
-	public DiskLruImageCache(Context context, String uniqueName, int diskCacheSize, CompressFormat compressFormat, int quality) {
+	public VolleyL1DiskLruImageCache(Context context, String uniqueName, int diskCacheSize, CompressFormat compressFormat, int quality) {
 		try {
 			final File diskCacheDir = getDiskCacheDir(context, uniqueName);
 			mDiskCache = DiskLruCache.open(diskCacheDir, APP_VERSION, VALUE_COUNT, diskCacheSize, Integer.MAX_VALUE);

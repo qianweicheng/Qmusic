@@ -6,9 +6,15 @@ import android.util.LruCache;
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 import com.qmusic.uitls.BLog;
 
-public class BitmapLruImageCache extends LruCache<String, Bitmap> implements ImageCache {
+/**
+ * The Memory L1 cache
+ * 
+ * @author andy
+ *
+ */
+public class VolleyL1MemoryLruImageCache extends LruCache<String, Bitmap> implements ImageCache {
 
-	public BitmapLruImageCache(int maxSize) {
+	public VolleyL1MemoryLruImageCache(int maxSize) {
 		super(maxSize);
 	}
 

@@ -13,12 +13,12 @@ import org.apache.http.entity.mime.content.FileBody;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.Response.Listener;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 
-public class QMusicMultipartRequest extends Request<String> {
+public class QMusicMultipartRequest extends QmusicRequest<String> {
 	MultipartEntityBuilder entity = MultipartEntityBuilder.create();
 	HttpEntity httpentity;
 	private static final String FILE_PART_NAME = "file";
@@ -27,9 +27,8 @@ public class QMusicMultipartRequest extends Request<String> {
 	private final File mFilePart;
 	private final Map<String, String> mStringPart;
 
-	public QMusicMultipartRequest(String url, Response.ErrorListener errorListener, Response.Listener<String> listener, File file,
-			Map<String, String> mStringPart) {
-		super(Method.POST, url, errorListener);
+	public QMusicMultipartRequest(String url, Listener<String> listener, Response.ErrorListener errorListener, File file, Map<String, String> mStringPart) {
+		super(Method.POST, url, listener, errorListener);
 		mListener = listener;
 		mFilePart = file;
 		this.mStringPart = mStringPart;
