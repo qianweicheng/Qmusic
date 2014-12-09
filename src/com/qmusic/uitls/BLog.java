@@ -24,19 +24,20 @@ public class BLog {
 				final SimpleDateFormat formater = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
 				final String logFileName = String.format("%s/Qmusic_%s.log", Environment.getExternalStorageDirectory(), formater.format(new Date()));
 				CommandConsole commond = new CommandConsole();
-				// commond.sh().run("logcat -v threadtime ", new
-				// File(logFileName));
-				commond.sh().run("echo abc>a.log", new File(logFileName));
+				commond.sh().run("logcat -v threadtime ", new File(logFileName));
 			}
 		}.start();
 	}
 
+	/**
+	 * This will duplicate the log if exit and re-login
+	 */
 	public static void logToFile2() {
 		new Thread() {
 			@Override
 			public void run() {
 				final SimpleDateFormat formater = new SimpleDateFormat("yyyy_MM_dd", Locale.US);
-				final String logFileName = String.format("%s/Qmusic3_%s.log", Environment.getExternalStorageDirectory(), formater.format(new Date()));
+				final String logFileName = String.format("%s/Qmusic2_%s.log", Environment.getExternalStorageDirectory(), formater.format(new Date()));
 				try {
 					CommandConsole commond = new CommandConsole();
 					Process process = commond.sh().run("logcat -v threadtime -f " + logFileName);
@@ -53,7 +54,7 @@ public class BLog {
 	public static void setLevel(int level) {
 		DEBUG_LEVEL = level;
 		logToFile();
-		logToFile2();
+		// logToFile2();
 	}
 
 	public static int v(String tag, String msg) {

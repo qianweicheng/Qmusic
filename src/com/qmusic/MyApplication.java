@@ -59,8 +59,8 @@ public class MyApplication extends Application {
 			DEBUG = true;
 		}
 		instance = ctx;
-		QMusicRequestManager.init(ctx);
 		BLog.setLevel(BLog.ALL);
+		QMusicRequestManager.init(ctx);
 		RunningAppProcessInfo appProcessInfo = BUtilities.getCurProcess(ctx);
 		BLog.i(TAG, BUtilities.objToJsonString(appProcessInfo));
 		if (appProcessInfo != null) {

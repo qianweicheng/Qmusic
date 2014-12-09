@@ -98,6 +98,9 @@ public class QMusicRequestManager {
 	}
 
 	public static final void init(Context ctx) {
+		// VERBOSE, DEBUG, INFO, WARN, ERROR, ASSERT, or SUPPRESS.
+		// Note: to enable the log for volley
+		// adb shell setprop log.tag.Volley VERBOSE
 		final String packageName = ctx.getPackageName();
 		String userAgent = System.getProperties().getProperty("http.agent");
 		if (TextUtils.isEmpty(userAgent)) {
