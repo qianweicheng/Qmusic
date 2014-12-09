@@ -5,12 +5,17 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import org.apache.http.Header;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.qmusic.MyApplication;
+import com.qmusic.common.BConstants;
 import com.qmusic.uitls.BIOUtilities;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
@@ -131,23 +136,32 @@ public final class BWebdoEngine {
 		} else {
 			final File zipFile = new File(ctx.getExternalCacheDir(), "htmls.zip");
 			if (zipFile.exists()) {
-				InputStream is = null;
-				try {
-					is = new FileInputStream(zipFile);
-					BIOUtilities.unZipFolder(is, htmlFolder.getAbsolutePath());
-					BLog.i(TAG, "htmls.zip unziped sucessfully");
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				} finally {
-					if (is != null) {
-						try {
-							is.close();
-						} catch (Exception ex) {
-							ex.printStackTrace();
+				// Note: rename to another filename is to prevent the zip file
+				// unziping failed. One zip file has only one chance to unzip.
+				File zippingFile = new File(ctx.getExternalCacheDir(), "htmls.unzipping");
+				boolean result = zipFile.renameTo(zippingFile);
+				if (result) {
+					InputStream is = null;
+					try {
+						is = new FileInputStream(zippingFile);
+						BLog.i(TAG, "start to unzip htmls.zip");
+						BIOUtilities.unZipFolder(is, htmlFolder.getAbsolutePath());
+						BLog.i(TAG, "htmls.zip unziped sucessfully");
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					} finally {
+						if (is != null) {
+							try {
+								is.close();
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
 						}
 					}
+					zippingFile.delete();
+				} else {
+					zipFile.delete();
 				}
-				zipFile.delete();
 			} else {
 				// get zip from server async
 				final String url = "http://192.168.1.105/htmls.zip";

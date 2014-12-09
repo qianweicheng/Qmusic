@@ -1,7 +1,10 @@
 package com.qmusic.test;
 
+import java.io.File;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 
@@ -16,6 +19,7 @@ import com.qmusic.activities.BWebActivity;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.common.BAppHelper;
 import com.qmusic.uitls.BLog;
+import com.qmusic.volley.QMusicFileRequest;
 import com.qmusic.volley.QMusicRequestManager;
 
 public class TestActivity extends BaseActivity implements View.OnClickListener {
@@ -78,10 +82,31 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void onBtn2(final View view) {
-		Intent intent = new Intent(this, Test2Activity.class);
-		intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
-		intent.putExtra("url", "file:///android_asset/www/html/index.html");
-		startActivity(intent);
+		QMusicRequestManager.getInstance().enableLargeFileDownload();
+		RequestQueue queue = QMusicRequestManager.getInstance().getRequestQueue2();
+		// String url = "https://example.org/";
+		String url = "https://www.google.com";
+		File file = new File(getExternalCacheDir(), "google.txt");
+		QMusicFileRequest fileRequest = new QMusicFileRequest(Request.Method.GET, url, file, new Response.Listener<Pair<Integer, Integer>>() {
+
+			@Override
+			public void onResponse(Pair<Integer, Integer> response) {
+				BLog.d(TAG, "" + response.first + "/" + response.second);
+
+			}
+		}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				if (error != null) {
+					BLog.e(TAG, "Error:" + error.getMessage());
+				} else {
+					BLog.e(TAG, "Error Happens");
+				}
+			}
+		});
+
+		// Add the request to the RequestQueue.
+		queue.add(fileRequest);
 	}
 
 	public void onBtn3(final View view) {

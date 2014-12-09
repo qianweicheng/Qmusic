@@ -17,10 +17,10 @@ import android.util.Log;
 
 import com.android.volley.Cache;
 import com.android.volley.VolleyLog;
-import com.android.volley.cache.disc.impl.ext.DiskLruCache;
-import com.android.volley.cache.disc.impl.ext.DiskLruCache.Snapshot;
 import com.qmusic.BuildConfig;
 import com.qmusic.uitls.BLog;
+import com.qmusic.volley.cache.disc.impl.ext.DiskLruCache;
+import com.qmusic.volley.cache.disc.impl.ext.DiskLruCache.Snapshot;
 
 public class VolleyL2DiskLruCache implements Cache {
 	static boolean USE_HTTP_CACHE = true;

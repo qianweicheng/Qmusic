@@ -49,6 +49,7 @@ public class QMusicRequestManager {
 	private static final int MEM_SIZE = 10 * 1024 * 1024;
 	private static QMusicRequestManager instance;
 	private RequestQueue mRequestQueue;
+	private RequestQueue mRequestQueue2;// used to download large file;
 	private ImageLoader mImageLoader;
 	private ImageCache mCacheL1;
 	private Cache mCacheL2;
@@ -97,6 +98,13 @@ public class QMusicRequestManager {
 		mImageLoader = new ImageLoader(mRequestQueue, mCacheL1);
 	}
 
+	public final void enableLargeFileDownload() {
+		HttpStack stack = getHttpStack(false);
+		Network network = new QMusicNetwork(stack);
+		mRequestQueue2 = new RequestQueue(mCacheL2, network, 1);
+		mRequestQueue2.start();
+	}
+
 	public static final void init(Context ctx) {
 		// VERBOSE, DEBUG, INFO, WARN, ERROR, ASSERT, or SUPPRESS.
 		// Note: to enable the log for volley
@@ -124,18 +132,14 @@ public class QMusicRequestManager {
 		}
 	}
 
-	/**
-	 * @return instance of the queue
-	 * @throws IllegalStatException
-	 *             if init has not yet been called
-	 */
 	public final RequestQueue getRequestQueue() {
 		return mRequestQueue;
 	}
 
-	/**
-	 * @return instance of the image loader
-	 */
+	public final RequestQueue getRequestQueue2() {
+		return mRequestQueue2;
+	}
+
 	public final ImageLoader getImageLoader() {
 		return mImageLoader;
 	}

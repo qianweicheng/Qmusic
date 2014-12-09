@@ -14,9 +14,9 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.android.volley.cache.disc.impl.ext.DiskLruCache;
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 import com.qmusic.BuildConfig;
+import com.qmusic.volley.cache.disc.impl.ext.DiskLruCache;
 
 /**
  * The Disk L1 cache
