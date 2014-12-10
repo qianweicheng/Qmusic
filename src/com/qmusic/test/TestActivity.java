@@ -110,16 +110,16 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void onBtn3(final View view) {
-		Intent intent = new Intent(this, BCommonWebActivity.class);
+		Intent intent = new Intent(this, BWebActivity.class);
 		intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
-		intent.putExtra(BCommonWebActivity.TITLE, "Index");
+		intent.putExtra(BWebActivity.TITLE, "Index");
 		startActivity(intent);
 	}
 
 	public void onBtn4(final View view) {
 		Intent intent = new Intent(this, BCommonWebActivity.class);
 		intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
-		intent.putExtra(BCommonWebActivity.TITLE, "Index2");
+		intent.putExtra(BWebActivity.TITLE, "Index2");
 		intent.putExtra("mode", 2);
 		startActivity(intent);
 	}

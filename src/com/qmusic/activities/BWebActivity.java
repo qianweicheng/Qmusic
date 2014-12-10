@@ -4,19 +4,19 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.qmusic.MyApplication;
 import com.qmusic.R;
 import com.qmusic.common.BConstants;
-import com.qmusic.controls.BCommonTitle;
 import com.qmusic.uitls.BLog;
 import com.qmusic.webdoengine.BJSInterface;
 import com.qmusic.webdoengine.BWebHost;
 import com.qmusic.webdoengine.BWebView;
 
-public class BWebActivity extends BaseActivity {
+public class BWebActivity extends BaseActivity implements OnClickListener {
 	public static final String TITLE = "title";
 	public static final String URL = "url";
 	public static final String HTML_DATA = "htmlData";
@@ -26,21 +26,39 @@ public class BWebActivity extends BaseActivity {
 	BWebView webView;
 	MyWebHost webHost;
 	boolean showProgressBar;
+	View btnBack, btnForward, btnClose;
+	TextView txtTitle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_web);
-		webViewContainer = (ViewGroup) findViewById(R.id.activity_web_webview_container);
+		init();
+	}
+
+	protected void init() {
+		btnBack = findViewById(R.id.activity_web_back_btn);
+		btnForward = findViewById(R.id.activity_web_forward_btn);
+		btnClose = findViewById(R.id.activity_web_close_btn);
+		txtTitle = (TextView) findViewById(R.id.activity_web_title_txt);
+		btnBack.setOnClickListener(this);
+		btnForward.setOnClickListener(this);
+		btnClose.setOnClickListener(this);
+		btnForward.setVisibility(View.GONE);
+		btnClose.setVisibility(View.GONE);
+		webViewContainer = (ViewGroup) findViewById(R.id.activity_web_container);
 		webHost = new MyWebHost(this);
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null && (bundle.containsKey(URL) || bundle.containsKey(HTML_DATA))) {
 			String title = bundle.getString(TITLE);
 			if (TextUtils.isEmpty(title)) {
-				title = "";// getString(R.string.app_name);
+				txtTitle.setText(title);
+				txtTitle.setVisibility(View.GONE);
+			} else {
+				txtTitle.setText(title);
+				txtTitle.setVisibility(View.VISIBLE);
+				txtTitle.setSelected(true);
 			}
-			BCommonTitle commonTitle = (BCommonTitle) findViewById(R.id.activity_web_title);
-			commonTitle.setTitle(title);
 			showProgressBar = bundle.getBoolean(SHOW_PROGRESS_BAR, false);
 			progressBar = (ProgressBar) findViewById(R.id.activity_web_progressbar);
 			if (showProgressBar) {
@@ -75,14 +93,6 @@ public class BWebActivity extends BaseActivity {
 	protected void onResume() {
 		super.onResume();
 		webHost.onResume();
-		MyApplication.postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-				webView.dispatchWindowVisibilityChanged(View.VISIBLE);
-				webView.invalidate();
-			}
-		}, 1000);
 	}
 
 	@Override
@@ -101,7 +111,60 @@ public class BWebActivity extends BaseActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		webHost.onDestory();
-		webView.detachWebview(webViewContainer);
+	}
+
+	@Override
+	public void onBackPressed() {
+		btnBack.performClick();
+	}
+
+	@Override
+	public void onClick(View v) {
+		int viewId = v.getId();
+		if (viewId == R.id.activity_web_back_btn) {
+			if (webView.canGoBack()) {
+				webView.goBack();
+			} else {
+				finishMyself();
+			}
+		} else if (viewId == R.id.activity_web_forward_btn) {
+			webView.goForward();
+		} else if (viewId == R.id.activity_web_close_btn) {
+			finishMyself();
+		}
+	}
+
+	private void updateNav() {
+		boolean hideTitle = false;
+		if (webView.canGoForward()) {
+			hideTitle = true;
+			btnForward.setVisibility(View.VISIBLE);
+		} else {
+			btnForward.setVisibility(View.GONE);
+		}
+		if (webView.canGoBackOrForward(-1)) {
+			hideTitle = true;
+			btnClose.setVisibility(View.VISIBLE);
+		} else {
+			btnClose.setVisibility(View.GONE);
+		}
+		if (hideTitle) {
+			txtTitle.setVisibility(View.GONE);
+		} else {
+			txtTitle.setVisibility(View.VISIBLE);
+		}
+	}
+
+	private void finishMyself() {
+		// if (backToSmartList) {
+		// Intent intent = new Intent(this, SmartTaskActivity.class);
+		// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		// startActivity(intent);
+		// }
+		if (webView != null) {
+			webView.detachWebview(webViewContainer);
+		}
+		finish();
 	}
 
 	class MyWebHost extends BWebHost {
@@ -120,6 +183,7 @@ public class BWebActivity extends BaseActivity {
 				if (showProgressBar) {
 					progressBar.setVisibility(View.GONE);
 				}
+				BWebActivity.this.updateNav();
 			} else {
 				return super.onMessage(arg0, arg1, obj);
 			}

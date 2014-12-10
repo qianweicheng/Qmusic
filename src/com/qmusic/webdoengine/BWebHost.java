@@ -75,34 +75,46 @@ public class BWebHost {
 	}
 
 	public void onStart() {
-		webView.sendJavascript("Qm.onStart();");
+		if (webView != null) {
+			webView.sendJavascript("Qm.onStart();");
+		}
 	}
 
 	public void onResume() {
-		webView.sendJavascript("Qm.onResume();");
-		webView.postDelayed(new Runnable() {
+		if (webView != null) {
+			webView.sendJavascript("Qm.onResume();");
+			webView.postDelayed(new Runnable() {
 
-			@Override
-			public void run() {
-				webView.dispatchWindowVisibilityChanged(View.VISIBLE);
-				webView.invalidate();
-			}
-		}, 1000);
+				@Override
+				public void run() {
+					if (webView != null) {
+						webView.dispatchWindowVisibilityChanged(View.VISIBLE);
+						webView.invalidate();
+					}
+				}
+			}, 1000);
+		}
 	}
 
 	public void onPause() {
-		webView.sendJavascript("Qm.onPause();");
+		if (webView != null) {
+			webView.sendJavascript("Qm.onPause();");
+		}
 	}
 
 	public void onStop() {
-		webView.sendJavascript("Qm.onStop();");
+		if (webView != null) {
+			webView.sendJavascript("Qm.onStop();");
+		}
 	}
 
 	public void onDestory() {
 		// =========
-		webView.sendJavascript("Qm.onDestory();");
-		// webView.clearView();
-		// webView.reload();
+		if (webView != null) {
+			webView.sendJavascript("Qm.onDestory();");
+			// webView.clearView();
+			// webView.reload();
+		}
 		// =========
 		activity = null;
 		webView = null;

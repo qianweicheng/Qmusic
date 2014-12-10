@@ -5,9 +5,6 @@
     <color name="button_normal">#ffffffff</color>
     <color name="txt_gray_input">#000</color>
     <color name="txt_hint_gray_input">#cccccc</color>
-    <color name="gray_dark_text">#ff1f1f1f</color> <!-- 灰黑色文字 -->
-    <color name="gray_light_text">#ff999999</color> <!-- 灰黑色文字 -->
-    <color name="gray_division">#ffe6e6e6</color> <!-- 灰色横条 -->
     <color name="blue">#ff0099cc</color>
     <color name="blue_pressed">#330099cc</color>
     <color name="gray">#ff666666</color>
@@ -17,5 +14,12 @@
     <color name="light_red">#ffff9b9b</color>
     <color name="red">#ffff6a66</color>
     <color name="red_pressed">#ff9e5441</color>
+    <color name="gray_normal_text">#ff8a8a8a</color> <!-- normal text -->
+    <color name="gray_light_text">#ff999999</color> <!-- light text -->
+    <color name="gray_dark_text">#ff1f1f1f</color> <!-- 灰黑色文字 -->
+    <color name="gray_hint_text">#ffcccccc</color>
+    <color name="gray_division">#ffe6e6e6</color> <!-- 灰色横条 -->
+    <color name="bg_gray_title">#ffdddddd</color> <!-- background for title bar -->
+    <color name="bg_gray_dark">#ffaaaaaa</color> <!-- dark background -->
 
 </resources>
