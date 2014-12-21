@@ -93,6 +93,9 @@ public class BWebActivity extends BaseActivity implements OnClickListener {
 	protected void onResume() {
 		super.onResume();
 		webHost.onResume();
+		// check if scrolls to bottom
+		// if (webView.getContentHeight() * webView.getScaleY() ==
+		// (webView.getHeight() + webView.getScrollY())) {}
 	}
 
 	@Override

@@ -1,14 +1,9 @@
-<div ng-controller="Page3Ctrl">
-	{{'your id is:'+id}}
-	<br/><a href="#/page1">Page1</a>
-	<br/><a href="#/page2">Page2</a>
-	<br/><a href="#/page3/3">Page3</a>
-	<br/>
-	<br/>
-<ul>
-  <li ng-repeat="x in names" ng-animate="'animate'">
-    {{ x.Name + ', ' + x.Country }}
-  </li>
-</ul>
-	
+<div>
+	{{'your id is:'+id}} <br /> <a href="#/page1">Page1</a> <br /> <a
+		href="#/page2">Page2</a> <br /> <a href="#/page3/3">Page3</a> <br />
+	<br />
+	<ul>
+		<li ng-repeat="x in names" ng-animate="'animate'">{{ x.Name + ',
+			' + x.Country }}</li>
+	</ul>
 </div>

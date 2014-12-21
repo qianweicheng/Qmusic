@@ -24,35 +24,26 @@ public class BJSInterface {
 		this.webHost = webHost;
 	}
 
-	/**
-	 * Show warning message, do NOT dismiss task detail activity
-	 * 
-	 * @param msg
-	 */
-	public void warning(final String msg) {
-		final FragmentActivity context = webHost.getHost();
-		if (context != null) {
-			AlertDialogFragment fragment = AlertDialogFragment.getInstance(null, msg, context.getString(android.R.string.ok));
-			fragment.getArguments().putInt("icon", android.R.drawable.ic_dialog_alert);
-			fragment.show(context.getSupportFragmentManager());
-		}
-	}
-
-	public void alert(final String msg, final String positiveStr, final String negativeStr, final String callback) {
+	public void alert(final String title, final String msg, final String positiveStr, final String negativeStr, final String args) {
 		final FragmentActivity context = webHost.getHost();
 		final BWebView webView = webHost.getWebView();
 		if (context != null && webView != null) {
-			AlertDialogFragment fragment = AlertDialogFragment.getInstance(null, msg, context.getString(android.R.string.ok));
+			AlertDialogFragment fragment = AlertDialogFragment.getInstance(title, msg, positiveStr, negativeStr);
 			fragment.getArguments().putInt("icon", android.R.drawable.ic_dialog_info);
 			fragment.setCallback(new SimpleFragmentDialogCallback() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					if (which == DialogInterface.BUTTON_POSITIVE) {
-						webView.sendJavascript(String.format("%s(\"OK\")", callback));
+						webView.sendJavascript(String.format("Qm.callback('%s',true)", args));
 					} else if (which == DialogInterface.BUTTON_NEGATIVE) {
-						webView.sendJavascript(String.format("%s(\"CANCEL\")", callback));
+						webView.sendJavascript(String.format("Qm.callback('%s',false)", args));
 					}
+				}
+
+				@Override
+				public void cancel() {
+					webView.sendJavascript(String.format("Qm.callback('%s',false)", args));
 				}
 
 			});

@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.util.Pair;
-import android.view.KeyEvent;
 import android.webkit.ConsoleMessage;
 import android.webkit.GeolocationPermissions.Callback;
 import android.webkit.JsPromptResult;
@@ -15,6 +14,8 @@ import android.webkit.WebView;
 import android.widget.EditText;
 
 import com.qmusic.common.BConstants;
+import com.qmusic.controls.dialogs.AlertDialogFragment;
+import com.qmusic.controls.dialogs.SimpleFragmentDialogCallback;
 import com.qmusic.uitls.BLog;
 
 public class BWebChromeClient extends WebChromeClient {
@@ -48,37 +49,23 @@ public class BWebChromeClient extends WebChromeClient {
 	@Override
 	public boolean onJsAlert(final WebView view, final String url, final String message, final JsResult result) {
 		final BWebHost webHost = webView.getWebHost();
-		if (webHost != null) {
-			final FragmentActivity activity = webHost.getHost();
-			if (activity != null) {
-				AlertDialog.Builder dlg = new AlertDialog.Builder(activity);
-				dlg.setMessage(message);
-				dlg.setTitle("Alert");
-				// Don't let alerts break the back button
-				dlg.setCancelable(true);
-				dlg.setPositiveButton(android.R.string.ok, new AlertDialog.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						result.confirm();
-					}
-				});
-				dlg.setOnCancelListener(new DialogInterface.OnCancelListener() {
-					public void onCancel(DialogInterface dialog) {
-						result.cancel();
-					}
-				});
-				dlg.setOnKeyListener(new DialogInterface.OnKeyListener() {
-					// DO NOTHING
-					public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-						if (keyCode == KeyEvent.KEYCODE_BACK) {
-							result.confirm();
-							return false;
-						} else
-							return true;
-					}
-				});
-				dlg.show();
-			}
+		final FragmentActivity activity = webHost.getHost();
+		if (webHost == null || activity == null) {
+			return false;
 		}
+		AlertDialogFragment fragment = AlertDialogFragment.getInstance(null, message, android.R.string.ok);
+		fragment.setCallback(new SimpleFragmentDialogCallback() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				result.confirm();
+			}
+
+			@Override
+			public void cancel() {
+				result.cancel();
+			}
+		});
+		fragment.show(activity.getSupportFragmentManager());
 		return true;
 	}
 
@@ -90,41 +77,27 @@ public class BWebChromeClient extends WebChromeClient {
 	@Override
 	public boolean onJsConfirm(final WebView view, final String url, final String message, final JsResult result) {
 		final BWebHost webHost = webView.getWebHost();
-		if (webHost != null) {
-			final FragmentActivity activity = webHost.getHost();
-			if (activity != null) {
-				AlertDialog.Builder dlg = new AlertDialog.Builder(activity);
-				dlg.setMessage(message);
-				dlg.setTitle("Confirm");
-				dlg.setCancelable(true);
-				dlg.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						result.confirm();
-					}
-				});
-				dlg.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						result.cancel();
-					}
-				});
-				dlg.setOnCancelListener(new DialogInterface.OnCancelListener() {
-					public void onCancel(DialogInterface dialog) {
-						result.cancel();
-					}
-				});
-				dlg.setOnKeyListener(new DialogInterface.OnKeyListener() {
-					// DO NOTHING
-					public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-						if (keyCode == KeyEvent.KEYCODE_BACK) {
-							result.cancel();
-							return false;
-						} else
-							return true;
-					}
-				});
-				dlg.show();
-			}
+		final FragmentActivity activity = webHost.getHost();
+		if (webHost == null || activity == null) {
+			return false;
 		}
+		AlertDialogFragment fragment = AlertDialogFragment.getInstance(null, message, android.R.string.ok, android.R.string.cancel);
+		fragment.setCallback(new SimpleFragmentDialogCallback() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (which == DialogInterface.BUTTON_POSITIVE) {
+					result.confirm();
+				} else {
+					result.cancel();
+				}
+			}
+
+			@Override
+			public void cancel() {
+				result.cancel();
+			}
+		});
+		fragment.show(activity.getSupportFragmentManager());
 		return true;
 	}
 

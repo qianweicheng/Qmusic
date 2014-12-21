@@ -1,0 +1,19 @@
+*:not(input):not(textarea) {
+	-webkit-user-select: none;
+}
+
+#gajavascript_frame {
+	display: none;
+}
+
+body {
+	background: white;
+}
+
+.red-button {
+	background: red;
+}
+
+.black-button {
+	background: black;
+}

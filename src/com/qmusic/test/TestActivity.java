@@ -110,7 +110,7 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void onBtn3(final View view) {
-		Intent intent = new Intent(this, BWebActivity.class);
+		Intent intent = new Intent(this, BCommonWebActivity.class);
 		intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
 		intent.putExtra(BWebActivity.TITLE, "Index");
 		startActivity(intent);

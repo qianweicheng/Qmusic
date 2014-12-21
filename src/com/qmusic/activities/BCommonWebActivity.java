@@ -1,5 +1,7 @@
 package com.qmusic.activities;
 
+import java.util.Date;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -61,5 +63,11 @@ public class BCommonWebActivity extends BWebActivity {
 			finish();
 			BLog.e(TAG, "bundle is null");
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		String date = new Date().toString();
+		webView.sendJavascript(String.format("Qm.nativeEvent('back-clicked','%s');", date));
 	}
 }
