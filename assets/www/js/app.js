@@ -1,4 +1,5 @@
 (function(window) {
+	"use strict";
 	var qmApp = angular.module('qmApp', [ 'qmDirective', 'qmFilter',
 			'timeService', 'ngRoute' ]);
 	qmApp.config([ '$routeProvider', function($routeProvider) {

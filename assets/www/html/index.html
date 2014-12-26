@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+<link rel="stylesheet" href="../static/css/bootstrap.min.css" />
 <script type="text/javascript" src="../static/js/angular.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
 <script type="text/javascript">
@@ -16,6 +16,11 @@
 
 	};
 	angular.module('myApp', []).controller('MyCtrl', [ '$scope', ctrl ]);
+
+	function onClicked() {
+		console.info('%o',this);
+		console.trace();
+	}
 </script>
 </head>
 <body ng-app='myApp' ng-controller='MyCtrl'>
@@ -34,7 +39,8 @@
 	<br />
 	<div id="myDiv"></div>
 	<div id="picDiv"></div>
-
+	<button onclick='onClicked();'>Onclick</button>
+	<div id="d"></div>
 </body>
 </html>
 

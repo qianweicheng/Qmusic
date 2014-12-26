@@ -1,4 +1,5 @@
 (function(window) {
+	"use strict";
 	qmApp.controller("Page1Ctrl", [ '$scope', 'time', '$q',
 			function($scope, time, $q) {
 				$scope.$on('$viewContentLoaded', function() {

@@ -1,4 +1,5 @@
 (function(window) {
+	"use strict";
 	var Qm = {
 		onStart : function() {
 			console.log("onStart");

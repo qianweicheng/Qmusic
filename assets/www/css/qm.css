@@ -17,3 +17,7 @@ body {
 .black-button {
 	background: black;
 }
+
+*:not(input):not(textarea) {
+    -webkit-user-select: none;
+}
