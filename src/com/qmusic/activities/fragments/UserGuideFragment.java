@@ -1,4 +1,4 @@
-package com.qmusic.activities;
+package com.qmusic.activities.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,15 +11,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.qmusic.R;
+import com.qmusic.activities.GuideActivity;
+import com.qmusic.activities.SplashActivity;
 import com.qmusic.uitls.BLog;
 
-public final class FragmentUserGuide extends Fragment implements OnClickListener {
-	static final String TAG = FragmentUserGuide.class.getSimpleName();
+public final class UserGuideFragment extends Fragment implements OnClickListener {
+	static final String TAG = UserGuideFragment.class.getSimpleName();
 	public static final int[] tutorials = new int[] { R.drawable.splash, R.drawable.splash };
 	int index;
 
-	public static FragmentUserGuide newInstance(int index) {
-		FragmentUserGuide f = new FragmentUserGuide();
+	public static UserGuideFragment newInstance(int index) {
+		UserGuideFragment f = new UserGuideFragment();
 		Bundle b = new Bundle();
 		b.putInt("index", index);
 		f.setArguments(b);
@@ -67,7 +69,7 @@ public final class FragmentUserGuide extends Fragment implements OnClickListener
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View layout = inflater.inflate(R.layout.fragment_user_guide, null);
+		View layout = inflater.inflate(R.layout.fragment_user_guide, container, false);
 		ImageView tutorial = (ImageView) layout.findViewById(R.id.fragment_user_guide_img);
 		if (index > -1 && index < tutorials.length) {
 			tutorial.setImageResource(tutorials[index]);

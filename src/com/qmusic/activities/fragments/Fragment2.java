@@ -1,4 +1,4 @@
-package com.qmusic.activities;
+package com.qmusic.activities.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,13 +1,17 @@
 package com.qmusic.common;
 
 import java.util.HashMap;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Debug;
@@ -26,56 +30,6 @@ import com.qmusic.uitls.BUtilities;
 public class BAppHelper {
 	static final String TAG = BAppHelper.class.getSimpleName();
 	private static int exiting;
-
-	public final static void goHome(Activity ctx) {
-		Intent intent = new Intent(Intent.ACTION_MAIN);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-		intent.addCategory(Intent.CATEGORY_HOME);
-		ctx.startActivity(intent);
-		ctx.overridePendingTransition(0, 0);
-	}
-
-	@SuppressLint("InlinedApi")
-	public final static boolean exit(Activity activity, boolean force) {
-		if (exiting == 1 || force) {
-			Intent intent = new Intent(activity, SplashActivity.class);
-			if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-			} else {
-				intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			}
-			intent.putExtra(SplashActivity.SHUTDOWN, true);
-			activity.startActivity(intent);
-			activity.overridePendingTransition(0, 0);
-			return true;
-		} else if (exiting == 0) {
-			exiting++;
-			Toast.makeText(activity, R.string.press_back_to_exit, Toast.LENGTH_SHORT).show();
-			Handler handle = new Handler();
-			handle.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					exiting = 0;
-				}
-			}, 3000);
-			return false;
-		}
-		return false;
-	}
-
-	@SuppressLint("InlinedApi")
-	public final static void reLogin(Activity activity) {
-		Intent intent = new Intent(activity, SplashActivity.class);
-		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-		} else {
-			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		}
-		intent.putExtra(SplashActivity.RE_LOGIN, true);
-		activity.startActivity(intent);
-		activity.finish();
-		activity.overridePendingTransition(0, 0);
-	}
 
 	public final static void init(Context ctx) {
 		String countStr = BUtilities.getPref(BConstants.PRE_KEY_RUN_COUNT);
@@ -122,6 +76,80 @@ public class BAppHelper {
 		}
 	}
 
+	public final static void goHome(Activity ctx) {
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		ctx.startActivity(intent);
+		ctx.overridePendingTransition(0, 0);
+	}
+
+	public final static void goHome2(Activity ctx) {
+		PackageManager packageManager = ctx.getPackageManager();
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+		String myPackageName = ctx.getPackageName();
+		for (ResolveInfo ri : resolveInfos) {
+			if (myPackageName.equals(ri.activityInfo.packageName)) {
+				continue;
+			}
+			intent = new Intent();
+			ComponentName name = new ComponentName(ri.activityInfo.packageName, ri.activityInfo.name);
+			intent.setComponent(name);
+			// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+			// Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			ctx.startActivity(intent);
+			ctx.moveTaskToBack(true);
+			ctx.finish();
+			ctx.overridePendingTransition(0, 0);
+			break;
+		}
+	}
+
+	@SuppressLint("InlinedApi")
+	public final static boolean exit(Activity activity, boolean force) {
+		if (exiting == 1 || force) {
+			Intent intent = new Intent(activity, SplashActivity.class);
+			if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+			} else {
+				intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			}
+			intent.putExtra(SplashActivity.SHUTDOWN, true);
+			activity.startActivity(intent);
+			activity.overridePendingTransition(0, 0);
+			return true;
+		} else if (exiting == 0) {
+			exiting++;
+			Toast.makeText(activity, R.string.press_back_to_exit, Toast.LENGTH_SHORT).show();
+			Handler handle = new Handler();
+			handle.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					exiting = 0;
+				}
+			}, 3000);
+			return false;
+		}
+		return false;
+	}
+
+	@SuppressLint("InlinedApi")
+	public final static void reLogin(Activity activity) {
+		Intent intent = new Intent(activity, SplashActivity.class);
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+		} else {
+			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		}
+		intent.putExtra(SplashActivity.RE_LOGIN, true);
+		activity.startActivity(intent);
+		activity.finish();
+		activity.overridePendingTransition(0, 0);
+	}
+
 	public static final void watchMem() {
 		final Debug.MemoryInfo outInfo = new Debug.MemoryInfo();
 		final ActivityManager.MemoryInfo outInfo1 = new ActivityManager.MemoryInfo();
@@ -143,7 +171,7 @@ public class BAppHelper {
 					long globalAllocSize = Debug.getGlobalAllocSize();
 					long threadAllocSize = Debug.getThreadAllocSize();
 					BLog.i(TAG, "nativeHeapAllocatedSize=" + nativeHeapAllocatedSize + ";nativeHeapFreeSize=" + nativeHeapFreeSize + ";nativeHeapSize="
-							+ nativeHeapSize + ";globalAllocSize=" + globalAllocSize + ";threadAllocSize=" + threadAllocSize);
+					        + nativeHeapSize + ";globalAllocSize=" + globalAllocSize + ";threadAllocSize=" + threadAllocSize);
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {

@@ -144,7 +144,7 @@ public class SplashActivity extends BaseActivity {
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				context.startActivity(intent);
 			} else {
-				Intent intent = new Intent(context, MainActivity.class);
+				Intent intent = new Intent(context, MainActivity2.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				context.startActivity(intent);
 			}

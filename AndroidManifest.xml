@@ -66,7 +66,7 @@
     <application
         android:name="com.qmusic.MyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/locker"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:persistent="true"
         android:theme="@style/AppTheme" >
@@ -136,13 +136,15 @@
         </activity>
         <activity
             android:name="com.qmusic.activities.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoTitleBar" >
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.qmusic.activities.MainActivity2"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.qmusic.activities.GuideActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoTitleBar" >
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.qmusic.activities.DialogActivity"
@@ -170,15 +172,11 @@
             android:name="com.qmusic.activities.BCommonWebActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
-            android:name="com.google.zxing.CaptureActivity"
-            android:screenOrientation="portrait" >
-        </activity>
         <!--
         <activity
             android:name="com.qmusic.activities.ShortCutActivity"
             android:icon="@drawable/tab1"
-            android:label="钱炜铖" >
+            android:label="ShortCut" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -45,19 +45,22 @@ public class DialogActivity extends FragmentActivity implements IFragmentDialogC
 				String msg = bundle.getString("message");
 				String okStr = bundle.getString("ok");
 				String cancelStr = bundle.getString("cancel");
-				AlertDialogFragment fragment = AlertDialogFragment.getInstance(title, msg,
-						TextUtils.isEmpty(okStr) ? getString(android.R.string.ok) : okStr,
-						TextUtils.isEmpty(cancelStr) ? getString(android.R.string.cancel) : cancelStr);
+				AlertDialogFragment fragment = AlertDialogFragment.getInstance(title, msg, TextUtils.isEmpty(okStr) ? getString(android.R.string.ok) : okStr,
+				        TextUtils.isEmpty(cancelStr) ? getString(android.R.string.cancel) : cancelStr);
 				fragment.show(getSupportFragmentManager(), ScheduledReceiver.SCHEDULE_TYPE + action);
 			} else {
-				AlertDialogFragment fragment = AlertDialogFragment.getInstance("Unknow type",
-						"Please set a correct type!", getString(android.R.string.ok),
-						getString(android.R.string.cancel));
+				AlertDialogFragment fragment = AlertDialogFragment.getInstance("Unknow type", "Please set a correct type!", getString(android.R.string.ok),
+				        getString(android.R.string.cancel));
 				fragment.show(getSupportFragmentManager(), ScheduledReceiver.SCHEDULE_TYPE + action);
 			}
 		} else {
 			finish();
 		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putInt(ScheduledReceiver.SCHEDULE_TYPE, action);
 	}
 
 	@Override

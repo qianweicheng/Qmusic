@@ -6,7 +6,7 @@ public final class BEnvironment {
 	// =============CONFIG FOR THE BUILD===================
 	public static final int ENV = DEBUG;
 	public static final String SERVER_URL = "http://localhost";
-	public static final boolean UI_TEST = true;// only for UI test.
+	public static final boolean UI_TEST = false;// only for UI test.
 	// ===================================================
 	public static final String USERLOGIN = SERVER_URL + "/php/user.php";
 

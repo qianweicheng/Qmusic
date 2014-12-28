@@ -35,10 +35,6 @@
         <item name="myBEditTextStyle">@style/myBEditText</item>
     </style>
 
-    <style name="AppTheme.NoTitleBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
     <!-- common theme -->
     <style name="b_edittext_style" parent="base_edittext_style">
         <item name="android:layout_width">match_parent</item>

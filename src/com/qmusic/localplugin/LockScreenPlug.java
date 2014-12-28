@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
-import com.qmusic.localplugin.lockscreen.AnimateScreenView;
 import com.qmusic.localplugin.lockscreen.LockScreenReceiver;
 import com.qmusic.localplugin.lockscreen.LockScreenView;
 
@@ -45,7 +44,6 @@ public class LockScreenPlug extends BasePlug {
 
 	private void init2() {
 		mWindowManager = (WindowManager) ctx.getSystemService(Service.WINDOW_SERVICE);
-		fullView = new AnimateScreenView(ctx);
 		activityView = new LockScreenView(ctx);
 		fullScreenParams = createFullParams(ctx);
 		activityParams = createActivityParams(ctx);
@@ -68,9 +66,8 @@ public class LockScreenPlug extends BasePlug {
 		// TYPE_SYSTEM_ALERT 虽然能保持最上面，但不能屏蔽按钮
 		// TYPE_PRIORITY_PHONE 同上
 		mLockViewLayoutParams.format = PixelFormat.RGBA_8888;// 控制透明度
-		mLockViewLayoutParams.flags = LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | LayoutParams.FLAG_NOT_TOUCH_MODAL
-				| LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_LAYOUT_IN_SCREEN
-				| LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+		mLockViewLayoutParams.flags = LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE
+		        | LayoutParams.FLAG_LAYOUT_IN_SCREEN | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED;
 		// | LayoutParams.FLAG_LAYOUT_INSET_DECOR|
 		mLockViewLayoutParams.gravity = Gravity.LEFT | Gravity.TOP;
 		// mLockViewLayoutParams.x = 0;

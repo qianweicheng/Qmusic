@@ -13,6 +13,9 @@ import android.view.View.OnClickListener;
 import cn.jpush.android.api.JPushInterface;
 
 import com.qmusic.R;
+import com.qmusic.activities.fragments.Fragment1;
+import com.qmusic.activities.fragments.Fragment2;
+import com.qmusic.activities.fragments.Fragment3;
 import com.qmusic.common.BAppHelper;
 import com.qmusic.controls.BTabFragment;
 import com.qmusic.uitls.BLog;

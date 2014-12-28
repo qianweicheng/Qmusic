@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.qmusic.R;
+import com.qmusic.activities.fragments.UserGuideFragment;
 import com.qmusic.common.BConstants;
 import com.qmusic.uitls.BLog;
 import com.qmusic.uitls.BUtilities;
@@ -48,12 +49,12 @@ public class GuideActivity extends BaseActivity {
 		startActivity(intent);
 	}
 
-	public void registerPage(FragmentUserGuide fragment) {
+	public void registerPage(UserGuideFragment fragment) {
 		fragments.add(fragment);
 		BLog.i(TAG, "add fragment:" + fragment.getId());
 	}
 
-	public void unRegisterPage(FragmentUserGuide fragment) {
+	public void unRegisterPage(UserGuideFragment fragment) {
 		fragments.remove(fragment);
 		BLog.i(TAG, "remove fragment:" + fragment.getId());
 	}
@@ -66,12 +67,12 @@ public class GuideActivity extends BaseActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			return FragmentUserGuide.newInstance(position);
+			return UserGuideFragment.newInstance(position);
 		}
 
 		@Override
 		public int getCount() {
-			return FragmentUserGuide.tutorials.length;
+			return UserGuideFragment.tutorials.length;
 		}
 
 		@Override
