@@ -3,6 +3,7 @@ package com.qmusic.test;
 import java.io.File;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.qmusic.activities.BCommonWebActivity;
 import com.qmusic.activities.BWebActivity;
 import com.qmusic.activities.BaseActivity;
 import com.qmusic.common.BAppHelper;
+import com.qmusic.controls.graphy.TextDrawable;
 import com.qmusic.uitls.BLog;
 import com.qmusic.volley.QMusicFileRequest;
 import com.qmusic.volley.QMusicRequestManager;
@@ -114,6 +116,7 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 		intent.putExtra(BWebActivity.SHOW_PROGRESS_BAR, true);
 		intent.putExtra(BWebActivity.TITLE, "Index");
 		startActivity(intent);
+		TextDrawable.builder().buildRound("AB", Color.RED);
 	}
 
 	public void onBtn4(final View view) {

@@ -1,4 +1,4 @@
-package com.qmusic.controls;
+package com.qmusic.controls.graphy;
 
 import android.annotation.SuppressLint;
 import android.content.res.Resources;

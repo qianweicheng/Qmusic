@@ -1,4 +1,4 @@
-package com.qmusic.controls;
+package com.qmusic.controls.graphy;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
