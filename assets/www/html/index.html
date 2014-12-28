@@ -8,7 +8,17 @@
 <script type="text/javascript">
 	var ctrl = function($scope) {
 		$scope.clickMe = function() {
-
+			console.profile('profile1');
+			var d = {
+				name : 'qweic',
+				age : 30
+			};
+			var table = document.getElementById("myDiv");
+			console.info('%o', d);
+			console.dir(d);
+			console.dirxml(table);
+			console.trace();
+			console.profileEnd();
 		};
 		$scope.clickMe2 = function() {
 
@@ -18,8 +28,7 @@
 	angular.module('myApp', []).controller('MyCtrl', [ '$scope', ctrl ]);
 
 	function onClicked() {
-		console.info('%o',this);
-		console.trace();
+
 	}
 </script>
 </head>
@@ -39,8 +48,6 @@
 	<br />
 	<div id="myDiv"></div>
 	<div id="picDiv"></div>
-	<button onclick='onClicked();'>Onclick</button>
-	<div id="d"></div>
 </body>
 </html>
 

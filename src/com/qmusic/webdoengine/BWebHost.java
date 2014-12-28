@@ -137,11 +137,11 @@ public class BWebHost {
 	}
 
 	public void showAnimate() {
+		webView.setVisibility(View.VISIBLE);
 		if (webView == null || animated || !webView.getState() || !onDrawReady) {
 			return;
 		}
 		animated = true;
-		webView.setVisibility(View.VISIBLE);
 		AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
 		alphaAnimation.setDuration(500);
 		ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_PARENT, 0.5f, Animation.RELATIVE_TO_PARENT, 0.5f);
