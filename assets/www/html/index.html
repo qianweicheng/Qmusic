@@ -5,31 +5,25 @@
 <link rel="stylesheet" href="../static/css/bootstrap.min.css" />
 <script type="text/javascript" src="../static/js/angular.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/utils.js"></script>
 <script type="text/javascript">
 	var ctrl = function($scope) {
 		$scope.clickMe = function() {
-			console.profile('profile1');
-			var d = {
-				name : 'qweic',
-				age : 30
-			};
-			var table = document.getElementById("myDiv");
-			console.info('%o', d);
-			console.dir(d);
-			console.dirxml(table);
-			console.trace();
-			console.profileEnd();
+			 
 		};
 		$scope.clickMe2 = function() {
-
+			var objs=[{'ab':1},{},{'a':1,'b':2,'c':3}];
+			for(var i in objs){
+				var obj=objs[i];
+				console.log(isEmptyObj(obj));
+				console.log('length:' + obj.length());
+			}
 		};
 
 	};
 	angular.module('myApp', []).controller('MyCtrl', [ '$scope', ctrl ]);
 
-	function onClicked() {
-
-	}
+ 
 </script>
 </head>
 <body ng-app='myApp' ng-controller='MyCtrl'>

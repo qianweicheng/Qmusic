@@ -3,22 +3,21 @@ package com.qmusic.activities;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.qmusic.R;
 import com.qmusic.activities.fragments.Fragment1;
-import com.qmusic.activities.fragments.Fragment2;
-import com.qmusic.activities.fragments.Fragment3;
+import com.qmusic.activities.fragments.FragmentLeftMenu;
+import com.qmusic.activities.fragments.FragmentRightMenu;
+import com.qmusic.common.BAppHelper;
 import com.special.ResideMenu.ResideMenu;
-import com.special.ResideMenu.ResideMenuItem;
 
 public class MainActivity2 extends BaseActivity implements View.OnClickListener, ResideMenu.OnMenuListener {
 	private ResideMenu resideMenu;
-	private ResideMenuItem itemHome;
-	private ResideMenuItem itemProfile;
-	private ResideMenuItem itemCalendar;
-	private ResideMenuItem itemSettings;
+	private Fragment leftFragment;
+	private Fragment rightFragment;
 
 	/**
 	 * Called when the activity is first created.
@@ -39,24 +38,12 @@ public class MainActivity2 extends BaseActivity implements View.OnClickListener,
 		resideMenu.setMenuListener(this);
 		// valid scale factor is between 0.0f and 1.0f. leftmenu'width is
 		// 150dip.
-		resideMenu.setScaleValue(0.6f);
-
+		resideMenu.setScaleValue(0.5f);
 		// create menu items;
-		itemHome = new ResideMenuItem(this, R.drawable.icon, "Home");
-		itemProfile = new ResideMenuItem(this, R.drawable.icon, "Profile");
-		itemCalendar = new ResideMenuItem(this, R.drawable.icon, "Calendar");
-		itemSettings = new ResideMenuItem(this, R.drawable.icon, "Settings");
-
-		itemHome.setOnClickListener(this);
-		itemProfile.setOnClickListener(this);
-		itemCalendar.setOnClickListener(this);
-		itemSettings.setOnClickListener(this);
-
-		resideMenu.addMenuItem(itemHome, ResideMenu.DIRECTION_LEFT);
-		resideMenu.addMenuItem(itemProfile, ResideMenu.DIRECTION_LEFT);
-		resideMenu.addMenuItem(itemCalendar, ResideMenu.DIRECTION_RIGHT);
-		resideMenu.addMenuItem(itemSettings, ResideMenu.DIRECTION_RIGHT);
-
+		leftFragment = new FragmentLeftMenu();
+		rightFragment = new FragmentRightMenu();
+		resideMenu.addMenuItem(leftFragment, ResideMenu.DIRECTION_LEFT);
+		resideMenu.addMenuItem(rightFragment, ResideMenu.DIRECTION_RIGHT);
 		// You can disable a direction by setting ->
 		// resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
 		findViewById(R.id.activity_main_title_left_menu).setOnClickListener(this);
@@ -69,21 +56,18 @@ public class MainActivity2 extends BaseActivity implements View.OnClickListener,
 	}
 
 	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			BAppHelper.exit(this, false);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
 	public void onClick(View view) {
 		int viewId = view.getId();
-		if (view == itemHome) {
-			changeFragment(new Fragment1());
-			resideMenu.closeMenu();
-		} else if (view == itemProfile) {
-			changeFragment(new Fragment2());
-			resideMenu.closeMenu();
-		} else if (view == itemCalendar) {
-			changeFragment(new Fragment3());
-			resideMenu.closeMenu();
-		} else if (view == itemSettings) {
-			changeFragment(new Fragment1());
-			resideMenu.closeMenu();
-		} else if (viewId == R.id.activity_main_title_left_menu) {
+		if (viewId == R.id.activity_main_title_left_menu) {
 			resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
 		} else if (viewId == R.id.activity_main_title_right_menu) {
 			resideMenu.openMenu(ResideMenu.DIRECTION_RIGHT);
