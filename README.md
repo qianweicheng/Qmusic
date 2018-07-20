@@ -1,4 +1,1 @@
-Qmusic
-======
-
-Quick framework for android development
+Version 1
